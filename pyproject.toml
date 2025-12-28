@@ -1,0 +1,20 @@
+[project]
+name = "nightforo"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.8"
+dependencies = [
+    "aiohttp>=3.10.11",
+    "pydantic>=2.10.6",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.10",
+]
+
+[tool.pyright]
+include = ["NightForo"]
+pythonVersion = "3.8"
+typeCheckingMode = "strict"

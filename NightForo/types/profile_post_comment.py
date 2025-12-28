@@ -1,0 +1,31 @@
+from typing import List
+from pydantic import BaseModel
+
+from .attachment import Attachment
+from .user import User
+from .profile_post import ProfilePost
+
+
+class ProfilePostComment(BaseModel):
+    username: str
+    message_parsed: str  # HTML parsed version of the message contents.
+    can_edit: bool
+    can_soft_delete: bool
+    can_hard_delete: bool
+    can_react: bool
+    can_view_attachments: bool
+    Attachments: List[
+        Attachment
+    ]  # 	 Attachments to this profile post, if it has any.
+    ProfilePost: ProfilePost  #  If requested by context, the profile post this comment relates to.
+    is_reacted_to: bool  # True if the viewing user has reacted to this content
+    visitor_reaction_id: int  # If the viewer reacted, the ID of the reaction they used
+    profile_post_comment_id: int
+    profile_post_id: int
+    user_id: int
+    comment_date: int
+    message: str
+    message_state: str
+    warning_message: str
+    reaction_score: int
+    User: User
