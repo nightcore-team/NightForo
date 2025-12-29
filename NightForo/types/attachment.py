@@ -1,3 +1,4 @@
+from typing import BinaryIO, List, Optional
 from pydantic import BaseModel
 
 
@@ -15,3 +16,18 @@ class Attachment(BaseModel):
     content_id: int
     attach_date: int
     view_count: int
+
+
+class GetAttachmentsParams(BaseModel):
+    key: str
+
+
+class PostAttachmentParams(BaseModel):
+    key: str
+    attachment: BinaryIO  # File upload
+
+
+class PostAttachmentsNewKeyParams(BaseModel):
+    type: str
+    context: Optional[List[str]] = None
+    attachment: Optional[BinaryIO] = None  # File upload

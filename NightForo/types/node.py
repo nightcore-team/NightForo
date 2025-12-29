@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 from pydantic import BaseModel
 
 
@@ -24,3 +24,18 @@ class Node(BaseModel):
     parent_node_id: int
     display_order: int
     display_in_list: bool
+
+
+class PostNodeParams(BaseModel):
+    node: Dict[str, Any]
+    type_data: Dict[str, Any]
+    node_type_id: str
+
+
+class PostNodeUpdateParams(BaseModel):
+    node: Dict[str, Any]
+    type_data: Dict[str, Any]
+
+
+class DeleteNodeParams(BaseModel):
+    delete_children: Optional[bool] = None

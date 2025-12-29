@@ -15,21 +15,21 @@ endpoint_alerts = create_endpoint(
 )
 
 endpoint_alerts_mark_all = create_endpoint(
-    ENDPOINT_API + "/alerts/mark-all",
+    endpoint_alerts + "/mark-all",
     HTTPMethod.POST,
 )
 
 
 def endpoint_alert(alert_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/alerts/{alert_id}",
+        endpoint_alerts + f"/{alert_id}",
         HTTPMethod.GET,
     )
 
 
 def endpoint_alert_mark(alert_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/alerts/{alert_id}/mark",
+        endpoint_alert(alert_id) + "/mark",
         HTTPMethod.POST,
     )
 
@@ -45,14 +45,14 @@ endpoint_attachments = create_endpoint(
 )
 
 endpoint_attachments_new_key = create_endpoint(
-    ENDPOINT_API + "/attachments/new-key",
+    endpoint_attachments + "/new-key",
     HTTPMethod.POST,
 )
 
 
 def endpoint_attachment(attachment_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/attachments/{attachment_id}",
+        endpoint_attachments + f"/{attachment_id}",
         HTTPMethod.GET,
         HTTPMethod.DELETE,
     )
@@ -60,14 +60,14 @@ def endpoint_attachment(attachment_id: int):
 
 def endpoint_attachment_data(attachment_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/attachments/{attachment_id}/data",
+        endpoint_attachment(attachment_id) + "/data",
         HTTPMethod.GET,
     )
 
 
 def endpoint_attachment_thumbnail(attachment_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/attachments/{attachment_id}/thumbnail",
+        endpoint_attachment(attachment_id) + "/thumbnail",
         HTTPMethod.GET,
     )
 
@@ -82,12 +82,12 @@ endpoint_auth = create_endpoint(
 )
 
 endpoint_auth_from_session = create_endpoint(
-    ENDPOINT_API + "/auth/from-session",
+    endpoint_auth + "/from-session",
     HTTPMethod.POST,
 )
 
 endpoint_auth_login_token = create_endpoint(
-    ENDPOINT_API + "/auth/login-token",
+    endpoint_auth + "/login-token",
     HTTPMethod.POST,
 )
 
@@ -104,7 +104,7 @@ endpoint_conversation_messages = create_endpoint(
 
 def endpoint_conversation_message(message_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversation-messages/{message_id}",
+        endpoint_conversation_messages + f"/{message_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
     )
@@ -112,7 +112,7 @@ def endpoint_conversation_message(message_id: int):
 
 def endpoint_conversation_message_react(message_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversation-messages/{message_id}/react",
+        endpoint_conversation_message(message_id) + "/react",
         HTTPMethod.POST,
     )
 
@@ -130,7 +130,7 @@ endpoint_conversations = create_endpoint(
 
 def endpoint_conversation(conversation_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversations/{conversation_id}",
+        endpoint_conversations + f"/{conversation_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -139,35 +139,35 @@ def endpoint_conversation(conversation_id: int):
 
 def endpoint_conversation_invite(conversation_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversations/{conversation_id}/invite",
+        endpoint_conversation(conversation_id) + "/invite",
         HTTPMethod.POST,
     )
 
 
 def endpoint_conversation_mark_read(conversation_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversations/{conversation_id}/mark-read",
+        endpoint_conversation(conversation_id) + "/mark-read",
         HTTPMethod.POST,
     )
 
 
 def endpoint_conversation_mark_unread(conversation_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversations/{conversation_id}/mark-unread",
+        endpoint_conversation(conversation_id) + "/mark-unread",
         HTTPMethod.POST,
     )
 
 
 def endpoint_conversation_messages_list(conversation_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversations/{conversation_id}/messages",
+        endpoint_conversation(conversation_id) + "/messages",
         HTTPMethod.GET,
     )
 
 
 def endpoint_conversation_star(conversation_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/conversations/{conversation_id}/star",
+        endpoint_conversation(conversation_id) + "/star",
         HTTPMethod.POST,
     )
 
@@ -186,14 +186,14 @@ def endpoint_forum(forum_id: int):
 
 def endpoint_forum_mark_read(forum_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/forums/{forum_id}/mark-read",
+        endpoint_forum(forum_id) + "/mark-read",
         HTTPMethod.POST,
     )
 
 
 def endpoint_forum_threads(forum_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/forums/{forum_id}/threads",
+        endpoint_forum(forum_id) + "/threads",
         HTTPMethod.GET,
     )
 
@@ -219,18 +219,18 @@ endpoint_me = create_endpoint(
 )
 
 endpoint_me_avatar = create_endpoint(
-    ENDPOINT_API + "/me/avatar",
+    endpoint_me + "/avatar",
     HTTPMethod.POST,
     HTTPMethod.DELETE,
 )
 
 endpoint_me_email = create_endpoint(
-    ENDPOINT_API + "/me/email",
+    endpoint_me + "/email",
     HTTPMethod.POST,
 )
 
 endpoint_me_password = create_endpoint(
-    ENDPOINT_API + "/me/password",
+    endpoint_me + "/password",
     HTTPMethod.POST,
 )
 
@@ -246,14 +246,14 @@ endpoint_nodes = create_endpoint(
 )
 
 endpoint_nodes_flattened = create_endpoint(
-    ENDPOINT_API + "/nodes/flattened",
+    endpoint_nodes + "/flattened",
     HTTPMethod.GET,
 )
 
 
 def endpoint_node(node_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/nodes/{node_id}",
+        endpoint_nodes + f"/{node_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -272,7 +272,7 @@ endpoint_posts = create_endpoint(
 
 def endpoint_post(post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/posts/{post_id}",
+        endpoint_posts + f"/{post_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -281,21 +281,21 @@ def endpoint_post(post_id: int):
 
 def endpoint_post_mark_solution(post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/posts/{post_id}/mark-solution",
+        endpoint_post(post_id) + "/mark-solution",
         HTTPMethod.POST,
     )
 
 
 def endpoint_post_react(post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/posts/{post_id}/react",
+        endpoint_post(post_id) + "/react",
         HTTPMethod.POST,
     )
 
 
 def endpoint_post_vote(post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/posts/{post_id}/vote",
+        endpoint_post(post_id) + "/vote",
         HTTPMethod.POST,
     )
 
@@ -312,7 +312,7 @@ endpoint_profile_post_comments = create_endpoint(
 
 def endpoint_profile_post_comment(comment_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/profile-post-comments/{comment_id}",
+        endpoint_profile_post_comments + f"/{comment_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -321,7 +321,7 @@ def endpoint_profile_post_comment(comment_id: int):
 
 def endpoint_profile_post_comment_react(comment_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/profile-post-comments/{comment_id}/react",
+        endpoint_profile_post_comment(comment_id) + "/react",
         HTTPMethod.POST,
     )
 
@@ -338,7 +338,7 @@ endpoint_profile_posts = create_endpoint(
 
 def endpoint_profile_post(profile_post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/profile-posts/{profile_post_id}",
+        endpoint_profile_posts + f"/{profile_post_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -347,14 +347,14 @@ def endpoint_profile_post(profile_post_id: int):
 
 def endpoint_profile_post_comments_list(profile_post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/profile-posts/{profile_post_id}/comments",
+        endpoint_profile_post(profile_post_id) + "/comments",
         HTTPMethod.GET,
     )
 
 
 def endpoint_profile_post_react(profile_post_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/profile-posts/{profile_post_id}/react",
+        endpoint_profile_post(profile_post_id) + "/react",
         HTTPMethod.POST,
     )
 
@@ -382,7 +382,7 @@ endpoint_threads = create_endpoint(
 
 def endpoint_thread(thread_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/threads/{thread_id}",
+        endpoint_threads + f"/{thread_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -391,35 +391,35 @@ def endpoint_thread(thread_id: int):
 
 def endpoint_thread_change_type(thread_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/threads/{thread_id}/change-type",
+        endpoint_thread(thread_id) + "/change-type",
         HTTPMethod.POST,
     )
 
 
 def endpoint_thread_mark_read(thread_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/threads/{thread_id}/mark-read",
+        endpoint_thread(thread_id) + "/mark-read",
         HTTPMethod.POST,
     )
 
 
 def endpoint_thread_move(thread_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/threads/{thread_id}/move",
+        endpoint_thread(thread_id) + "/move",
         HTTPMethod.POST,
     )
 
 
 def endpoint_thread_posts(thread_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/threads/{thread_id}/posts",
+        endpoint_thread(thread_id) + "/posts",
         HTTPMethod.GET,
     )
 
 
 def endpoint_thread_vote(thread_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/threads/{thread_id}/vote",
+        endpoint_thread(thread_id) + "/vote",
         HTTPMethod.POST,
     )
 
@@ -435,19 +435,19 @@ endpoint_users = create_endpoint(
 )
 
 endpoint_users_find_email = create_endpoint(
-    ENDPOINT_API + "/users/find-email",
+    endpoint_users + "/find-email",
     HTTPMethod.GET,
 )
 
 endpoint_users_find_name = create_endpoint(
-    ENDPOINT_API + "/users/find-name",
+    endpoint_users + "/find-name",
     HTTPMethod.GET,
 )
 
 
 def endpoint_user(user_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/users/{user_id}",
+        endpoint_users + f"/{user_id}",
         HTTPMethod.GET,
         HTTPMethod.POST,
         HTTPMethod.DELETE,
@@ -456,7 +456,7 @@ def endpoint_user(user_id: int):
 
 def endpoint_user_avatar(user_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/users/{user_id}/avatar",
+        endpoint_user(user_id) + "/avatar",
         HTTPMethod.POST,
         HTTPMethod.DELETE,
     )
@@ -464,32 +464,6 @@ def endpoint_user_avatar(user_id: int):
 
 def endpoint_user_profile_posts(user_id: int):
     return create_endpoint(
-        ENDPOINT_API + f"/users/{user_id}/profile-posts",
+        endpoint_user(user_id) + "/profile-posts",
         HTTPMethod.GET,
     )
-
-
-# ============================================================================
-# OAUTH2
-# ============================================================================
-
-endpoint_oauth2_revoke = create_endpoint(
-    ENDPOINT_API + "/oauth2/revoke",
-    HTTPMethod.POST,
-)
-
-endpoint_oauth2_token = create_endpoint(
-    ENDPOINT_API + "/oauth2/token",
-    HTTPMethod.GET,
-    HTTPMethod.POST,
-)
-
-
-# ============================================================================
-# OEMBED
-# ============================================================================
-
-endpoint_oembed = create_endpoint(
-    ENDPOINT_API + "/oembed",
-    HTTPMethod.GET,
-)

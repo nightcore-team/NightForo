@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from pydantic import BaseModel
 
 from .user import User
@@ -16,14 +16,18 @@ class ProfilePost(BaseModel):
     can_view_attachments: bool
     view_url: str
     ProfileUser: (
-        User  # If requested by context, the user this profile post was left for.
+        Optional[
+            User
+        ]  # If requested by context, the user this profile post was left for.
     )
     Attachments: List[Attachment]  # Attachments to this profile post, if it has any.
     LatestComments: List[
         ProfilePostComment
     ]  # If requested, the most recent comments on this profile post.
     is_reacted_to: bool  # True if the viewing user has reacted to this content
-    visitor_reaction_id: int  # If the viewer reacted, the ID of the reaction they used
+    visitor_reaction_id: Optional[
+        int
+    ]  # If the viewer reacted, the ID of the reaction they used
     profile_post_id: int
     profile_user_id: int
     user_id: int
@@ -36,3 +40,33 @@ class ProfilePost(BaseModel):
     last_comment_date: int
     reaction_score: int
     User: User
+
+
+class PostProfilePostParams(BaseModel):
+    user_id: int
+    message: str
+    attachment_key: Optional[str] = None
+
+
+class GetProfilePostParams(BaseModel):
+    with_comments: Optional[bool] = None
+    page: Optional[int] = None
+    direction: Optional[str] = None
+
+
+class PostProfilePostUpdateParams(BaseModel):
+    message: str
+    author_alert: Optional[bool] = None
+    author_alert_reason: Optional[str] = None
+    attachment_key: Optional[str] = None
+
+
+class DeleteProfilePostParams(BaseModel):
+    hard_delete: Optional[bool] = None
+    reason: Optional[str] = None
+    author_alert: Optional[bool] = None
+    author_alert_reason: Optional[str] = None
+
+
+class PostProfilePostReactParams(BaseModel):
+    reaction_id: int
