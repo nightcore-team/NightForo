@@ -1,11 +1,15 @@
 from typing import Dict, Optional
+
 from pydantic import BaseModel
+
 from ..user import User
 
 
 class Conversation(BaseModel):
     username: str  # Name of the user that started the conversation
-    recipients: Dict[str, str]  # Key-value pair of recipient user IDs and names
+    recipients: Dict[
+        str, str
+    ]  # Key-value pair of recipient user IDs and names
     is_starred: bool  # True if the viewing user starred the conversation
     is_unread: Optional[
         bool

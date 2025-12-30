@@ -1,9 +1,10 @@
 from typing import List, Optional
+
 from pydantic import BaseModel
 
-from ..user import User
 from ..attachment import Attachment
 from ..profile_post_comment import ProfilePostComment
+from ..user import User
 
 
 class ProfilePost(BaseModel):
@@ -20,7 +21,9 @@ class ProfilePost(BaseModel):
             User
         ]  # If requested by context, the user this profile post was left for.
     )
-    Attachments: List[Attachment]  # Attachments to this profile post, if it has any.
+    Attachments: List[
+        Attachment
+    ]  # Attachments to this profile post, if it has any.
     LatestComments: List[
         ProfilePostComment
     ]  # If requested, the most recent comments on this profile post.

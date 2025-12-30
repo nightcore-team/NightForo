@@ -1,9 +1,10 @@
 from typing import List, Optional
+
 from pydantic import BaseModel
 
-from . import Conversation
 from ..conversation_message import ConversationMessage
 from ..pagination import Pagination
+from . import Conversation
 
 
 class ConversationsGetResponse(BaseModel):

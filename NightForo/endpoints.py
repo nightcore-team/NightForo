@@ -1,6 +1,8 @@
+"""XenForo API endpoint definitions."""
+
 from typing import Final
 
-from .endpoint import create_endpoint, HTTPMethod
+from .endpoint import HTTPMethod, create_endpoint
 
 ENDPOINT_API: Final[str] = "https://forum.arzguard.com/api"
 

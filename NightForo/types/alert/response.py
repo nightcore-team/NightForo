@@ -1,8 +1,9 @@
 from typing import List
+
 from pydantic import BaseModel
 
-from . import UserAlert
 from ..pagination import Pagination
+from . import UserAlert
 
 
 class AlertsGetResponse(BaseModel):

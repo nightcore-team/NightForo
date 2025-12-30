@@ -2,8 +2,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from ..conversation import Conversation
 from ..attachment import Attachment
+from ..conversation import Conversation
 from ..user import User
 
 

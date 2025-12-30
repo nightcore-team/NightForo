@@ -1,4 +1,5 @@
 from typing import BinaryIO, Dict, Optional
+
 from pydantic import BaseModel
 
 from . import Option, Privacy, Profile

@@ -58,7 +58,7 @@ class ThreadChangeTypeParams(BaseModel):
     new_thread_type_id: str
 
 
-class ThreadMarkReadParams:
+class ThreadMarkReadParams(BaseModel):
     date: Optional[int] = None
 
 

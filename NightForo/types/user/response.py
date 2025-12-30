@@ -1,9 +1,10 @@
 from typing import List, Optional
+
 from pydantic import BaseModel
 
-from . import User
-from ..profile_post import ProfilePost
 from ..pagination import Pagination
+from ..profile_post import ProfilePost
+from . import User
 
 
 class UsersGetResponse(BaseModel):

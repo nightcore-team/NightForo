@@ -2,9 +2,9 @@ from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
-from ..vote_type import VoteTypeEnum
 from ..node import Node
 from ..user import User
+from ..vote_type import VoteTypeEnum
 
 
 class Thread(BaseModel):
@@ -17,7 +17,9 @@ class Thread(BaseModel):
             int
         ]  # If accessing as a user, the number of posts they have made in this thread
     )
-    is_unread: Optional[bool]  # If accessing as a user, true if this thread is unread
+    is_unread: Optional[
+        bool
+    ]  # If accessing as a user, true if this thread is unread
     custom_fields: Dict[
         str, Any
     ]  # Key-value pairs of custom field values for this thread
@@ -44,7 +46,9 @@ class Thread(BaseModel):
     allowed_content_vote_types: List[
         str
     ]  # List of content vote types allowed on this content
-    is_content_voted: bool  # True if the viewing user has voted on this content
+    is_content_voted: (
+        bool  # True if the viewing user has voted on this content
+    )
     visitor_content_vote: Optional[
         VoteTypeEnum
     ]  # If the viewer reacted, the vote they case (up/down)

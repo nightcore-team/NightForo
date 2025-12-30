@@ -1,9 +1,10 @@
 from typing import List, Optional
+
 from pydantic import BaseModel
 
 from ..attachment import Attachment
-from ..user import User
 from ..profile_post import ProfilePost
+from ..user import User
 
 
 class ProfilePostComment(BaseModel):

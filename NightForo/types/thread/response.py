@@ -1,9 +1,10 @@
 from typing import List, Optional
+
 from pydantic import BaseModel
 
+from ..pagination import Pagination
 from ..post import Post
 from . import Thread
-from ..pagination import Pagination
 
 
 class ThreadsGetResponse(BaseModel):

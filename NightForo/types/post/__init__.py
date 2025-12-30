@@ -11,7 +11,9 @@ class Post(BaseModel):
     username: str
     is_first_post: bool
     is_last_post: bool
-    is_unread: Optional[bool]  # If accessing as a user, true if this post is unread
+    is_unread: Optional[
+        bool
+    ]  # If accessing as a user, true if this post is unread
     message_parsed: str  # HTML parsed version of the message contents.
     can_edit: bool
     can_soft_delete: bool
@@ -32,7 +34,9 @@ class Post(BaseModel):
     allowed_content_vote_types: List[
         str
     ]  # List of content vote types allowed on this content
-    is_content_voted: bool  # True if the viewing user has voted on this content
+    is_content_voted: (
+        bool  # True if the viewing user has voted on this content
+    )
     visitor_content_vote: Optional[
         str
     ]  # If the viewer reacted, the vote they case (up/down)

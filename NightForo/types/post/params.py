@@ -1,5 +1,7 @@
 from typing import Optional
+
 from pydantic import BaseModel
+
 from ..vote_type import VoteTypeEnum
 
 
