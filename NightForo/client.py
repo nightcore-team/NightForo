@@ -229,7 +229,7 @@ class Client:
     api_key : str
         XenForo API key for authentication
 
-    Raises:
+    Errors:
     ------
     NoApiKeyProvidedError
         If api_key is empty string
@@ -1349,13 +1349,12 @@ class Client:
         post_id : int
             ID of the post
 
-        Returns:
+        Returns PostGetResponse:
         -------
-        PostGetResponse
-            post : Post
-                Post information
+        post : Post
+            Post information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1386,15 +1385,14 @@ class Client:
             attachment_key : str, optional
                 Attachment key if including attachments
 
-        Returns:
+        Returns PostUpdateResponse:
         -------
-        PostUpdateResponse
-            success : bool
-                True if update was successful
-            post : Post
-                Updated post information
+        success : bool
+            True if update was successful
+        post : Post
+            Updated post information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1423,13 +1421,12 @@ class Client:
             author_alert_reason : str, optional
                 Reason for alert
 
-        Returns:
+        Returns PostDeleteResponse:
         -------
-        PostDeleteResponse
-            success : bool
-                True if deletion was successful
+        success : bool
+            True if deletion was successful
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1447,17 +1444,16 @@ class Client:
         post_id : int
             ID of the post
 
-        Returns:
+        Returns PostMarkSolutionResponse:
         -------
-        PostMarkSolutionResponse
-            true : Any
-                Success indicator
-            new_solution_post : Post, optional
-                New solution post if set
-            old_solution_post : Post, optional
-                Old solution post if changed
+        true : Any
+            Success indicator
+        new_solution_post : Post, optional
+            New solution post if set
+        old_solution_post : Post, optional
+            Old solution post if changed
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1478,15 +1474,14 @@ class Client:
             reaction_id : int
                 ID of the reaction
 
-        Returns:
+        Returns PostReactResponse:
         -------
-        PostReactResponse
-            success : bool
-                True if reaction was added/removed
-            action : str
-                "insert" or "delete"
+        success : bool
+            True if reaction was added/removed
+        action : str
+            "insert" or "delete"
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1507,15 +1502,14 @@ class Client:
             type : str
                 "up" or "down"
 
-        Returns:
+        Returns PostVoteResponse:
         -------
-        PostVoteResponse
-            success : bool
-                True if vote was cast/removed
-            action : str
-                "insert" or "delete"
+        success : bool
+            True if vote was cast/removed
+        action : str
+            "insert" or "delete"
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1542,15 +1536,14 @@ class Client:
             attachment_key : str, optional
                 Attachment key if including attachments
 
-        Returns:
+        Returns ProfilePostCommentCreateResponse:
         -------
-        ProfilePostCommentCreateResponse
-            success : bool
-                True if comment was created
-            comment : ProfilePostComment
-                Created comment information
+        success : bool
+            True if comment was created
+        comment : ProfilePostComment
+            Created comment information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1568,13 +1561,12 @@ class Client:
         comment_id : int
             ID of the comment
 
-        Returns:
+        Returns ProfilePostCommentGetResponse:
         -------
-        ProfilePostCommentGetResponse
-            comment : ProfilePostComment
-                Comment information
+        comment : ProfilePostComment
+            Comment information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1601,15 +1593,14 @@ class Client:
             attachment_key : str, optional
                 Attachment key if including attachments
 
-        Returns:
+        Returns ProfilePostCommentUpdateResponse:
         -------
-        ProfilePostCommentUpdateResponse
-            success : bool
-                True if update was successful
-            comment : ProfilePostComment
-                Updated comment information
+        success : bool
+            True if update was successful
+        comment : ProfilePostComment
+            Updated comment information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1640,13 +1631,12 @@ class Client:
             author_alert_reason : str, optional
                 Reason for alert
 
-        Returns:
+        Returns ProfilePostCommentDeleteResponse:
         -------
-        ProfilePostCommentDeleteResponse
-            success : bool
-                True if deletion was successful
+        success : bool
+            True if deletion was successful
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1669,15 +1659,14 @@ class Client:
             reaction_id : int
                 ID of the reaction
 
-        Returns:
+        Returns ProfilePostCommentReactResponse:
         -------
-        ProfilePostCommentReactResponse
-            success : bool
-                True if reaction was added/removed
-            action : str
-                "insert" or "delete"
+        success : bool
+            True if reaction was added/removed
+        action : str
+            "insert" or "delete"
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1706,15 +1695,14 @@ class Client:
             attachment_key : str, optional
                 Attachment key if including attachments
 
-        Returns:
+        Returns ProfilePostCreateResponse:
         -------
-        ProfilePostCreateResponse
-            success : bool
-                True if post was created
-            profile_post : ProfilePost
-                Created profile post information
+        success : bool
+            True if post was created
+        profile_post : ProfilePost
+            Created profile post information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1741,17 +1729,16 @@ class Client:
             direction : str, optional
                 "desc" or "asc"
 
-        Returns:
+        Returns ProfilePostGetResponse:
         -------
-        ProfilePostGetResponse
-            profile_post : ProfilePost
-                Profile post information
-            comments : List[ProfilePostComment], optional
-                Comments if requested
-            pagination : Pagination, optional
-                Pagination if comments included
+        profile_post : ProfilePost
+            Profile post information
+        comments : List[ProfilePostComment], optional
+            Comments if requested
+        pagination : Pagination, optional
+            Pagination if comments included
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1778,15 +1765,14 @@ class Client:
             attachment_key : str, optional
                 Attachment key if including attachments
 
-        Returns:
+        Returns ProfilePostUpdateResponse:
         -------
-        ProfilePostUpdateResponse
-            success : bool
-                True if update was successful
-            profile_post : ProfilePost
-                Updated profile post information
+        success : bool
+            True if update was successful
+        profile_post : ProfilePost
+            Updated profile post information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1815,13 +1801,12 @@ class Client:
             author_alert_reason : str, optional
                 Reason for alert
 
-        Returns:
+        Returns ProfilePostDeleteResponse:
         -------
-        ProfilePostDeleteResponse
-            success : bool
-                True if deletion was successful
+        success : bool
+            True if deletion was successful
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1846,15 +1831,14 @@ class Client:
             direction : str, optional
                 "desc" or "asc"
 
-        Returns:
+        Returns ProfilePostCommentsGetResponse:
         -------
-        ProfilePostCommentsGetResponse
-            comments : List[ProfilePostComment]
-                List of comments
-            pagination : Pagination
-                Pagination information
+        comments : List[ProfilePostComment]
+            List of comments
+        pagination : Pagination
+            Pagination information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1877,15 +1861,14 @@ class Client:
             reaction_id : int
                 ID of the reaction
 
-        Returns:
+        Returns ProfilePostReactResponse:
         -------
-        ProfilePostReactResponse
-            success : bool
-                True if reaction was added/removed
-            action : str
-                "insert" or "delete"
+        success : bool
+            True if reaction was added/removed
+        action : str
+            "insert" or "delete"
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1900,17 +1883,16 @@ class Client:
     async def get_stats(self) -> StatsResponse:
         """GET stats/ - Gets site statistics and general activity information
 
-        Returns:
+        Returns StatsResponse:
         -------
-        StatsResponse
-            totals : dict
-                Total counts for threads, messages, users
-            latest_user : dict
-                Latest registered user information
-            online : dict
-                Online user counts
+        totals : dict
+            Total counts for threads, messages, users
+        latest_user : dict
+            Latest registered user information
+        online : dict
+            Online user counts
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1947,15 +1929,14 @@ class Client:
             direction : str, optional
                 "asc" or "desc"
 
-        Returns:
+        Returns ThreadsGetResponse:
         -------
-        ThreadsGetResponse
-            threads : List[Thread]
-                List of threads
-            pagination : Pagination
-                Pagination information
+        threads : List[Thread]
+            List of threads
+        pagination : Pagination
+            Pagination information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -1992,13 +1973,12 @@ class Client:
             attachment_key : str, optional
                 Attachment key if including attachments
 
-        Returns:
+        Returns ThreadCreateResponse:
         -------
-        ThreadCreateResponse
-            success : bool
-                True if thread was created
-            thread : Thread
-                Created thread information
+        success : bool
+            True if thread was created
+        thread : Thread
+            Created thread information
 
         Errors:
         ------
@@ -2025,17 +2005,16 @@ class Client:
             page : int, optional
                 Page number
 
-        Returns:
+        Returns ThreadGetResponse:
         -------
-        ThreadGetResponse
-            thread : Thread
-                Thread information
-            posts : List[Post], optional
-                Posts if requested
-            pagination : Pagination, optional
-                Pagination if posts included
+        thread : Thread
+            Thread information
+        posts : List[Post], optional
+            Posts if requested
+        pagination : Pagination, optional
+            Pagination if posts included
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2066,15 +2045,14 @@ class Client:
             sticky : bool, optional
                 Whether thread is sticky
 
-        Returns:
+        Returns ThreadUpdateResponse:
         -------
-        ThreadUpdateResponse
-            success : bool
-                True if update was successful
-            thread : Thread
-                Updated thread information
+        success : bool
+            True if update was successful
+        thread : Thread
+            Updated thread information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2105,13 +2083,12 @@ class Client:
             starter_alert_reason : str, optional
                 Reason for starter alert
 
-        Returns:
+        Returns ThreadDeleteResponse:
         -------
-        ThreadDeleteResponse
-            success : bool
-                True if deletion was successful
+        success : bool
+            True if deletion was successful
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2132,15 +2109,14 @@ class Client:
             discussion_type : str
                 New discussion type
 
-        Returns:
+        Returns ThreadChangeTypeResponse:
         -------
-        ThreadChangeTypeResponse
-            success : bool
-                True if type was changed
-            thread : Thread
-                Updated thread information
+        success : bool
+            True if type was changed
+        thread : Thread
+            Updated thread information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2161,13 +2137,12 @@ class Client:
             date : int
                 Unix timestamp
 
-        Returns:
+        Returns ThreadMarkReadResponse:
         -------
-        ThreadMarkReadResponse
-            success : bool
-                True if operation was successful
+        success : bool
+            True if operation was successful
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2196,15 +2171,14 @@ class Client:
             prefix_id : int, optional
                 New prefix ID
 
-        Returns:
+        Returns ThreadMoveResponse:
         -------
-        ThreadMoveResponse
-            success : bool
-                True if move was successful
-            thread : Thread
-                Moved thread information
+        success : bool
+            True if move was successful
+        thread : Thread
+            Moved thread information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2225,15 +2199,14 @@ class Client:
             page : int, optional
                 Page number
 
-        Returns:
+        Returns ThreadPostsGetResponse:
         -------
-        ThreadPostsGetResponse
-            posts : List[Post]
-                List of posts
-            pagination : Pagination
-                Pagination information
+        posts : List[Post]
+            List of posts
+        pagination : Pagination
+            Pagination information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2254,15 +2227,14 @@ class Client:
             type : str
                 "up" or "down"
 
-        Returns:
+        Returns ThreadVoteResponse:
         -------
-        ThreadVoteResponse
-            success : bool
-                True if vote was cast/removed
-            action : str
-                "insert" or "delete"
+        success : bool
+            True if vote was cast/removed
+        action : str
+            "insert" or "delete"
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2285,15 +2257,14 @@ class Client:
             page : int, optional
                 Page number
 
-        Returns:
+        Returns UsersGetResponse:
         -------
-        UsersGetResponse
-            users : List[User]
-                List of users
-            pagination : Pagination
-                Pagination information
+        users : List[User]
+            List of users
+        pagination : Pagination
+            Pagination information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2316,15 +2287,14 @@ class Client:
             password : str
                 Password
 
-        Returns:
+        Returns UserCreateResponse:
         -------
-        UserCreateResponse
-            success : bool
-                True if user was created
-            user : User
-                Created user information
+        success : bool
+            True if user was created
+        user : User
+            Created user information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2343,13 +2313,12 @@ class Client:
             email : str
                 Email address to search for
 
-        Returns:
+        Returns UserFindEmailResponse:
         -------
-        UserFindEmailResponse
-            exact : User, optional
-                Exact match user
+        exact : User, optional
+            Exact match user
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2368,15 +2337,14 @@ class Client:
             username : str
                 Username to search for
 
-        Returns:
+        Returns UserFindNameResponse:
         -------
-        UserFindNameResponse
-            exact : User, optional
-                Exact match user
-            recommendations : List[User], optional
-                Similar usernames
+        exact : User, optional
+            Exact match user
+        recommendations : List[User], optional
+            Similar usernames
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2397,13 +2365,12 @@ class Client:
             with_posts : bool, optional
                 Include recent posts
 
-        Returns:
+        Returns UserGetResponse:
         -------
-        UserGetResponse
-            user : User
-                User information
+        user : User
+            User information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2436,15 +2403,14 @@ class Client:
             visible : bool, optional
                 Visibility
 
-        Returns:
+        Returns UserUpdateResponse:
         -------
-        UserUpdateResponse
-            success : bool
-                True if update was successful
-            user : User
-                Updated user information
+        success : bool
+            True if update was successful
+        user : User
+            Updated user information
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2465,13 +2431,12 @@ class Client:
             rename_to : str, optional
                 New name for content attribution
 
-        Returns:
+        Returns UserDeleteResponse:
         -------
-        UserDeleteResponse
-            success : bool
-                True if deletion was successful
+        success : bool
+            True if deletion was successful
 
-        Raises:
+        Errors:
         ------
         XenForoError
             If the API request fails
@@ -2492,11 +2457,10 @@ class Client:
             avatar : BinaryIO
                 Avatar file
 
-        Returns:
+        Returns UserAvatarUpdateResponse:
         -------
-        UserAvatarUpdateResponse
-            success : bool
-                True if update was successful
+        success : bool
+            True if update was successful
         """
         payload = await self._http.update_user_avatar(user_id, params)
         return UserAvatarUpdateResponse.model_validate(payload)
@@ -2532,8 +2496,8 @@ class Client:
         page : int, optional
             Page number
 
-        Returns UserProfilePostsGetResponse
-        -----------------------------------
+        Returns UserProfilePostsGetResponse:
+        -------
         profile_posts : List[ProfilePost]
             List of profile posts
         pagination : Pagination
@@ -2555,9 +2519,10 @@ class Client:
 
         Returns GetDemoteGroupsResponse:
         -------
-            success: bool
-                Operation status
-            groups : Dict[XenForoInternalGroupsEnum, ArzGuardGroupsEnum]
+        success : bool
+            Operation status
+        groups : Dict[XenForoInternalGroupsEnum, ArzGuardGroupsEnum]
+            Mapping of internal group enum values to ArzGuard groups
 
         """
 
@@ -2578,12 +2543,13 @@ class Client:
 
         Returns DemoteUserResponse:
         -------
-            success: bool
-                Operation status
-            groups: List[ArzGuardGroupsNamesEnum]
-                An array of group names that the user belongs to
-            user: Optional[User]
-                Detailed user information (included if the API key has the user:read permission)
+        success : bool
+            Operation status
+        groups : List[ArzGuardGroupsNamesEnum]
+            An array of group names that the user belongs to
+        user : Optional[User]
+            Detailed user information (included if the API key has the user:read permission)
+
         Errors
         ------
             user_id_not_valid:
@@ -2603,9 +2569,10 @@ class Client:
 
         Returns GetPromoteGroupsResponse:
         -------
-            success: bool
-                Operation status
-            groups : Dict[XenForoInternalGroupsEnum, ArzGuardGroupsEnum]
+        success : bool
+            Operation status
+        groups : Dict[XenForoInternalGroupsEnum, ArzGuardGroupsEnum]
+            Mapping of internal group enum values to ArzGuard groups
         """
         payload = await self._http.get_promote_groups()
         return GetPromoteGroupsResponse.model_validate(payload)
@@ -2624,13 +2591,14 @@ class Client:
 
         Returns PromoteUserResponse:
         -------
-            success: bool
-                Operation status
-            groups: List[ArzGuardGroupsNamesEnum]
-                An array of group names that the user belongs to
-            user: Optional[User]
-                Detailed user information (included if the API key has the user:read permission)
-        Errors
+        success : bool
+            Operation status
+        groups : List[ArzGuardGroupsNamesEnum]
+            An array of group names that the user belongs to
+        user : Optional[User]
+            Detailed user information (included if the API key has the user:read permission)
+
+        Errors:
         ------
             group_not_provided:
                 The group is not specified
