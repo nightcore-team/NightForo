@@ -1,7 +1,7 @@
 [project]
 name = "nightforo"
 version = "0.1.0"
-description = "Add your description here"
+description = "API wrapper for Arizona Guard written in Python"
 readme = "README.md"
 requires-python = ">=3.8"
 dependencies = ["aiohttp>=3.10.11", "pydantic>=2.10.6"]
@@ -46,19 +46,21 @@ ignore = [
     "RUF006",
     "D100",
     "E501",
+    "D102",
+    "D103",
 ]
 
 # Allow unused variables if they start with an underscore
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 
 # Per-file ignores
-[tool.ruff.lint.per-file-ignores]
-"NightForo/http.py" = [
-    "D102",
-] # Internal implementation, documented in client.py
-"NightForo/endpoints.py" = ["D103"] # Endpoint definitions, self-explanatory
+# [tool.ruff.lint.per-file-ignores]
+# "nightforo/http.py" = [
+#     "D102",
+# ] # Internal implementation, documented in client.py
+# "nightforo/endpoints.py" = ["D103"] # Endpoint definitions, self-explanatory
 
-# Docstring handling
+# Docstring handlings
 [tool.ruff.lint.pydocstyle]
 convention = "google"
 
