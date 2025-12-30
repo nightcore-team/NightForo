@@ -12,8 +12,8 @@ from .endpoints import (
 )
 from .endpoint import Endpoint, HTTPMethod
 
-from .types.thread import ThreadGetParams, ThreadCreateParams
-from .types.alert import AlertsGetParams, AlertSendParams
+from .types.thread.params import ThreadGetParams, ThreadCreateParams
+from .types.alert.params import AlertsGetParams, AlertSendParams
 
 
 class HTTPClient:

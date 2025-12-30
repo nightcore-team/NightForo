@@ -17,9 +17,3 @@ class Online(BaseModel):
     total: int
     members: int
     guests: int
-
-
-class StatsResponse(BaseModel):
-    totals: Totals
-    latest_user: LatestUser
-    online: Online

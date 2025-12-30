@@ -1,6 +1,6 @@
 from enum import Enum
 
 
-class VoteType(Enum):
+class VoteTypeEnum(Enum):
     UP = "up"
     DOWN = "down"

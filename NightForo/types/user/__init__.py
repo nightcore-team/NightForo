@@ -1,4 +1,4 @@
-from typing import Any, BinaryIO, Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -93,78 +93,3 @@ class User(BaseModel):
     is_staff: bool
     reaction_score: int
     vote_score: int
-
-
-class GetUsersParams(BaseModel):
-    page: Optional[int] = None
-
-
-class PostUserParams(BaseModel):
-    username: str
-    email: str
-    password: str
-    option: Optional[Dict[str, Any]] = None
-    profile: Optional[Dict[str, str]] = None
-    privacy: Optional[Dict[str, str]] = None
-    visible: Optional[bool] = None
-    activity_visible: Optional[bool] = None
-    timezone: Optional[str] = None
-    custom_title: Optional[str] = None
-    user_group_id: Optional[int] = None
-    secondary_group_ids: Optional[List[int]] = None
-    user_state: Optional[str] = None
-    is_staff: Optional[bool] = None
-    message_count: Optional[int] = None
-    reaction_score: Optional[int] = None
-    trophy_points: Optional[int] = None
-    username_change_visible: Optional[bool] = None
-    dob: Optional[Dict[str, int]] = None
-    custom_fields: Optional[Dict[str, str]] = None
-
-
-class GetUsersFindEmailParams:
-    email: str
-
-
-class GetUsersFindNameParams(BaseModel):
-    username: str
-
-
-class GetUserParams(BaseModel):
-    with_posts: Optional[bool] = None
-    page: Optional[int] = None
-
-
-class PostUserUpdateParams(BaseModel):
-    option: Optional[Dict[str, Any]] = None
-    profile: Optional[Dict[str, str]] = None
-    privacy: Optional[Dict[str, str]] = None
-    visible: Optional[bool] = None
-    activity_visible: Optional[bool] = None
-    timezone: Optional[str] = None
-    custom_title: Optional[str] = None
-    username: Optional[str] = None
-    email: Optional[str] = None
-    password: Optional[str] = None
-    user_group_id: Optional[int] = None
-    secondary_group_ids: Optional[List[int]] = None
-    user_state: Optional[str] = None
-    is_staff: Optional[bool] = None
-    message_count: Optional[int] = None
-    reaction_score: Optional[int] = None
-    trophy_points: Optional[int] = None
-    username_change_visible: Optional[bool] = None
-    dob: Optional[Dict[str, int]] = None
-    custom_fields: Optional[Dict[str, str]] = None
-
-
-class DeleteUserParams(BaseModel):
-    rename_to: Optional[str] = None
-
-
-class PostUserAvatarParamsv:
-    avatar: BinaryIO  # File upload
-
-
-class GetUserProfilePostsParams(BaseModel):
-    page: Optional[int] = None

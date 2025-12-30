@@ -2,14 +2,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class Forum(BaseModel):
-    forum_type_id: str
-    allow_posting: bool
-    require_prefix: bool
-    min_tags: int
-
-
-class GetForumParams(BaseModel):
+class ForumGetParams(BaseModel):
     with_threads: Optional[bool] = None
     page: Optional[int] = None
     prefix_id: Optional[int] = None
@@ -21,11 +14,11 @@ class GetForumParams(BaseModel):
     direction: Optional[str] = None
 
 
-class PostForumMarkReadParams(BaseModel):
+class ForumMarkReadParams(BaseModel):
     date: Optional[int] = None
 
 
-class GetForumThreadsParams(BaseModel):
+class ForumThreadsGetParams(BaseModel):
     page: Optional[int] = None
     prefix_id: Optional[int] = None
     starter_id: Optional[int] = None

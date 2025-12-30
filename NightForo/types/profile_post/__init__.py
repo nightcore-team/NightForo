@@ -1,9 +1,9 @@
 from typing import List, Optional
 from pydantic import BaseModel
 
-from .user import User
-from .attachment import Attachment
-from .profile_post_comment import ProfilePostComment
+from ..user import User
+from ..attachment import Attachment
+from ..profile_post_comment import ProfilePostComment
 
 
 class ProfilePost(BaseModel):
@@ -40,33 +40,3 @@ class ProfilePost(BaseModel):
     last_comment_date: int
     reaction_score: int
     User: User
-
-
-class PostProfilePostParams(BaseModel):
-    user_id: int
-    message: str
-    attachment_key: Optional[str] = None
-
-
-class GetProfilePostParams(BaseModel):
-    with_comments: Optional[bool] = None
-    page: Optional[int] = None
-    direction: Optional[str] = None
-
-
-class PostProfilePostUpdateParams(BaseModel):
-    message: str
-    author_alert: Optional[bool] = None
-    author_alert_reason: Optional[str] = None
-    attachment_key: Optional[str] = None
-
-
-class DeleteProfilePostParams(BaseModel):
-    hard_delete: Optional[bool] = None
-    reason: Optional[str] = None
-    author_alert: Optional[bool] = None
-    author_alert_reason: Optional[str] = None
-
-
-class PostProfilePostReactParams(BaseModel):
-    reaction_id: int

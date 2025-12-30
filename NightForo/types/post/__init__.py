@@ -2,11 +2,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from .vote_type import VoteType
-
-from .attachment import Attachment
-from .thread import Thread
-from .user import User
+from ..attachment import Attachment
+from ..thread import Thread
+from ..user import User
 
 
 class Post(BaseModel):
@@ -50,33 +48,3 @@ class Post(BaseModel):
     last_edit_date: int
     reaction_score: int
     User: User
-
-
-class PostPostParams(BaseModel):
-    thread_id: int
-    message: str
-    attachment_key: Optional[str] = None
-
-
-class PostPostUpdateParams(BaseModel):
-    message: str
-    silent: Optional[bool] = None
-    clear_edit: Optional[bool] = None
-    author_alert: Optional[bool] = None
-    author_alert_reason: Optional[str] = None
-    attachment_key: Optional[str] = None
-
-
-class DeletePostParams(BaseModel):
-    hard_delete: Optional[bool] = None
-    reason: Optional[str] = None
-    author_alert: Optional[bool] = None
-    author_alert_reason: Optional[str] = None
-
-
-class PostPostReactParams(BaseModel):
-    reaction_id: int
-
-
-class PostPostVoteParams(BaseModel):
-    type: VoteType

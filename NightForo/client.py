@@ -1,17 +1,21 @@
 from .errors import NoApiKeyProvided
 
 from .http import HTTPClient
-from .types.thread import (
-    ThreadGetParams,
-    GetThreadResponse,
-    ThreadCreateParams,
+from .types.thread.response import (
+    ThreadGetResponse,
     ThreadCreateResponse,
 )
-from .types.stats import StatsResponse
-from .types.alert import (
+from .types.thread.params import (
+    ThreadGetParams,
+    ThreadCreateParams,
+)
+from .types.stats.response import StatsResponse
+from .types.alert.params import (
     AlertsGetParams,
-    AlertsGetResponse,
     AlertSendParams,
+)
+from .types.alert.response import (
+    AlertsGetResponse,
     AlertSendResponse,
 )
 
@@ -74,10 +78,10 @@ class Client:
 
     async def get_thread(
         self, thread_id: int, params: ThreadGetParams
-    ) -> GetThreadResponse:
+    ) -> ThreadGetResponse:
         payload = await self._http.get_thread(thread_id, params)
 
-        return GetThreadResponse.model_validate(payload)
+        return ThreadGetResponse.model_validate(payload)
 
     async def create_thread(self, params: ThreadCreateParams) -> ThreadCreateResponse:
         payload = await self._http.create_thread(params)

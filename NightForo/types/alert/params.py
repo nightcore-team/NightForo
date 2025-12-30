@@ -1,14 +1,6 @@
-from typing import List, Optional
+from typing import Optional
 
 from pydantic import BaseModel
-
-
-class UserAlert(BaseModel): ...
-
-
-class AlertsGetResponse(BaseModel):
-    alerts: List[UserAlert]
-    pagination: pagination
 
 
 class AlertsGetParams(BaseModel):
@@ -16,10 +8,6 @@ class AlertsGetParams(BaseModel):
     cutoff: Optional[int] = None
     unviewed: Optional[bool] = None
     unread: Optional[bool] = None
-
-
-class AlertSendResponse(BaseModel):
-    success: bool
 
 
 class AlertSendParams(BaseModel):
@@ -35,7 +23,7 @@ class AlertsMarkAllParams(BaseModel):
     viewed: Optional[bool] = None
 
 
-class PostAlertMarkParams(BaseModel):
+class AlertMarkParams(BaseModel):
     read: Optional[bool] = None
     unread: Optional[bool] = None
     viewed: Optional[bool] = None

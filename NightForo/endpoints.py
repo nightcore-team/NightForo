@@ -467,3 +467,34 @@ def endpoint_user_profile_posts(user_id: int):
         endpoint_user(user_id) + "/profile-posts",
         HTTPMethod.GET,
     )
+
+
+# ============================================================================
+# ACTIONS
+# ============================================================================
+
+
+endpoint_demote = create_endpoint(
+    ENDPOINT_API + "/demote",
+    HTTPMethod.GET,
+)
+
+
+def endpoint_demote_user(user_id: int):
+    return create_endpoint(
+        endpoint_demote + f"/{user_id}",
+        HTTPMethod.POST,
+    )
+
+
+endpoint_promote = create_endpoint(
+    ENDPOINT_API + "/promote",
+    HTTPMethod.GET,
+)
+
+
+def endpoint_promote_user(user_id: int):
+    return create_endpoint(
+        endpoint_promote + f"/{user_id}",
+        HTTPMethod.POST,
+    )

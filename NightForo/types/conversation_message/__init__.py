@@ -2,9 +2,9 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
-from .conversation import Conversation
-from .attachment import Attachment
-from .user import User
+from ..conversation import Conversation
+from ..attachment import Attachment
+from ..user import User
 
 
 class ConversationMessage(BaseModel):
@@ -34,18 +34,3 @@ class ConversationMessage(BaseModel):
     attach_count: int
     reaction_score: int
     User: User
-
-
-class PostConversationMessageParams(BaseModel):
-    conversation_id: int
-    message: str
-    attachment_key: Optional[str] = None
-
-
-class PostConversationMessageUpdateParams(BaseModel):
-    message: str
-    attachment_key: Optional[str] = None
-
-
-class PostConversationMessageReactParams(BaseModel):
-    reaction_id: int
