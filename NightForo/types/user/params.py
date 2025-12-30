@@ -1,8 +1,9 @@
-from typing import Any, BinaryIO, Dict, List, Optional
+from typing import BinaryIO, Dict, List, Optional
 
 from pydantic import BaseModel
 
 from ...groups import ArzGuardGroupsIdsEnum
+from . import DateOfBirth, Option, Privacy, Profile
 
 
 class UsersGetParams(BaseModel):
@@ -13,9 +14,9 @@ class UserCreateParams(BaseModel):
     username: str
     email: str
     password: str
-    option: Optional[Dict[str, Any]] = None
-    profile: Optional[Dict[str, str]] = None
-    privacy: Optional[Dict[str, str]] = None
+    option: Optional[Option] = None
+    profile: Optional[Profile] = None
+    privacy: Optional[Privacy] = None
     visible: Optional[bool] = None
     activity_visible: Optional[bool] = None
     timezone: Optional[str] = None
@@ -29,7 +30,7 @@ class UserCreateParams(BaseModel):
     trophy_points: Optional[int] = None
     username_change_visible: Optional[bool] = None
     dob: Optional[Dict[str, int]] = None
-    custom_fields: Optional[Dict[str, str]] = None
+    custom_fields: Optional[str] = None
 
 
 class UsersFindEmailParams(BaseModel):
@@ -46,9 +47,9 @@ class UserGetParams(BaseModel):
 
 
 class UserUpdateParams(BaseModel):
-    option: Optional[Dict[str, Any]] = None
-    profile: Optional[Dict[str, str]] = None
-    privacy: Optional[Dict[str, str]] = None
+    option: Optional[Option] = None
+    profile: Optional[Profile] = None
+    privacy: Optional[Privacy] = None
     visible: Optional[bool] = None
     activity_visible: Optional[bool] = None
     timezone: Optional[str] = None
@@ -64,8 +65,8 @@ class UserUpdateParams(BaseModel):
     reaction_score: Optional[int] = None
     trophy_points: Optional[int] = None
     username_change_visible: Optional[bool] = None
-    dob: Optional[Dict[str, int]] = None
-    custom_fields: Optional[Dict[str, str]] = None
+    dob: Optional[DateOfBirth] = None
+    custom_fields: Optional[str] = None
 
 
 class UserRenameParams(BaseModel):

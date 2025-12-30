@@ -1319,7 +1319,7 @@ class Client:
     async def create_post(
         self, params: PostCreateParams
     ) -> PostCreateResponse:
-        """POST posts/ - Adds a new reply to a thread
+        """POST posts/ - Adds a new reply to a thread.
 
         Parameters
         ----------
@@ -1328,14 +1328,14 @@ class Client:
         message : str
             Post message content
         attachment_key : str, optional
-            Attachment key if including attachments
+            API attachment key to upload files. Attachment key context type must be post with context[thread_id] set to this thread ID.
 
         Returns PostCreateResponse:
         -------
         success : bool
             True if post was created
         post : Post
-            Created post information
+            Created post
         """
 
         payload = await self._http.create_post(params)
@@ -1366,19 +1366,18 @@ class Client:
         ----------
         post_id : int
             ID of the post
-        params : PostUpdateParams
-            message : str
-                Updated message content
-            silent : bool, optional
-                Silent edit
-            clear_edit : bool, optional
-                Clear edit history
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
-            attachment_key : str, optional
-                Attachment key if including attachments
+        message : str
+            Updated message content
+        silent : bool, optional
+            Silent edit
+        clear_edit : bool, optional
+            Clear edit history
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
+        attachment_key : str, optional
+            Attachment key if including attachments
 
         Returns PostUpdateResponse:
         -------
@@ -1401,15 +1400,14 @@ class Client:
         ----------
         post_id : int
             ID of the post
-        params : PostDeleteParams, optional
-            hard_delete : bool, optional
-                Whether to hard delete
-            reason : str, optional
-                Deletion reason
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
+        hard_delete : bool, optional
+            Whether to hard delete
+        reason : str, optional
+            Deletion reason
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
 
         Returns PostDeleteResponse:
         -------
@@ -1450,9 +1448,8 @@ class Client:
         ----------
         post_id : int
             ID of the post
-        params : PostReactParams
-            reaction_id : int
-                ID of the reaction
+        reaction_id : int
+            ID of the reaction
 
         Returns PostReactResponse:
         -------
@@ -1473,9 +1470,8 @@ class Client:
         ----------
         post_id : int
             ID of the post
-        params : PostVoteParams
-            type : str
-                "up" or "down"
+        type : str
+            "up" or "down"
 
         Returns PostVoteResponse:
         -------
@@ -1498,13 +1494,12 @@ class Client:
 
         Parameters
         ----------
-        params : ProfilePostCommentCreateParams
-            profile_post_id : int
-                ID of the profile post
-            message : str
-                Comment message content
-            attachment_key : str, optional
-                Attachment key if including attachments
+        profile_post_id : int
+            ID of the profile post
+        message : str
+            Comment message content
+        attachment_key : str, optional
+            Attachment key if including attachments
 
         Returns ProfilePostCommentCreateResponse:
         -------
@@ -1543,15 +1538,14 @@ class Client:
         ----------
         comment_id : int
             ID of the comment
-        params : ProfilePostCommentUpdateParams
-            message : str
-                Updated message content
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
-            attachment_key : str, optional
-                Attachment key if including attachments
+        message : str
+            Updated message content
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
+        attachment_key : str, optional
+            Attachment key if including attachments
 
         Returns ProfilePostCommentUpdateResponse:
         -------
@@ -1576,15 +1570,14 @@ class Client:
         ----------
         comment_id : int
             ID of the comment
-        params : ProfilePostCommentDeleteParams, optional
-            hard_delete : bool, optional
-                Whether to hard delete
-            reason : str, optional
-                Deletion reason
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
+        hard_delete : bool, optional
+            Whether to hard delete
+        reason : str, optional
+            Deletion reason
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
 
         Returns ProfilePostCommentDeleteResponse:
         -------
@@ -1605,9 +1598,8 @@ class Client:
         ----------
         comment_id : int
             ID of the comment
-        params : ProfilePostCommentReactParams
-            reaction_id : int
-                ID of the reaction
+        reaction_id : int
+            ID of the reaction
 
         Returns ProfilePostCommentReactResponse:
         -------
@@ -1632,13 +1624,12 @@ class Client:
 
         Parameters
         ----------
-        params : ProfilePostCreateParams
-            user_id : int
-                ID of the user whose profile to post on
-            message : str
-                Post message content
-            attachment_key : str, optional
-                Attachment key if including attachments
+        user_id : int
+            ID of the user whose profile to post on
+        message : str
+            Post message content
+        attachment_key : str, optional
+            Attachment key if including attachments
 
         Returns ProfilePostCreateResponse:
         -------
@@ -1661,13 +1652,12 @@ class Client:
         ----------
         profile_post_id : int
             ID of the profile post
-        params : ProfilePostGetParams, optional
-            with_comments : bool, optional
-                Include comments
-            page : int, optional
-                Page number
-            direction : str, optional
-                "desc" or "asc"
+        with_comments : bool, optional
+            Include comments
+        page : int, optional
+            Page number
+        direction : str, optional
+            "desc" or "asc"
 
         Returns ProfilePostGetResponse:
         -------
@@ -1690,15 +1680,14 @@ class Client:
         ----------
         profile_post_id : int
             ID of the profile post
-        params : ProfilePostUpdateParams
-            message : str
-                Updated message content
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
-            attachment_key : str, optional
-                Attachment key if including attachments
+        message : str
+            Updated message content
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
+        attachment_key : str, optional
+            Attachment key if including attachments
 
         Returns ProfilePostUpdateResponse:
         -------
@@ -1721,15 +1710,14 @@ class Client:
         ----------
         profile_post_id : int
             ID of the profile post
-        params : ProfilePostDeleteParams, optional
-            hard_delete : bool, optional
-                Whether to hard delete
-            reason : str, optional
-                Deletion reason
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
+        hard_delete : bool, optional
+            Whether to hard delete
+        reason : str, optional
+            Deletion reason
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
 
         Returns ProfilePostDeleteResponse:
         -------
@@ -1750,11 +1738,10 @@ class Client:
         ----------
         profile_post_id : int
             ID of the profile post
-        params : ProfilePostCommentsGetParams, optional
-            page : int, optional
-                Page number
-            direction : str, optional
-                "desc" or "asc"
+        page : int, optional
+            Page number
+        direction : str, optional
+            "desc" or "asc"
 
         Returns ProfilePostCommentsGetResponse:
         -------
@@ -1777,9 +1764,8 @@ class Client:
         ----------
         profile_post_id : int
             ID of the profile post
-        params : ProfilePostReactParams
-            reaction_id : int
-                ID of the reaction
+        reaction_id : int
+            ID of the reaction
 
         Returns ProfilePostReactResponse:
         -------
@@ -1821,23 +1807,22 @@ class Client:
 
         Parameters
         ----------
-        params : ThreadsGetParams, optional
-            page : int, optional
-                Page number
-            prefix_id : int, optional
-                Filter by prefix
-            starter_id : int, optional
-                Filter by starter user ID
-            last_days : int, optional
-                Filter by reply in last X days
-            unread : bool, optional
-                Filter to unread threads
-            thread_type : str, optional
-                Filter by thread type
-            order : str, optional
-                Method of ordering
-            direction : str, optional
-                "asc" or "desc"
+        page : int, optional
+            Page number
+        prefix_id : int, optional
+            Filter by prefix
+        starter_id : int, optional
+            Filter by starter user ID
+        last_days : int, optional
+            Filter by reply in last X days
+        unread : bool, optional
+            Filter to unread threads
+        thread_type : str, optional
+            Filter by thread type
+        order : str, optional
+            Method of ordering
+        direction : str, optional
+            "asc" or "desc"
 
         Returns ThreadsGetResponse:
         -------
@@ -1856,27 +1841,26 @@ class Client:
 
         Parameters
         ----------
-        params : ThreadCreateParams
-            node_id : int
-                ID of the forum to create thread in
-            title : str
-                Thread title
-            message : str
-                First post message content
-            discussion_type : str, optional
-                Discussion type
-            prefix_id : int, optional
-                Thread prefix ID
-            tags : List[str], optional
-                Thread tags
-            custom_fields : dict, optional
-                Custom field values
-            discussion_open : bool, optional
-                Whether discussion is open
-            sticky : bool, optional
-                Whether thread is sticky
-            attachment_key : str, optional
-                Attachment key if including attachments
+        node_id : int
+            ID of the forum to create thread in
+        title : str
+            Thread title
+        message : str
+            First post message content
+        discussion_type : str, optional
+            Discussion type
+        prefix_id : int, optional
+            Thread prefix ID
+        tags : List[str], optional
+            Thread tags
+        custom_fields : dict, optional
+            Custom field values
+        discussion_open : bool, optional
+            Whether discussion is open
+        sticky : bool, optional
+            Whether thread is sticky
+        attachment_key : str, optional
+            Attachment key if including attachments
 
         Returns ThreadCreateResponse:
         -------
@@ -1931,19 +1915,18 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadUpdateParams
-            title : str, optional
-                New thread title
-            prefix_id : int, optional
-                Thread prefix ID
-            tags : List[str], optional
-                Thread tags
-            custom_fields : dict, optional
-                Custom field values
-            discussion_open : bool, optional
-                Whether discussion is open
-            sticky : bool, optional
-                Whether thread is sticky
+        title : str, optional
+            New thread title
+        prefix_id : int, optional
+            Thread prefix ID
+        tags : List[str], optional
+            Thread tags
+        custom_fields : dict, optional
+            Custom field values
+        discussion_open : bool, optional
+            Whether discussion is open
+        sticky : bool, optional
+            Whether thread is sticky
 
         Returns ThreadUpdateResponse:
         -------
@@ -1964,19 +1947,18 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadDeleteParams, optional
-            hard_delete : bool, optional
-                Whether to hard delete
-            reason : str, optional
-                Deletion reason
-            author_alert : bool, optional
-                Send alert to author
-            author_alert_reason : str, optional
-                Reason for alert
-            starter_alert : bool, optional
-                Send alert to starter
-            starter_alert_reason : str, optional
-                Reason for starter alert
+        hard_delete : bool, optional
+            Whether to hard delete
+        reason : str, optional
+            Deletion reason
+        author_alert : bool, optional
+            Send alert to author
+        author_alert_reason : str, optional
+            Reason for alert
+        starter_alert : bool, optional
+            Send alert to starter
+        starter_alert_reason : str, optional
+            Reason for starter alert
 
         Returns ThreadDeleteResponse:
         -------
@@ -1995,9 +1977,8 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadChangeTypeParams
-            discussion_type : str
-                New discussion type
+        discussion_type : str
+            New discussion type
 
         Returns ThreadChangeTypeResponse:
         -------
@@ -2018,9 +1999,8 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadMarkReadParams
-            date : int
-                Unix timestamp
+        date : int
+            Unix timestamp
 
         Returns ThreadMarkReadResponse:
         -------
@@ -2039,17 +2019,16 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadMoveParams
-            node_id : int
-                ID of the target forum
-            notify_watchers : bool, optional
-                Notify watchers of move
-            starter_alert : bool, optional
-                Send alert to thread starter
-            starter_alert_reason : str, optional
-                Reason for starter alert
-            prefix_id : int, optional
-                New prefix ID
+        node_id : int
+            ID of the target forum
+        notify_watchers : bool, optional
+            Notify watchers of move
+        starter_alert : bool, optional
+            Send alert to thread starter
+        starter_alert_reason : str, optional
+            Reason for starter alert
+        prefix_id : int, optional
+            New prefix ID
 
         Returns ThreadMoveResponse:
         -------
@@ -2070,9 +2049,8 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadPostsGetParams, optional
-            page : int, optional
-                Page number
+        page : int, optional
+            Page number
 
         Returns ThreadPostsGetResponse:
         -------
@@ -2093,9 +2071,8 @@ class Client:
         ----------
         thread_id : int
             ID of the thread
-        params : ThreadVoteParams
-            type : str
-                "up" or "down"
+        type : str
+            "up" or "down"
 
         Returns ThreadVoteResponse:
         -------
@@ -2118,9 +2095,8 @@ class Client:
 
         Parameters
         ----------
-        params : UsersGetParams, optional
-            page : int, optional
-                Page number
+        page : int, optional
+            Page number
 
         Returns UsersGetResponse:
         -------
@@ -2139,13 +2115,12 @@ class Client:
 
         Parameters
         ----------
-        params : UserCreateParams
-            username : str
-                Username
-            email : str
-                Email address
-            password : str
-                Password
+        username : str
+            Username
+        email : str
+            Email address
+        password : str
+            Password
 
         Returns UserCreateResponse:
         -------
@@ -2164,14 +2139,12 @@ class Client:
 
         Parameters
         ----------
-        params : UsersFindEmailParams
-            email : str
-                Email address to search for
+        email : str
+            Email address to search for
 
         Returns UserFindEmailResponse:
         -------
-        exact : User, optional
-            Exact match user
+        user : User, optional
         """
         payload = await self._http.find_user_by_email(params)
         return UserFindEmailResponse.model_validate(payload)
@@ -2183,9 +2156,8 @@ class Client:
 
         Parameters
         ----------
-        params : UsersFindNameParams
-            username : str
-                Username to search for
+        username : str
+            Username to search for
 
         Returns UserFindNameResponse:
         -------
@@ -2206,9 +2178,10 @@ class Client:
         ----------
         user_id : int
             ID of the user
-        params : UserGetParams, optional
-            with_posts : bool, optional
-                Include recent posts
+        with_posts : bool, optional
+            If specified, the response will include a page of profile posts.
+        page : int
+            The page of comments to include
 
         Returns UserGetResponse:
         -------
@@ -2227,21 +2200,20 @@ class Client:
         ----------
         user_id : int
             ID of the user
-        params : UserUpdateParams
-            username : str, optional
-                New username
-            email : str, optional
-                New email
-            user_group_id : int, optional
-                Primary user group
-            secondary_group_ids : List[int], optional
-                Secondary groups
-            custom_title : str, optional
-                Custom title
-            is_staff : bool, optional
-                Staff status
-            visible : bool, optional
-                Visibility
+        username : str, optional
+            New username
+        email : str, optional
+            New email
+        user_group_id : int, optional
+            Primary user group
+        secondary_group_ids : List[int], optional
+            Secondary groups
+        custom_title : str, optional
+            Custom title
+        is_staff : bool, optional
+            Staff status
+        visible : bool, optional
+            Visibility
 
         Returns UserUpdateResponse:
         -------
@@ -2262,9 +2234,8 @@ class Client:
         ----------
         user_id : int
             ID of the user
-        params : UserRenameParams, optional
-            rename_to : str, optional
-                New name for content attribution
+        rename_to : str, optional
+            New name for content attribution
 
         Returns UserDeleteResponse:
         -------
@@ -2283,9 +2254,8 @@ class Client:
         ----------
         user_id : int
             ID of the user
-        params : UserAvatarChangeParams
-            avatar : BinaryIO
-                Avatar file
+        avatar : BinaryIO
+            Avatar file
 
         Returns UserAvatarUpdateResponse:
         -------

@@ -2,7 +2,7 @@ from typing import BinaryIO, Dict, Optional
 
 from pydantic import BaseModel
 
-from . import Option, Privacy, Profile
+from ..user import Option, Privacy, Profile
 
 
 class MeUpdateParams(BaseModel):
