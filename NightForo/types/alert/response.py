@@ -2,11 +2,12 @@ from typing import List
 from pydantic import BaseModel
 
 from . import UserAlert
+from ..pagination import Pagination
 
 
 class AlertsGetResponse(BaseModel):
     alerts: List[UserAlert]
-    pagination: pagination
+    pagination: Pagination
 
 
 class AlertSendResponse(BaseModel):

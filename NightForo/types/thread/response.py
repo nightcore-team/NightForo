@@ -3,6 +3,7 @@ from pydantic import BaseModel
 
 from ..post import Post
 from . import Thread
+from ..pagination import Pagination
 
 
 class ThreadGetResponse(BaseModel):
@@ -13,7 +14,7 @@ class ThreadGetResponse(BaseModel):
     pinned_post: Optional[Post]
     highlighted_posts: Optional[List[Post]]
     posts: List[Post]
-    pagination: pagination
+    pagination: Pagination
 
 
 class ThreadCreateResponse(BaseModel):
