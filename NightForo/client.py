@@ -1353,11 +1353,6 @@ class Client:
         -------
         post : Post
             Post information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_post(post_id)
         return PostGetResponse.model_validate(payload)
@@ -1391,11 +1386,6 @@ class Client:
             True if update was successful
         post : Post
             Updated post information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.update_post(post_id, params)
         return PostUpdateResponse.model_validate(payload)
@@ -1425,11 +1415,6 @@ class Client:
         -------
         success : bool
             True if deletion was successful
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.delete_post(post_id, params)
         return PostDeleteResponse.model_validate(payload)
@@ -1452,11 +1437,6 @@ class Client:
             New solution post if set
         old_solution_post : Post, optional
             Old solution post if changed
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.mark_post_solution(post_id)
         return PostMarkSolutionResponse.model_validate(payload)
@@ -1480,11 +1460,6 @@ class Client:
             True if reaction was added/removed
         action : str
             "insert" or "delete"
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.react_post(post_id, params)
         return PostReactResponse.model_validate(payload)
@@ -1508,11 +1483,6 @@ class Client:
             True if vote was cast/removed
         action : str
             "insert" or "delete"
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.vote_post(post_id, params)
         return PostVoteResponse.model_validate(payload)
@@ -1542,11 +1512,6 @@ class Client:
             True if comment was created
         comment : ProfilePostComment
             Created comment information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.create_profile_post_comment(params)
         return ProfilePostCommentCreateResponse.model_validate(payload)
@@ -1565,11 +1530,6 @@ class Client:
         -------
         comment : ProfilePostComment
             Comment information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_profile_post_comment(comment_id)
         return ProfilePostCommentGetResponse.model_validate(payload)
@@ -1599,11 +1559,6 @@ class Client:
             True if update was successful
         comment : ProfilePostComment
             Updated comment information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.update_profile_post_comment(
             comment_id, params
@@ -1635,11 +1590,6 @@ class Client:
         -------
         success : bool
             True if deletion was successful
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.delete_profile_post_comment(
             comment_id, params
@@ -1665,11 +1615,6 @@ class Client:
             True if reaction was added/removed
         action : str
             "insert" or "delete"
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.react_profile_post_comment(
             comment_id, params
@@ -1701,11 +1646,6 @@ class Client:
             True if post was created
         profile_post : ProfilePost
             Created profile post information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.create_profile_post(params)
         return ProfilePostCreateResponse.model_validate(payload)
@@ -1737,11 +1677,6 @@ class Client:
             Comments if requested
         pagination : Pagination, optional
             Pagination if comments included
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_profile_post(profile_post_id, params)
         return ProfilePostGetResponse.model_validate(payload)
@@ -1771,11 +1706,6 @@ class Client:
             True if update was successful
         profile_post : ProfilePost
             Updated profile post information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.update_profile_post(profile_post_id, params)
         return ProfilePostUpdateResponse.model_validate(payload)
@@ -1805,11 +1735,6 @@ class Client:
         -------
         success : bool
             True if deletion was successful
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.delete_profile_post(profile_post_id, params)
         return ProfilePostDeleteResponse.model_validate(payload)
@@ -1837,11 +1762,6 @@ class Client:
             List of comments
         pagination : Pagination
             Pagination information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_profile_post_comments(
             profile_post_id, params
@@ -1867,11 +1787,6 @@ class Client:
             True if reaction was added/removed
         action : str
             "insert" or "delete"
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.react_profile_post(profile_post_id, params)
         return ProfilePostReactResponse.model_validate(payload)
@@ -1891,11 +1806,6 @@ class Client:
             Latest registered user information
         online : dict
             Online user counts
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_stats()
         return StatsResponse.model_validate(payload)
@@ -1935,11 +1845,6 @@ class Client:
             List of threads
         pagination : Pagination
             Pagination information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_threads(params)
         return ThreadsGetResponse.model_validate(payload)
@@ -2013,11 +1918,6 @@ class Client:
             Posts if requested
         pagination : Pagination, optional
             Pagination if posts included
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_thread(thread_id, params)
         return ThreadGetResponse.model_validate(payload)
@@ -2051,11 +1951,6 @@ class Client:
             True if update was successful
         thread : Thread
             Updated thread information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.update_thread(thread_id, params)
         return ThreadUpdateResponse.model_validate(payload)
@@ -2087,11 +1982,6 @@ class Client:
         -------
         success : bool
             True if deletion was successful
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.delete_thread(thread_id, params)
         return ThreadDeleteResponse.model_validate(payload)
@@ -2115,11 +2005,6 @@ class Client:
             True if type was changed
         thread : Thread
             Updated thread information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.change_thread_type(thread_id, params)
         return ThreadChangeTypeResponse.model_validate(payload)
@@ -2141,11 +2026,6 @@ class Client:
         -------
         success : bool
             True if operation was successful
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.mark_thread_read(thread_id, params)
         return ThreadMarkReadResponse.model_validate(payload)
@@ -2177,11 +2057,6 @@ class Client:
             True if move was successful
         thread : Thread
             Moved thread information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.move_thread(thread_id, params)
         return ThreadMoveResponse.model_validate(payload)
@@ -2205,11 +2080,6 @@ class Client:
             List of posts
         pagination : Pagination
             Pagination information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_thread_posts(thread_id, params)
         return ThreadPostsGetResponse.model_validate(payload)
@@ -2233,11 +2103,6 @@ class Client:
             True if vote was cast/removed
         action : str
             "insert" or "delete"
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.vote_thread(thread_id, params)
         return ThreadVoteResponse.model_validate(payload)
@@ -2263,11 +2128,6 @@ class Client:
             List of users
         pagination : Pagination
             Pagination information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_users(params)
         return UsersGetResponse.model_validate(payload)
@@ -2293,11 +2153,6 @@ class Client:
             True if user was created
         user : User
             Created user information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.create_user(params)
         return UserCreateResponse.model_validate(payload)
@@ -2317,11 +2172,6 @@ class Client:
         -------
         exact : User, optional
             Exact match user
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.find_user_by_email(params)
         return UserFindEmailResponse.model_validate(payload)
@@ -2343,11 +2193,6 @@ class Client:
             Exact match user
         recommendations : List[User], optional
             Similar usernames
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.find_user_by_name(params)
         return UserFindNameResponse.model_validate(payload)
@@ -2369,11 +2214,6 @@ class Client:
         -------
         user : User
             User information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.get_user(user_id, params)
         return UserGetResponse.model_validate(payload)
@@ -2409,11 +2249,6 @@ class Client:
             True if update was successful
         user : User
             Updated user information
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.update_user(user_id, params)
         return UserUpdateResponse.model_validate(payload)
@@ -2435,11 +2270,6 @@ class Client:
         -------
         success : bool
             True if deletion was successful
-
-        Errors:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.delete_user(user_id, params)
         return UserDeleteResponse.model_validate(payload)
