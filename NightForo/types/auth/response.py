@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-from nightforo.types.user import User
+from ..user import User
 
 
 class AuthTestResponse(BaseModel):

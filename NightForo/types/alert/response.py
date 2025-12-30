@@ -18,5 +18,9 @@ class AlertsMarkAllResponse(BaseModel):
     success: bool
 
 
+class AlertGetResponse(BaseModel):
+    alert: UserAlert
+
+
 class AlertMarkResponse(BaseModel):
     success: bool

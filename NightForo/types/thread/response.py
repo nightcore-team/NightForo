@@ -6,17 +6,57 @@ from . import Thread
 from ..pagination import Pagination
 
 
+class ThreadsGetResponse(BaseModel):
+    threads: List[Thread]
+    pagination: Pagination
+
+
 class ThreadGetResponse(BaseModel):
     thread: Thread
-    first_unread: Optional[Post]
-    first_post: Optional[Post]
-    last_post: Optional[Post]
-    pinned_post: Optional[Post]
-    highlighted_posts: Optional[List[Post]]
-    posts: List[Post]
-    pagination: Pagination
+    first_unread: Optional[Post] = None
+    first_post: Optional[Post] = None
+    last_post: Optional[Post] = None
+    pinned_post: Optional[Post] = None
+    highlighted_posts: Optional[List[Post]] = None
+    posts: Optional[List[Post]] = None
+    pagination: Optional[Pagination] = None
 
 
 class ThreadCreateResponse(BaseModel):
     success: bool
     thread: Thread
+
+
+class ThreadUpdateResponse(BaseModel):
+    success: bool
+    thread: Thread
+
+
+class ThreadDeleteResponse(BaseModel):
+    success: bool
+
+
+class ThreadChangeTypeResponse(BaseModel):
+    success: bool
+    thread: Thread
+
+
+class ThreadMarkReadResponse(BaseModel):
+    success: bool
+
+
+class ThreadMoveResponse(BaseModel):
+    success: bool
+    thread: Thread
+
+
+class ThreadPostsGetResponse(BaseModel):
+    pinned_post: Optional[Post] = None
+    highlighted_posts: Optional[List[Post]] = None
+    posts: List[Post]
+    pagination: Pagination
+
+
+class ThreadVoteResponse(BaseModel):
+    success: bool
+    action: str

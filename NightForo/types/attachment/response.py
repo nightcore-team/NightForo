@@ -18,7 +18,7 @@ class AttachmentsCreateNewKeyResponse(BaseModel):
 
 
 class AttachmentGetResponse(BaseModel):
-    attachments: Attachment
+    attachment: Attachment
 
 
 class AttachmentDeleteResponse(BaseModel):
