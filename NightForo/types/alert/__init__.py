@@ -1,4 +1,3 @@
-from typing import Optional
 from pydantic import BaseModel
 
 from ..user import User
@@ -15,7 +14,7 @@ class UserAlert(BaseModel):
     content_type: str
     event_date: int
     read_date: int
-    User: Optional[User]
+    User: User
     user_id: int
     username: str
     view_date: int
