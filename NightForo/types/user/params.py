@@ -2,6 +2,8 @@ from typing import Any, BinaryIO, Dict, List, Optional
 
 from pydantic import BaseModel
 
+from ...groups import ArzGuardGroupsIdsEnum
+
 
 class UsersGetParams(BaseModel):
     page: Optional[int] = None
@@ -75,4 +77,12 @@ class UserAvatarChangeParams(BaseModel):
 
 
 class UserProfilePostsGetParams(BaseModel):
-    page: Optional[int] = None
+    page: int
+
+
+class UserDemoteParams(BaseModel):
+    group: ArzGuardGroupsIdsEnum
+
+
+class UserPromoteParams(BaseModel):
+    group: ArzGuardGroupsIdsEnum

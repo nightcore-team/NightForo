@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import List, Optional
 
 from pydantic import BaseModel
@@ -5,6 +6,11 @@ from pydantic import BaseModel
 from ..attachment import Attachment
 from ..conversation import Conversation
 from ..user import User
+
+
+class ConversationMessageReactActionEnum(Enum):
+    INSERT = "insert"
+    DELETE = "delete"
 
 
 class ConversationMessage(BaseModel):

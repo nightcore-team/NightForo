@@ -3,6 +3,7 @@
 from typing import Optional
 
 from .errors import NoApiKeyProvidedError
+from .groups import ArzGuardGroupsIdsEnum
 from .http import HTTPClient
 
 # Params imports
@@ -112,7 +113,7 @@ from .types.node.response import (
     NodeCreateResponse,
     NodeDeleteResponse,
     NodeGetResponse,
-    NodesFlattenedGetResponse,
+    NodesFlattenedGetResponse,  # type: ignore  # noqa: F401
     NodesGetResponse,
     NodeUpdateResponse,
 )
@@ -190,8 +191,10 @@ from .types.thread.response import (
 from .types.user.params import (
     UserAvatarChangeParams,
     UserCreateParams,
+    UserDemoteParams,
     UserGetParams,
     UserProfilePostsGetParams,
+    UserPromoteParams,
     UserRenameParams,
     UsersFindEmailParams,
     UsersFindNameParams,
@@ -199,6 +202,10 @@ from .types.user.params import (
     UserUpdateParams,
 )
 from .types.user.response import (
+    DemoteUserResponse,
+    GetDemoteGroupsResponse,
+    GetPromoteGroupsResponse,
+    PromoteUserResponse,
     UserAvatarDeleteResponse,
     UserAvatarUpdateResponse,
     UserCreateResponse,
@@ -245,29 +252,23 @@ class Client:
 
         Parameters
         ----------
-        params : AlertsGetParams, optional
-            page : int, optional
-                Page number of results
-            cutoff : int, optional
-                Unix timestamp of oldest alert to include
-            unviewed : bool, optional
-                If true, gets only unviewed alerts
-            unread : bool, optional
-                If true, gets only unread alerts
+        page : int, optional
+            Page number of results
+        cutoff : int, optional
+            Unix timestamp of oldest alert to include
+        unviewed : bool, optional
+            If true, gets only unviewed alerts
+        unread : bool, optional
+            If true, gets only unread alerts
 
-        Returns:
+        Returns AlertsGetResponse:
         -------
-        AlertsGetResponse
-            alerts : List[UserAlert]
-                List of user alerts
-            pagination : Pagination
-                Pagination information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        alerts : List[UserAlert]
+            List of user alerts
+        pagination : Pagination
+            Pagination information
         """
+
         payload = await self._http.get_alerts(params)
         return AlertsGetResponse.model_validate(payload)
 
@@ -278,29 +279,23 @@ class Client:
 
         Parameters
         ----------
-        params : AlertSendParams
-            to_user_id : int
-                ID of the user to receive the alert
-            alert : str
-                Text of the alert
-            from_user_id : int, optional
-                User to send the alert from
-            link_url : str, optional
-                URL user will be taken to
-            link_title : str, optional
-                Text of the link URL
+        to_user_id : int
+            ID of the user to receive the alert
+        alert : str
+            Text of the alert
+        from_user_id : int, optional
+            If provided, the user to send the alert from. Otherwise, uses the current API user. May be 0 for an anonymous alert.
+        link_url : str, optional
+            URL user will be taken to when the alert is clicked.
+        link_title : str, optional
+            Text of the link URL that will be displayed. If no placeholder is present in the alert, will be automatically appended.
 
-        Returns:
+        Returns AlertSendResponse:
         -------
-        AlertSendResponse
-            success : bool
-                True if alert was sent successfully
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if alert was sent successfully
         """
+
         payload = await self._http.send_alert(params)
         return AlertSendResponse.model_validate(payload)
 
@@ -311,23 +306,17 @@ class Client:
 
         Parameters
         ----------
-        params : AlertsMarkAllParams
-            read : bool, optional
-                Marks all alerts as read
-            viewed : bool, optional
-                Marks all alerts as viewed
+        read : bool, optional
+            If specified, marks all alerts as read.
+        viewed : bool, optional
+            If specified, marks all alerts as viewed. This will remove the alert counter but keep unactioned alerts highlighted.
 
-        Returns:
+        Returns AlertsMarkAllResponse:
         -------
-        AlertsMarkAllResponse
-            success : bool
-                True if operation was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if operation was successful
         """
+
         payload = await self._http.mark_all_alerts(params)
         return AlertsMarkAllResponse.model_validate(payload)
 
@@ -339,17 +328,12 @@ class Client:
         alert_id : int
             ID of the alert
 
-        Returns:
+        Returns AlertGetResponse:
         -------
-        AlertGetResponse
-            alert : UserAlert
-                Alert information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        alert : UserAlert
+            Alert information
         """
+
         payload = await self._http.get_alert(alert_id)
         return AlertGetResponse.model_validate(payload)
 
@@ -362,25 +346,19 @@ class Client:
         ----------
         alert_id : int
             ID of the alert
-        params : AlertMarkParams
-            read : bool, optional
-                Marks the alert as read
-            unread : bool, optional
-                Marks the alert as unread
-            viewed : bool, optional
-                Marks all alerts as viewed
+        read : bool, optional
+            Marks the alert as read
+        unread : bool, optional
+            Marks the alert as unread
+        viewed : bool, optional
+            Marks all alerts as viewed
 
-        Returns:
+        Returns AlertMarkResponse:
         -------
-        AlertMarkResponse
-            success : bool
-                True if operation was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if operation was successful
         """
+
         payload = await self._http.mark_alert(alert_id, params)
         return AlertMarkResponse.model_validate(payload)
 
@@ -395,21 +373,15 @@ class Client:
 
         Parameters
         ----------
-        params : AttachmentsGetParams
-            key : str
-                The API attachment key
+        key : str
+            The API attachment key
 
-        Returns:
+        Returns AttachmentsGetResponse:
         -------
-        AttachmentsGetResponse
-            attachments : List[Attachment]
-                List of attachments
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        attachments : List[Attachment]
+            List of attachments
         """
+
         payload = await self._http.get_attachments(params)
         return AttachmentsGetResponse.model_validate(payload)
 
@@ -422,23 +394,22 @@ class Client:
 
         Parameters
         ----------
-        params : AttachmentUploadParams
-            key : str
-                The API attachment key
-            attachment : BinaryIO
-                The attachment file
+        key : str
+            The API attachment key
+        attachment : BinaryIO
+            The attachment file
 
-        Returns:
+        Returns AttachmentUploadResponse:
         -------
-        AttachmentUploadResponse
-            attachment : Attachment
-                Uploaded attachment information
+        attachment : Attachment
+            Uploaded attachment information
 
-        Raises:
+        Errors:
         ------
-        XenForoError
-            If the API request fails
+            attachment_key_user_wrong:
+                Triggered if the user making the request does not match the user that created the attachment key.
         """
+
         payload = await self._http.upload_attachment(params)
         return AttachmentUploadResponse.model_validate(payload)
 
@@ -449,27 +420,21 @@ class Client:
 
         Parameters
         ----------
-        params : AttachmentsCreateNewKeyParams
-            type : str
-                Content type of the attachment
-            context : List[str], optional
-                Key-value pairs representing context
-            attachment : BinaryIO, optional
-                First attachment to be associated
+        type : str
+            Content type of the attachment
+        context : List[str], optional
+            Key-value pairs representing context
+        attachment : BinaryIO, optional
+            First attachment to be associated
 
-        Returns:
+        Returns AttachmentsCreateNewKeyResponse:
         -------
-        AttachmentsCreateNewKeyResponse
-            key : str
-                The attachment key created
-            attachment : Attachment, optional
-                Attachment information if provided
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        key : str
+            The attachment key created
+        attachment : Attachment, optional
+            Attachment information if provided
         """
+
         payload = await self._http.create_attachment_key(params)
         return AttachmentsCreateNewKeyResponse.model_validate(payload)
 
@@ -483,17 +448,11 @@ class Client:
         attachment_id : int
             ID of the attachment
 
-        Returns:
+        Returns AttachmentGetResponse:
         -------
-        AttachmentGetResponse
-            attachment : Attachment
-                Attachment information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        attachment : Attachment
         """
+
         payload = await self._http.get_attachment(attachment_id)
         return AttachmentGetResponse.model_validate(payload)
 
@@ -507,17 +466,12 @@ class Client:
         attachment_id : int
             ID of the attachment
 
-        Returns:
+        Returns AttachmentDeleteResponse:
         -------
-        AttachmentDeleteResponse
-            success : bool
-                True if deletion was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if deletion was successful
         """
+
         payload = await self._http.delete_attachment(attachment_id)
         return AttachmentDeleteResponse.model_validate(payload)
 
@@ -531,17 +485,12 @@ class Client:
         attachment_id : int
             ID of the attachment
 
-        Returns:
+        Returns AttachmentGetData:
         -------
-        AttachmentGetData
-            data : BinaryIO
-                The binary data
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        data : BinaryIO
+            The binary data
         """
+
         payload = await self._http.get_attachment_data(attachment_id)
         return AttachmentGetData.model_validate(payload)
 
@@ -555,17 +504,17 @@ class Client:
         attachment_id : int
             ID of the attachment
 
-        Returns:
+        Returns AttachmentGetThumbnail:
         -------
-        AttachmentGetThumbnail
-            url : str
-                URL via 301 redirect
+        url : str
+            URL via 301 redirect
 
-        Raises:
+        Errors:
         ------
-        XenForoError
-            If the API request fails
+            not_found:
+                Not found if the attachment does not have a thumbnail
         """
+
         payload = await self._http.get_attachment_thumbnail(attachment_id)
         return AttachmentGetThumbnail.model_validate(payload)
 
@@ -580,25 +529,19 @@ class Client:
 
         Parameters
         ----------
-        params : AuthTestParams
-            login : str
-                Username or email address
-            password : str
-                The password
-            limit_ip : str, optional
-                IP that should be considered making the request
+        login : str
+            Username or email address
+        password : str
+            The password
+        limit_ip : str, optional
+            IP that should be considered making the request
 
-        Returns:
+        Returns AuthTestResponse:
         -------
-        AuthTestResponse
-            user : User
-                User information if authentication successful
-
-        Raises:
-        ------
-        XenForoError
-            If authentication fails or API request fails
+        user : User
+            User information if authentication successful
         """
+
         payload = await self._http.test_auth(params)
         return AuthTestResponse.model_validate(payload)
 
@@ -609,25 +552,19 @@ class Client:
 
         Parameters
         ----------
-        params : AuthFromSessionParams
-            session_id : str, optional
-                Checks for active session
-            remember_cookie : str, optional
-                Checks for active "remember me" cookie
+        session_id : str, optional
+            Checks for active session
+        remember_cookie : str, optional
+            Checks for active "remember me" cookie
 
-        Returns:
+        Returns AuthFromSessionResponse:
         -------
-        AuthFromSessionResponse
-            success : bool
-                True if session is valid
-            user : User
-                User information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+                If false, no session or remember cookie could be found
+        user : User
+            If successful, the user record of the matching user. May be a guest.
         """
+
         payload = await self._http.auth_from_session(params)
         return AuthFromSessionResponse.model_validate(payload)
 
@@ -638,33 +575,27 @@ class Client:
 
         Parameters
         ----------
-        params : AuthLoginTokenParams
-            user_id : int
-                User ID to generate token for
-            limit_ip : str, optional
-                Locks token to specified IP
-            return_url : str, optional
-                URL to return user after login
-            force : bool, optional
-                Forcibly replace currently logged in user
-            remember : bool, optional
-                Set "remember me" cookie
+        user_id : int
+            User ID to generate token for
+        limit_ip : str, optional
+            Locks token to specified IP
+        return_url : str, optional
+            URL to return user after login
+        force : bool, optional
+            If provided, the login URL will forcibly replace the currently logged in user if a user is already logged in and different to the currently logged in user. Defaults to false.
+        remember: bool
+            Controls whether the a "remember me" cookie will be set when the user logs in. Defaults to true.
 
-        Returns:
+        Returns AuthLoginTokenResponse:
         -------
-        AuthLoginTokenResponse
-            login_token : str
-                Generated login token
-            login_url : str
-                URL to use for login
-            expiry_date : int
-                Unix timestamp of expiration
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        login_token : str
+            Generated login token
+        login_url : str
+            URL to use for login
+        expiry_date : int
+            Unix timestamp of expiration
         """
+
         payload = await self._http.create_login_token(params)
         return AuthLoginTokenResponse.model_validate(payload)
 
@@ -679,27 +610,21 @@ class Client:
 
         Parameters
         ----------
-        params : ConversationMessageReplyParams
-            conversation_id : int
-                ID of the conversation
-            message : str
-                Message content
-            attachment_key : str, optional
-                Attachment key if including attachments
+        conversation_id : int
+            ID of the conversation
+        message : str
+            Message content
+        attachment_key : str, optional
+            API attachment key to upload files. Attachment key content type must be conversation_message with context[conversation_id] set to this conversation ID.
 
-        Returns:
+        Returns ConversationMessageReplyResponse:
         -------
-        ConversationMessageReplyResponse
-            success : bool
-                True if message was posted
-            message : ConversationMessage
-                Posted message information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if message was posted
+        message : ConversationMessage
+            The newly inserted message
         """
+
         payload = await self._http.reply_conversation_message(params)
         return ConversationMessageReplyResponse.model_validate(payload)
 
@@ -713,17 +638,12 @@ class Client:
         message_id : int
             ID of the conversation message
 
-        Returns:
+        Returns ConversationMessageGetResponse:
         -------
-        ConversationMessageGetResponse
-            message : ConversationMessage
-                Message information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        message : ConversationMessage
+            Message information
         """
+
         payload = await self._http.get_conversation_message(message_id)
         return ConversationMessageGetResponse.model_validate(payload)
 
@@ -736,25 +656,19 @@ class Client:
         ----------
         message_id : int
             ID of the conversation message
-        params : ConversationMessageUpdateParams
-            message : str
-                Updated message content
-            attachment_key : str, optional
-                Attachment key if including attachments
+        message : str
+            Updated message content
+        attachment_key : str, optional
+            API attachment key to upload files. Attachment key content type must be conversation_message with context[message_id] set to this message ID.
 
-        Returns:
+        Returns ConversationMessageUpdateResponse:
         -------
-        ConversationMessageUpdateResponse
-            success : bool
-                True if update was successful
-            message : ConversationMessage
-                Updated message information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if update was successful
+        message : ConversationMessage
+            Updated message information
         """
+
         payload = await self._http.update_conversation_message(
             message_id, params
         )
@@ -769,23 +683,17 @@ class Client:
         ----------
         message_id : int
             ID of the conversation message
-        params : ConversationMessageReactParams
-            reaction_id : int
-                ID of the reaction
+        reaction_id : int
+            ID of the reaction to use. Use the current reaction ID to undo.
 
-        Returns:
+        Returns ConversationMessageReactResponse:
         -------
-        ConversationMessageReactResponse
-            success : bool
-                True if reaction was added/removed
-            action : str
-                "insert" or "delete"
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if reaction was added/removed
+        action : ConversationMessageReactActionEnum
+            "insert" or "delete"
         """
+
         payload = await self._http.react_conversation_message(
             message_id, params
         )
@@ -802,31 +710,25 @@ class Client:
 
         Parameters
         ----------
-        params : ConversationsGetParams, optional
-            page : int, optional
-                Page number
-            starter_id : int, optional
-                Filter by starter user ID
-            receiver_id : int, optional
-                Filter by receiver user ID
-            starred : bool, optional
-                Only gets starred conversations
-            unread : bool, optional
-                Only gets unread conversations
+        page : int, optional
+            Page number
+        starter_id : int, optional
+            Filter by starter user ID
+        receiver_id : int, optional
+            Filter by receiver user ID
+        starred : bool, optional
+            Only gets starred conversations
+        unread : bool, optional
+            Only gets unread conversations
 
-        Returns:
+        Returns ConversationsGetResponse:
         -------
-        ConversationsGetResponse
-            conversations : List[Conversation]
-                List of conversations
-            pagination : Pagination
-                Pagination information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        conversations : List[Conversation]
+            List of conversations
+        pagination : Pagination
+            Pagination information
         """
+
         payload = await self._http.get_conversations(params)
         return ConversationsGetResponse.model_validate(payload)
 
@@ -837,33 +739,27 @@ class Client:
 
         Parameters
         ----------
-        params : ConversationCreateParams
-            recipient_ids : List[int]
-                IDs of recipient users
-            title : str
-                Conversation title
-            message : str
-                First message content
-            attachment_key : str, optional
-                Attachment key if including attachments
-            conversation_open : bool, optional
-                Whether conversation is open
-            open_invite : bool, optional
-                Whether open for invites
+        recipient_ids : List[int]
+            IDs of recipient users
+        title : str
+            Conversation title
+        message : str
+            First message content
+        attachment_key : str, optional
+            Attachment key if including attachments
+        conversation_open : bool, optional
+            Whether conversation is open
+        open_invite : bool, optional
+            Whether open for invites
 
-        Returns:
+        Returns ConversationCreateResponse:
         -------
-        ConversationCreateResponse
-            success : bool
-                True if conversation was created
-            conversation : Conversation
-                Created conversation information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if conversation was created
+        conversation : Conversation
+            Created conversation information
         """
+
         payload = await self._http.create_conversation(params)
         return ConversationCreateResponse.model_validate(payload)
 
@@ -878,26 +774,19 @@ class Client:
         ----------
         conversation_id : int
             ID of the conversation
-        params : ConversationGetParams, optional
-            with_messages : bool, optional
-                Include a page of messages
-            page : int, optional
-                Page number
+        with_messages : bool, optional
+            Include a page of messages
+        page : int, optional
+            Page number
 
-        Returns:
+        Returns ConversationGetResponse:
         -------
-        ConversationGetResponse
-            conversation : Conversation
-                Conversation information
-            messages : List[ConversationMessage], optional
-                Messages if requested
-            pagination : Pagination, optional
-                Pagination if messages included
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        conversation : Conversation
+            Conversation information
+        messages : List[ConversationMessage], optional
+            Messages if requested
+        pagination : Pagination, optional
+            Pagination if messages included
         """
         payload = await self._http.get_conversation(conversation_id, params)
         return ConversationGetResponse.model_validate(payload)
@@ -911,27 +800,21 @@ class Client:
         ----------
         conversation_id : int
             ID of the conversation
-        params : ConversationUpdateParams
-            title : str, optional
-                New conversation title
-            open_invite : bool, optional
-                Whether open for invites
-            conversation_open : bool, optional
-                Whether conversation is open
+        title : str, optional
+            New conversation title
+        open_invite : bool, optional
+            Whether open for invites
+        conversation_open : bool, optional
+            Whether conversation is open
 
-        Returns:
+        Returns ConversationUpdateResponse:
         -------
-        ConversationUpdateResponse
-            success : bool
-                True if update was successful
-            conversation : Conversation
-                Updated conversation information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if update was successful
+        conversation : Conversation
+            Updated conversation information
         """
+
         payload = await self._http.update_conversation(conversation_id, params)
         return ConversationUpdateResponse.model_validate(payload)
 
@@ -955,12 +838,8 @@ class Client:
         ConversationDeleteResponse
             success : bool
                 True if deletion was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
         """
+
         payload = await self._http.delete_conversation(conversation_id, params)
         return ConversationDeleteResponse.model_validate(payload)
 
@@ -973,21 +852,16 @@ class Client:
         ----------
         conversation_id : int
             ID of the conversation
-        params : ConversationInviteParams
-            recipient_ids : List[int]
-                IDs of users to invite
+        recipient_ids : List[int]
+            IDs of users to invite
 
-        Returns:
+        Returns ConversationInviteResponse:
         -------
         ConversationInviteResponse
             success : bool
                 True if invites were sent
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
         """
+
         payload = await self._http.invite_conversation(conversation_id, params)
         return ConversationInviteResponse.model_validate(payload)
 
@@ -1002,21 +876,15 @@ class Client:
         ----------
         conversation_id : int
             ID of the conversation
-        params : ConversationMarkReadParams, optional
-            date : int, optional
-                Unix timestamp
+        date : int, optional
+            Unix timestamp
 
-        Returns:
+        Returns ConversationMarkReadResponse:
         -------
-        ConversationMarkReadResponse
-            success : bool
-                True if operation was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if operation was successful
         """
+
         payload = await self._http.mark_conversation_read(
             conversation_id, params
         )
@@ -1032,17 +900,12 @@ class Client:
         conversation_id : int
             ID of the conversation
 
-        Returns:
+        Returns ConversationMarkUnreadResponse:
         -------
-        ConversationMarkUnreadResponse
-            success : bool
-                True if operation was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if operation was successful
         """
+
         payload = await self._http.mark_conversation_unread(conversation_id)
         return ConversationMarkUnreadResponse.model_validate(payload)
 
@@ -1057,22 +920,15 @@ class Client:
         ----------
         conversation_id : int
             ID of the conversation
-        params : ConversationGetMessagesParams, optional
-            page : int, optional
-                Page number
+        page : int, optional
+            Page number
 
-        Returns:
+        Returns ConversationMessagesGetResponse:
         -------
-        ConversationMessagesGetResponse
-            messages : List[ConversationMessage]
-                List of messages
-            pagination : Pagination
-                Pagination information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        messages : List[ConversationMessage]
+            List of messages
+        pagination : Pagination
+            Pagination information
         """
 
         payload = await self._http.get_conversation_messages(
@@ -1089,21 +945,15 @@ class Client:
         ----------
         conversation_id : int
             ID of the conversation
-        params : ConversationStarParams
-            star : bool
-                Sets the star status
+        star : bool
+            Sets the star status
 
-        Returns:
+        Returns ConversationStarResponse:
         -------
-        ConversationStarResponse
-            success : bool
-                True if operation was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if operation was successful
         """
+
         payload = await self._http.star_conversation(conversation_id, params)
         return ConversationStarResponse.model_validate(payload)
 
@@ -1120,43 +970,37 @@ class Client:
         ----------
         forum_id : int
             ID of the forum
-        params : ForumGetParams, optional
-            with_threads : bool, optional
-                Gets a page of threads
-            page : int, optional
-                Page number
-            prefix_id : int, optional
-                Filter by prefix
-            starter_id : int, optional
-                Filter by user ID
-            last_days : int, optional
-                Filter by reply in last X days
-            unread : bool, optional
-                Filter to unread threads
-            thread_type : str, optional
-                Filter by thread type
-            order : str, optional
-                Method of ordering
-            direction : str, optional
-                "asc" or "desc"
+        with_threads : bool, optional
+            Gets a page of threads
+        page : int, optional
+            Page number
+        prefix_id : int, optional
+            Filter by prefix
+        starter_id : int, optional
+            Filter by user ID
+        last_days : int, optional
+            Filter by reply in last X days
+        unread : bool, optional
+            Filter to unread threads
+        thread_type : str, optional
+            Filter by thread type
+        order : str, optional
+            Method of ordering
+        direction : str, optional
+            "asc" or "desc"
 
-        Returns:
+        Returns ForumGetResponse:
         -------
-        ForumGetResponse
-            forum : Forum
-                Forum information
-            threads : List[Thread], optional
-                Threads if requested
-            pagination : Pagination, optional
-                Pagination if threads included
-            sticky : List[Thread], optional
-                Sticky threads
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        forum : Forum
+            Forum information
+        threads : List[Thread], optional
+            Threads if requested
+        pagination : Pagination, optional
+            Pagination if threads included
+        sticky : List[Thread], optional
+            Sticky threads
         """
+
         payload = await self._http.get_forum(forum_id, params)
         return ForumGetResponse.model_validate(payload)
 
@@ -1169,21 +1013,15 @@ class Client:
         ----------
         forum_id : int
             ID of the forum
-        params : ForumMarkReadParams, optional
-            date : int, optional
-                Unix timestamp
+        date : int, optional
+            Unix timestamp
 
-        Returns:
+        Returns ForumMarkReadResponse:
         -------
-        ForumMarkReadResponse
-            success : bool
-                True if operation was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if operation was successful
         """
+
         payload = await self._http.mark_forum_read(forum_id, params)
         return ForumMarkReadResponse.model_validate(payload)
 
@@ -1196,39 +1034,33 @@ class Client:
         ----------
         forum_id : int
             ID of the forum
-        params : ForumThreadsGetParams, optional
-            page : int, optional
-                Page number
-            prefix_id : int, optional
-                Filter by prefix
-            starter_id : int, optional
-                Filter by user ID
-            last_days : int, optional
-                Filter by reply in last X days
-            unread : bool, optional
-                Filter to unread threads
-            thread_type : str, optional
-                Filter by thread type
-            order : str, optional
-                Method of ordering
-            direction : str, optional
-                "asc" or "desc"
+        page : int, optional
+            Page number
+        prefix_id : int, optional
+            Filter by prefix
+        starter_id : int, optional
+            Filter by user ID
+        last_days : int, optional
+            Filter by reply in last X days
+        unread : bool, optional
+            Filter to unread threads
+        thread_type : str, optional
+            Filter by thread type
+        order : str, optional
+            Method of ordering
+        direction : str, optional
+            "asc" or "desc"
 
-        Returns:
+        Returns ForumThreadsGetResponse:
         -------
-        ForumThreadsGetResponse
-            threads : List[Thread]
-                List of threads
-            pagination : Pagination
-                Pagination information
-            sticky : List[Thread], optional
-                Sticky threads
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        threads : List[Thread]
+            List of threads
+        pagination : Pagination
+            Pagination information
+        sticky : List[Thread], optional
+            Sticky threads
         """
+
         payload = await self._http.get_forum_threads(forum_id, params)
         return ForumThreadsGetResponse.model_validate(payload)
 
@@ -1239,25 +1071,20 @@ class Client:
     async def get_index(self) -> IndexGetResponse:
         """GET index/ - Gets general information about the site and the API
 
-        Returns:
+        Returns IndexGetResponse:
         -------
-        IndexGetResponse
-            version_id : int
-                XenForo version ID
-            site_title : str
-                Site title
-            base_url : str
-                Base URL
-            api_url : str
-                API URL
-            key : ApiKey
-                API key information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        version_id : int
+            XenForo version ID
+        site_title : str
+            Site title
+        base_url : str
+            Base URL
+        api_url : str
+            API URL
+        key : ApiKey
+            API key information
         """
+
         payload = await self._http.get_index()
         return IndexGetResponse.model_validate(payload)
 
@@ -1268,17 +1095,12 @@ class Client:
     async def get_me(self) -> MeGetResponse:
         """GET me/ - Gets information about the current API user
 
-        Returns:
+        Returns MeGetResponse:
         -------
-        MeGetResponse
-            me : User
-                Current user information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        me : User
+            Current user information
         """
+
         payload = await self._http.get_me()
         return MeGetResponse.model_validate(payload)
 
@@ -1287,28 +1109,21 @@ class Client:
 
         Parameters
         ----------
-        params : MeUpdateParams
-            Various user settings including:
-            - option : dict with creation_watch_state, interaction_watch_state, etc.
-            - profile : dict with location, website, about, signature
-            - privacy : dict with allow_view_profile, allow_post_profile, etc.
-            - visible : bool
-            - activity_visible : bool
-            - timezone : str
-            - custom_title : str
-            - custom_fields : dict
+        option : dict with creation_watch_state, interaction_watch_state, etc.
+        profile : dict with location, website, about, signature
+        privacy : dict with allow_view_profile, allow_post_profile, etc.
+        visible : bool
+        activity_visible : bool
+        timezone : str
+        custom_title : str
+        custom_fields : dict
 
-        Returns:
+        Returns MeUpdateResponse:
         -------
-        MeUpdateResponse
-            success : bool
-                True if update was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if update was successful
         """
+
         payload = await self._http.update_me(params)
         return MeUpdateResponse.model_validate(payload)
 
@@ -1319,21 +1134,15 @@ class Client:
 
         Parameters
         ----------
-        params : MeAvatarUpdateParams
-            avatar : BinaryIO
-                Avatar file
+        avatar : BinaryIO
+            Avatar file
 
-        Returns:
+        Returns MeAvatarUpdateResponse:
         -------
-        MeAvatarUpdateResponse
-            success : bool
-                True if update was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if update was successful
         """
+
         payload = await self._http.update_my_avatar(params)
         return MeAvatarUpdateResponse.model_validate(payload)
 
@@ -1342,15 +1151,10 @@ class Client:
 
         Returns:
         -------
-        MeAvatarDeleteResponse
-            success : bool
-                True if deletion was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if deletion was successful
         """
+
         payload = await self._http.delete_my_avatar()
         return MeAvatarDeleteResponse.model_validate(payload)
 
@@ -1361,25 +1165,19 @@ class Client:
 
         Parameters
         ----------
-        params : MeEmailUpdateParams
-            current_password : str
-                Current password for verification
-            email : str
-                New email address
+        current_password : str
+            Current password for verification
+        email : str
+            New email address
 
-        Returns:
+        Returns MeEmailUpdateResponse:
         -------
-        MeEmailUpdateResponse
-            success : bool
-                True if update was successful
-            confirmation_required : bool
-                Whether email confirmation is required
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if update was successful
+        confirmation_required : bool
+            Whether email confirmation is required
         """
+
         payload = await self._http.update_my_email(params)
         return MeEmailUpdateResponse.model_validate(payload)
 
@@ -1390,23 +1188,17 @@ class Client:
 
         Parameters
         ----------
-        params : MePasswordUpdateParams
-            current_password : str
-                Current password
-            new_password : str
-                New password
+        current_password : str
+            Current password
+        new_password : str
+            New password
 
-        Returns:
+        Returns MePasswordUpdateResponse:
         -------
-        MePasswordUpdateResponse
-            success : bool
-                True if update was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if update was successful
         """
+
         payload = await self._http.update_my_password(params)
         return MePasswordUpdateResponse.model_validate(payload)
 
@@ -1417,19 +1209,14 @@ class Client:
     async def get_nodes(self) -> NodesGetResponse:
         """GET nodes/ - Gets the node tree
 
-        Returns:
+        Returns NodesGetResponse:
         -------
-        NodesGetResponse
-            tree_map : List
-                Tree structure mapping
-            nodes : List[Node]
-                List of nodes
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        tree_map : List
+            Tree structure mapping
+        nodes : List[Node]
+            List of nodes
         """
+
         payload = await self._http.get_nodes()
         return NodesGetResponse.model_validate(payload)
 
@@ -1440,43 +1227,32 @@ class Client:
 
         Parameters
         ----------
-        params : NodeCreateParams
-            node : dict with title, node_name, description, parent_node_id, display_order, display_in_list
-            type_data : dict, optional
-                Type-specific data
-            node_type_id : str
-                Node type ID
+        node : dict with title, node_name, description, parent_node_id, display_order, display_in_list
+        type_data : dict, optional
+            Type-specific data
+        node_type_id : str
+            Node type ID
 
-        Returns:
+        Returns NodeCreateResponse:
         -------
-        NodeCreateResponse
             node : Node
                 Created node information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
         """
+
         payload = await self._http.create_node(params)
         return NodeCreateResponse.model_validate(payload)
 
-    async def get_nodes_flattened(self) -> NodesFlattenedGetResponse:
-        """GET nodes/flattened - Gets a flattened node tree
+    # async def get_nodes_flattened(self) -> NodesFlattenedGetResponse:
+    #     """GET nodes/flattened - Gets a flattened node tree
 
-        Returns:
-        -------
-        NodesFlattenedGetResponse
-            nodes_flat : List
-                Flattened node list
+    #     Returns NodesFlattenedGetResponse:
+    #     -------
+    #         nodes_flat : List
+    #             Flattened node list
+    #     """
 
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
-        """
-        payload = await self._http.get_nodes_flattened()
-        return NodesFlattenedGetResponse.model_validate(payload)
+    #     payload = await self._http.get_nodes_flattened()
+    #     return NodesFlattenedGetResponse.model_validate(payload)
 
     async def get_node(self, node_id: int) -> NodeGetResponse:
         """GET nodes/{id}/ - Gets information about the specified node
@@ -1486,16 +1262,10 @@ class Client:
         node_id : int
             ID of the node
 
-        Returns:
+        Returns NodeGetResponse:
         -------
-        NodeGetResponse
-            node : Node
-                Node information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        node : Node
+            Node information
         """
         payload = await self._http.get_node(node_id)
         return NodeGetResponse.model_validate(payload)
@@ -1509,22 +1279,15 @@ class Client:
         ----------
         node_id : int
             ID of the node
-        params : NodeUpdateParams
-            node : dict with title, node_name, description, parent_node_id, display_order, display_in_list
-            type_data : dict, optional
-                Type-specific data
+        node : NodeCreateOrUpdate
+        type_data : Dict[str, Any]
+            Type-specific data
 
-        Returns:
+        Returns NodeUpdateResponse:
         -------
-        NodeUpdateResponse
-            node : Node
-                Updated node information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        node : Node
         """
+
         payload = await self._http.update_node(node_id, params)
         return NodeUpdateResponse.model_validate(payload)
 
@@ -1537,21 +1300,15 @@ class Client:
         ----------
         node_id : int
             ID of the node
-        params : NodeDeleteParams, optional
-            delete_children : bool, optional
-                Whether to delete child nodes
+        delete_children : bool, optional
+            Whether to delete child nodes
 
-        Returns:
+        Returns NodeDeleteResponse:
         -------
-        NodeDeleteResponse
-            success : bool
-                True if deletion was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if deletion was successful
         """
+
         payload = await self._http.delete_node(node_id, params)
         return NodeDeleteResponse.model_validate(payload)
 
@@ -1566,27 +1323,21 @@ class Client:
 
         Parameters
         ----------
-        params : PostCreateParams
-            thread_id : int
-                ID of the thread to reply to
-            message : str
-                Post message content
-            attachment_key : str, optional
-                Attachment key if including attachments
+        thread_id : int
+            ID of the thread to reply to
+        message : str
+            Post message content
+        attachment_key : str, optional
+            Attachment key if including attachments
 
-        Returns:
+        Returns PostCreateResponse:
         -------
-        PostCreateResponse
-            success : bool
-                True if post was created
-            post : Post
-                Created post information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if post was created
+        post : Post
+            Created post information
         """
+
         payload = await self._http.create_post(params)
         return PostCreateResponse.model_validate(payload)
 
@@ -2249,10 +2000,10 @@ class Client:
             thread : Thread
                 Created thread information
 
-        Raises:
+        Errors:
         ------
-        XenForoError
-            If the API request fails
+            no_permission:
+                No permission error.
         """
         payload = await self._http.create_thread(params)
         return ThreadCreateResponse.model_validate(payload)
@@ -2746,11 +2497,6 @@ class Client:
         UserAvatarUpdateResponse
             success : bool
                 True if update was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
         """
         payload = await self._http.update_user_avatar(user_id, params)
         return UserAvatarUpdateResponse.model_validate(payload)
@@ -2765,22 +2511,17 @@ class Client:
         user_id : int
             ID of the user
 
-        Returns:
+        Returns UserAvatarDeleteResponse:
         -------
-        UserAvatarDeleteResponse
-            success : bool
-                True if deletion was successful
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        success : bool
+            True if deletion was successful
         """
+
         payload = await self._http.delete_user_avatar(user_id)
         return UserAvatarDeleteResponse.model_validate(payload)
 
     async def get_user_profile_posts(
-        self, user_id: int, params: Optional[UserProfilePostsGetParams] = None
+        self, user_id: int, page: Optional[int]
     ) -> UserProfilePostsGetResponse:
         """GET users/{id}/profile-posts - Gets a page of profile posts from the specified user's profile
 
@@ -2788,22 +2529,119 @@ class Client:
         ----------
         user_id : int
             ID of the user
-        params : UserProfilePostsGetParams, optional
-            page : int, optional
-                Page number
+        page : int, optional
+            Page number
 
-        Returns:
-        -------
-        UserProfilePostsGetResponse
-            profile_posts : List[ProfilePost]
-                List of profile posts
-            pagination : Pagination
-                Pagination information
-
-        Raises:
-        ------
-        XenForoError
-            If the API request fails
+        Returns UserProfilePostsGetResponse
+        -----------------------------------
+        profile_posts : List[ProfilePost]
+            List of profile posts
+        pagination : Pagination
+            Pagination information
         """
+
+        params = (
+            UserProfilePostsGetParams(page=page) if page is not None else None
+        )
         payload = await self._http.get_user_profile_posts(user_id, params)
         return UserProfilePostsGetResponse.model_validate(payload)
+
+    # ============================================================================
+    # ACTIONS
+    # ============================================================================
+
+    async def get_demote_groups(self) -> GetDemoteGroupsResponse:
+        """GET demote/ - getting a list of available groups for removing.
+
+        Returns GetDemoteGroupsResponse:
+        -------
+            success: bool
+                Operation status
+            groups : Dict[XenForoInternalGroupsEnum, ArzGuardGroupsEnum]
+
+        """
+
+        payload = await self._http.get_demote_groups()
+        return GetDemoteGroupsResponse.model_validate(payload)
+
+    async def demote_user(
+        self, user_id: int, group_id: ArzGuardGroupsIdsEnum
+    ) -> DemoteUserResponse:
+        """POST demote/{user_id}/ - demoting a user from a group.
+
+        Parameters
+        ----------
+        user_id : int
+            ID of the user
+        group_id : ArzGuardGroupsIdsEnum
+            ID of the group to delete for the user
+
+        Returns DemoteUserResponse:
+        -------
+            success: bool
+                Operation status
+            groups: List[ArzGuardGroupsNamesEnum]
+                An array of group names that the user belongs to
+            user: Optional[User]
+                Detailed user information (included if the API key has the user:read permission)
+        Errors
+        ------
+            user_id_not_valid:
+                Неверный ID пользователя
+            user_cannot_promote:
+                The user cannot be changed
+            group_not_allowed:
+                There are no rights to delete from the specified group
+        """
+
+        params = UserDemoteParams(group=group_id)
+        payload = await self._http.demote_user(user_id, params)
+        return DemoteUserResponse.model_validate(payload)
+
+    async def get_promote_groups(self) -> GetPromoteGroupsResponse:
+        """GET promote/ - getting a list of available groups for adding.
+
+        Returns GetPromoteGroupsResponse:
+        -------
+            success: bool
+                Operation status
+            groups : Dict[XenForoInternalGroupsEnum, ArzGuardGroupsEnum]
+        """
+        payload = await self._http.get_promote_groups()
+        return GetPromoteGroupsResponse.model_validate(payload)
+
+    async def promote_user(
+        self, user_id: int, group_id: ArzGuardGroupsIdsEnum
+    ) -> PromoteUserResponse:
+        """POST promote/{user_id}/ - promotion of the user to the group.
+
+        Parameters
+        ----------
+        user_id : int
+            ID of the user
+        group_id : ArzGuardGroupsIdsEnum
+            ID of the group to add to the user
+
+        Returns PromoteUserResponse:
+        -------
+            success: bool
+                Operation status
+            groups: List[ArzGuardGroupsNamesEnum]
+                An array of group names that the user belongs to
+            user: Optional[User]
+                Detailed user information (included if the API key has the user:read permission)
+        Errors
+        ------
+            group_not_provided:
+                The group is not specified
+            user_id_not_valid:
+                Invalid user ID
+            user_cannot_promote:
+                The user cannot be promoted
+            group_not_allowed:
+                No permissions to add to the specified group
+        """
+
+        params = UserPromoteParams(group=group_id)
+        payload = await self._http.promote_user(user_id, params)
+        return PromoteUserResponse.model_validate(payload)

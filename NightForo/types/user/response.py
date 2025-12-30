@@ -1,7 +1,8 @@
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 from pydantic import BaseModel
 
+from ...groups import ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum
 from ..pagination import Pagination
 from ..profile_post import ProfilePost
 from . import User
@@ -52,3 +53,25 @@ class UserAvatarDeleteResponse(BaseModel):
 class UserProfilePostsGetResponse(BaseModel):
     profile_posts: List[ProfilePost]
     pagination: Pagination
+
+
+class GetDemoteGroupsResponse(BaseModel):
+    success: bool
+    groups: Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]
+
+
+class GetPromoteGroupsResponse(BaseModel):
+    success: bool
+    groups: Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]
+
+
+class PromoteUserResponse(BaseModel):
+    success: bool
+    groups: List[ArzGuardGroupsNamesEnum]
+    user: Optional[User]
+
+
+class DemoteUserResponse(BaseModel):
+    success: bool
+    groups: List[ArzGuardGroupsNamesEnum]
+    user: Optional[User]

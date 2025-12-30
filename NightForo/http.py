@@ -29,6 +29,8 @@ from .endpoints import (
     endpoint_conversation_messages_list,
     endpoint_conversation_star,
     endpoint_conversations,
+    endpoint_demote,
+    endpoint_demote_user,
     endpoint_forum,
     endpoint_forum_mark_read,
     endpoint_forum_threads,
@@ -52,6 +54,8 @@ from .endpoints import (
     endpoint_profile_post_comments_list,
     endpoint_profile_post_react,
     endpoint_profile_posts,
+    endpoint_promote,
+    endpoint_promote_user,
     endpoint_stats,
     endpoint_thread,
     endpoint_thread_change_type,
@@ -152,8 +156,10 @@ from .types.thread.params import (
 from .types.user.params import (
     UserAvatarChangeParams,
     UserCreateParams,
+    UserDemoteParams,
     UserGetParams,
     UserProfilePostsGetParams,
+    UserPromoteParams,
     UserRenameParams,
     UsersFindEmailParams,
     UsersFindNameParams,
@@ -198,6 +204,9 @@ class HTTPClient:
                     )
 
                 if (errors := payload.get("errors", None)) is not None:
+                    raise XenForoError(errors)
+
+                if (errors := payload.get("error", None)) is not None:
                     raise XenForoError(errors)
 
                 return payload
@@ -892,5 +901,35 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_user_profile_posts(user_id),
             method=HTTPMethod.GET,
+            params=params,
+        )
+
+    # ============================================================================
+    # ACTIONS
+    # ============================================================================
+
+    async def get_demote_groups(self) -> Any:
+        return await self._request(
+            endpoint=endpoint_demote, method=HTTPMethod.GET
+        )
+
+    async def demote_user(self, user_id: int, params: UserDemoteParams) -> Any:
+        return await self._request(
+            endpoint=endpoint_demote_user(user_id),
+            method=HTTPMethod.POST,
+            params=params,
+        )
+
+    async def get_promote_groups(self) -> Any:
+        return await self._request(
+            endpoint=endpoint_promote, method=HTTPMethod.GET
+        )
+
+    async def promote_user(
+        self, user_id: int, params: UserPromoteParams
+    ) -> Any:
+        return await self._request(
+            endpoint=endpoint_promote_user(user_id),
+            method=HTTPMethod.POST,
             params=params,
         )
