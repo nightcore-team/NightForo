@@ -2,6 +2,12 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+__all__ = (
+    "ConversationMessageReactParams",
+    "ConversationMessageReplyParams",
+    "ConversationMessageUpdateParams",
+)
+
 
 class ConversationMessageReplyParams(BaseModel):
     conversation_id: int

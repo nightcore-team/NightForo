@@ -1,17 +1,3 @@
-from pydantic import BaseModel
-
-
-class Attachment(BaseModel):
-    filename: str
-    file_size: int
-    height: int
-    width: int
-    thumbnail_url: str
-    direct_url: str
-    is_video: bool
-    is_audio: bool
-    attachment_id: int
-    content_type: str
-    content_id: int
-    attach_date: int
-    view_count: int
+from .attachment import *  # noqa: F403
+from .params import *  # noqa: F403
+from .response import *  # noqa: F403

@@ -5,7 +5,24 @@ from pydantic import BaseModel
 from ...groups import ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum
 from ..pagination import Pagination
 from ..profile_post import ProfilePost
-from . import User
+from .user import User
+
+__all__ = (
+    "DemoteUserResponse",
+    "GetDemoteGroupsResponse",
+    "GetPromoteGroupsResponse",
+    "PromoteUserResponse",
+    "UserAvatarDeleteResponse",
+    "UserAvatarUpdateResponse",
+    "UserCreateResponse",
+    "UserDeleteResponse",
+    "UserFindEmailResponse",
+    "UserFindNameResponse",
+    "UserGetResponse",
+    "UserProfilePostsGetResponse",
+    "UserUpdateResponse",
+    "UsersGetResponse",
+)
 
 
 class UsersGetResponse(BaseModel):

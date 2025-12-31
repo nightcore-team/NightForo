@@ -1,8 +1,3 @@
-from pydantic import BaseModel
-
-
-class Forum(BaseModel):
-    forum_type_id: str
-    allow_posting: bool
-    require_prefix: bool
-    min_tags: int
+from .forum import *  # noqa: F403
+from .params import *  # noqa: F403
+from .response import *  # noqa: F403

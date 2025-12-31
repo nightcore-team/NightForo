@@ -2,6 +2,12 @@ from typing import BinaryIO, List, Optional
 
 from pydantic import BaseModel
 
+__all__ = (
+    "AttachmentUploadParams",
+    "AttachmentsCreateNewKeyParams",
+    "AttachmentsGetParams",
+)
+
 
 class AttachmentsGetParams(BaseModel):
     key: str

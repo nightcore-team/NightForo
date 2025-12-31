@@ -2,6 +2,8 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+__all__ = ("ForumGetParams", "ForumMarkReadParams", "ForumThreadsGetParams")
+
 
 class ForumGetParams(BaseModel):
     with_threads: Optional[bool] = None

@@ -2,6 +2,14 @@ from pydantic import BaseModel
 
 from . import ProfilePostComment
 
+__all__ = (
+    "ProfilePostCommentCreateResponse",
+    "ProfilePostCommentDeleteResponse",
+    "ProfilePostCommentGetResponse",
+    "ProfilePostCommentReactResponse",
+    "ProfilePostCommentUpdateResponse",
+)
+
 
 class ProfilePostCommentCreateResponse(BaseModel):
     success: bool

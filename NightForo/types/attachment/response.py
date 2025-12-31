@@ -2,7 +2,17 @@ from typing import BinaryIO, List, Optional
 
 from pydantic import BaseModel
 
-from . import Attachment
+from .attachment import Attachment
+
+__all__ = (
+    "AttachmentDeleteResponse",
+    "AttachmentGetDataResponse",
+    "AttachmentGetResponse",
+    "AttachmentGetThumbnailResponse",
+    "AttachmentUploadResponse",
+    "AttachmentsCreateNewKeyResponse",
+    "AttachmentsGetResponse",
+)
 
 
 class AttachmentsGetResponse(BaseModel):
@@ -26,9 +36,9 @@ class AttachmentDeleteResponse(BaseModel):
     success: bool
 
 
-class AttachmentGetData(BaseModel):
+class AttachmentGetDataResponse(BaseModel):
     data: BinaryIO
 
 
-class AttachmentGetThumbnail(BaseModel):
+class AttachmentGetThumbnailResponse(BaseModel):
     url: str

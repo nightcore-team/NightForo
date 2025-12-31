@@ -4,7 +4,20 @@ from pydantic import BaseModel
 
 from ..conversation_message import ConversationMessage
 from ..pagination import Pagination
-from . import Conversation
+from .conversation import Conversation
+
+__all__ = (
+    "ConversationCreateResponse",
+    "ConversationDeleteResponse",
+    "ConversationGetResponse",
+    "ConversationInviteResponse",
+    "ConversationMarkReadResponse",
+    "ConversationMarkUnreadResponse",
+    "ConversationMessagesGetResponse",
+    "ConversationStarResponse",
+    "ConversationUpdateResponse",
+    "ConversationsGetResponse",
+)
 
 
 class ConversationsGetResponse(BaseModel):

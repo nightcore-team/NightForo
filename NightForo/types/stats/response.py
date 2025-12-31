@@ -1,6 +1,8 @@
 from pydantic import BaseModel
 
-from . import LatestUser, Online, Totals
+from .stats import LatestUser, Online, Totals
+
+__all__ = ("StatsResponse",)
 
 
 class StatsResponse(BaseModel):

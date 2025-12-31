@@ -2,7 +2,17 @@ from typing import Optional
 
 from pydantic import BaseModel
 
-from . import Post
+from .post import Post
+
+__all__ = (
+    "PostCreateResponse",
+    "PostDeleteResponse",
+    "PostGetResponse",
+    "PostMarkSolutionResponse",
+    "PostReactResponse",
+    "PostUpdateResponse",
+    "PostVoteResponse",
+)
 
 
 class PostCreateResponse(BaseModel):

@@ -6,6 +6,12 @@ from ..node import Node
 from ..pagination import Pagination
 from ..thread import Thread
 
+__all__ = (
+    "ForumGetResponse",
+    "ForumMarkReadResponse",
+    "ForumThreadsGetResponse",
+)
+
 
 class ForumGetResponse(BaseModel):
     forum: Node

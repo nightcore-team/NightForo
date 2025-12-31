@@ -1,10 +1,11 @@
 from enum import Enum
 
+__all__ = ("ArzGuardGroupsIdsEnum", "ArzGuardGroupsNamesEnum")
+
 
 class ArzGuardGroupsIdsEnum(Enum):
     FORUM_MANAGERS = 3
     FORUM_ADMINISTRATORS = 25
-    # FORUM_MODERATORS =
     GAME_ADMINISTRATORS = 17
     SERVER_MANAGERS = 33
     HEAD_MODERATORS = 4
@@ -17,13 +18,6 @@ class ArzGuardGroupsIdsEnum(Enum):
 
 
 class ArzGuardGroupsNamesEnum(Enum):
-    FORUM_MANAGERS = 3
-    FORUM_ADMINISTRATORS = 25
-    # FORUM_MODERATORS =
-    GAME_ADMINISTRATORS = 17
-    SERVER_MANAGERS = 33
-    HEAD_MODERATORS = 4
-    SERVICE_ACCOUNTS = 19
     DEPUTY_HEAD_MODERATORS = "(08) Заместители главных модераторов"
     TECH_MODERATORS = "(09) Технические модераторы"
     CURATORS_OF_MODERATION = "(10) Кураторы модерации"

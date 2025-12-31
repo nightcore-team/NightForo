@@ -2,6 +2,8 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
+__all__ = ("ApiKey", "IndexGetResponse")
+
 
 class ApiKey(BaseModel):
     type: str

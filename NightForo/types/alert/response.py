@@ -3,7 +3,15 @@ from typing import List
 from pydantic import BaseModel
 
 from ..pagination import Pagination
-from . import UserAlert
+from .alert import UserAlert
+
+__all__ = (
+    "AlertGetResponse",
+    "AlertMarkResponse",
+    "AlertSendResponse",
+    "AlertsGetResponse",
+    "AlertsMarkAllResponse",
+)
 
 
 class AlertsGetResponse(BaseModel):

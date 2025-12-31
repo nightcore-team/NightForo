@@ -1,20 +1,11 @@
 """NightForo XenForo API Client."""
 
-from typing import Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from .errors import NoApiKeyProvidedError
-from .groups import ArzGuardGroupsIdsEnum
 from .http import HTTPClient
-
-# Params imports
-from .types.alert.params import (
-    AlertMarkParams,
-    AlertSendParams,
-    AlertsGetParams,
-    AlertsMarkAllParams,
-)
-
-# Response imports
 from .types.alert.response import (
     AlertGetResponse,
     AlertMarkResponse,
@@ -22,40 +13,19 @@ from .types.alert.response import (
     AlertsGetResponse,
     AlertsMarkAllResponse,
 )
-from .types.attachment.params import (
-    AttachmentsCreateNewKeyParams,
-    AttachmentsGetParams,
-    AttachmentUploadParams,
-)
 from .types.attachment.response import (
     AttachmentDeleteResponse,
-    AttachmentGetData,
+    AttachmentGetDataResponse,
     AttachmentGetResponse,
-    AttachmentGetThumbnail,
+    AttachmentGetThumbnailResponse,
     AttachmentsCreateNewKeyResponse,
     AttachmentsGetResponse,
     AttachmentUploadResponse,
-)
-from .types.auth.params import (
-    AuthFromSessionParams,
-    AuthLoginTokenParams,
-    AuthTestParams,
 )
 from .types.auth.response import (
     AuthFromSessionResponse,
     AuthLoginTokenResponse,
     AuthTestResponse,
-)
-from .types.conversation.params import (
-    ConversationCreateParams,
-    ConversationDeleteParams,
-    ConversationGetMessagesParams,
-    ConversationGetParams,
-    ConversationInviteParams,
-    ConversationMarkReadParams,
-    ConversationsGetParams,
-    ConversationStarParams,
-    ConversationUpdateParams,
 )
 from .types.conversation.response import (
     ConversationCreateResponse,
@@ -69,32 +39,16 @@ from .types.conversation.response import (
     ConversationStarResponse,
     ConversationUpdateResponse,
 )
-from .types.conversation_message.params import (
-    ConversationMessageReactParams,
-    ConversationMessageReplyParams,
-    ConversationMessageUpdateParams,
-)
 from .types.conversation_message.response import (
     ConversationMessageGetResponse,
     ConversationMessageReactResponse,
     ConversationMessageReplyResponse,
     ConversationMessageUpdateResponse,
 )
-from .types.forum.params import (
-    ForumGetParams,
-    ForumMarkReadParams,
-    ForumThreadsGetParams,
-)
 from .types.forum.response import (
     ForumGetResponse,
     ForumMarkReadResponse,
     ForumThreadsGetResponse,
-)
-from .types.me.params import (
-    MeAvatarUpdateParams,
-    MeEmailUpdateParams,
-    MePasswordUpdateParams,
-    MeUpdateParams,
 )
 from .types.me.response import (
     MeAvatarDeleteResponse,
@@ -103,11 +57,6 @@ from .types.me.response import (
     MeGetResponse,
     MePasswordUpdateResponse,
     MeUpdateResponse,
-)
-from .types.node.params import (
-    NodeCreateParams,
-    NodeDeleteParams,
-    NodeUpdateParams,
 )
 from .types.node.response import (
     NodeCreateResponse,
@@ -118,13 +67,6 @@ from .types.node.response import (
     NodeUpdateResponse,
 )
 from .types.page.response import IndexGetResponse
-from .types.post.params import (
-    PostCreateParams,
-    PostDeleteParams,
-    PostReactParams,
-    PostUpdateParams,
-    PostVoteParams,
-)
 from .types.post.response import (
     PostCreateResponse,
     PostDeleteResponse,
@@ -134,13 +76,6 @@ from .types.post.response import (
     PostUpdateResponse,
     PostVoteResponse,
 )
-from .types.profile_post.params import (
-    ProfilePostCreateParams,
-    ProfilePostDeleteParams,
-    ProfilePostGetParams,
-    ProfilePostReactParams,
-    ProfilePostUpdateParams,
-)
 from .types.profile_post.response import (
     ProfilePostCommentsGetResponse,
     ProfilePostCreateResponse,
@@ -148,13 +83,6 @@ from .types.profile_post.response import (
     ProfilePostGetResponse,
     ProfilePostReactResponse,
     ProfilePostUpdateResponse,
-)
-from .types.profile_post_comment.params import (
-    ProfilePostCommentCreateParams,
-    ProfilePostCommentDeleteParams,
-    ProfilePostCommentReactParams,
-    ProfilePostCommentsGetParams,
-    ProfilePostCommentUpdateParams,
 )
 from .types.profile_post_comment.response import (
     ProfilePostCommentCreateResponse,
@@ -164,18 +92,6 @@ from .types.profile_post_comment.response import (
     ProfilePostCommentUpdateResponse,
 )
 from .types.stats.response import StatsResponse
-from .types.thread.params import (
-    ThreadChangeTypeParams,
-    ThreadCreateParams,
-    ThreadDeleteParams,
-    ThreadGetParams,
-    ThreadMarkReadParams,
-    ThreadMoveParams,
-    ThreadPostsGetParams,
-    ThreadsGetParams,
-    ThreadUpdateParams,
-    ThreadVoteParams,
-)
 from .types.thread.response import (
     ThreadChangeTypeResponse,
     ThreadCreateResponse,
@@ -187,19 +103,6 @@ from .types.thread.response import (
     ThreadsGetResponse,
     ThreadUpdateResponse,
     ThreadVoteResponse,
-)
-from .types.user.params import (
-    UserAvatarChangeParams,
-    UserCreateParams,
-    UserDemoteParams,
-    UserGetParams,
-    UserProfilePostsGetParams,
-    UserPromoteParams,
-    UserRenameParams,
-    UsersFindEmailParams,
-    UsersFindNameParams,
-    UsersGetParams,
-    UserUpdateParams,
 )
 from .types.user.response import (
     DemoteUserResponse,
@@ -217,6 +120,105 @@ from .types.user.response import (
     UsersGetResponse,
     UserUpdateResponse,
 )
+
+if TYPE_CHECKING:
+    from .groups import ArzGuardGroupsIdsEnum
+    from .types.alert.params import (
+        AlertMarkParams,
+        AlertSendParams,
+        AlertsGetParams,
+        AlertsMarkAllParams,
+    )
+    from .types.attachment.params import (
+        AttachmentsCreateNewKeyParams,
+        AttachmentsGetParams,
+        AttachmentUploadParams,
+    )
+    from .types.auth.params import (
+        AuthFromSessionParams,
+        AuthLoginTokenParams,
+        AuthTestParams,
+    )
+    from .types.conversation.params import (
+        ConversationCreateParams,
+        ConversationDeleteParams,
+        ConversationGetMessagesParams,
+        ConversationGetParams,
+        ConversationInviteParams,
+        ConversationMarkReadParams,
+        ConversationsGetParams,
+        ConversationStarParams,
+        ConversationUpdateParams,
+    )
+    from .types.conversation_message.params import (
+        ConversationMessageReactParams,
+        ConversationMessageReplyParams,
+        ConversationMessageUpdateParams,
+    )
+    from .types.forum.params import (
+        ForumGetParams,
+        ForumMarkReadParams,
+        ForumThreadsGetParams,
+    )
+    from .types.me.params import (
+        MeAvatarUpdateParams,
+        MeEmailUpdateParams,
+        MePasswordUpdateParams,
+        MeUpdateParams,
+    )
+    from .types.node.params import (
+        NodeCreateParams,
+        NodeDeleteParams,
+        NodeUpdateParams,
+    )
+    from .types.post.params import (
+        PostCreateParams,
+        PostDeleteParams,
+        PostReactParams,
+        PostUpdateParams,
+        PostVoteParams,
+    )
+    from .types.profile_post.params import (
+        ProfilePostCreateParams,
+        ProfilePostDeleteParams,
+        ProfilePostGetParams,
+        ProfilePostReactParams,
+        ProfilePostUpdateParams,
+    )
+    from .types.profile_post_comment.params import (
+        ProfilePostCommentCreateParams,
+        ProfilePostCommentDeleteParams,
+        ProfilePostCommentReactParams,
+        ProfilePostCommentsGetParams,
+        ProfilePostCommentUpdateParams,
+    )
+    from .types.thread.params import (
+        ThreadChangeTypeParams,
+        ThreadCreateParams,
+        ThreadDeleteParams,
+        ThreadGetParams,
+        ThreadMarkReadParams,
+        ThreadMoveParams,
+        ThreadPostsGetParams,
+        ThreadsGetParams,
+        ThreadUpdateParams,
+        ThreadVoteParams,
+    )
+    from .types.user.params import (
+        UserAvatarChangeParams,
+        UserCreateParams,
+        UserDemoteParams,
+        UserGetParams,
+        UserProfilePostsGetParams,
+        UserPromoteParams,
+        UserRenameParams,
+        UsersFindEmailParams,
+        UsersFindNameParams,
+        UsersGetParams,
+        UserUpdateParams,
+    )
+
+__all__ = ("Client",)
 
 
 class Client:
@@ -246,7 +248,7 @@ class Client:
     # ============================================================================
 
     async def get_alerts(
-        self, params: Optional[AlertsGetParams] = None
+        self, params: AlertsGetParams | None = None
     ) -> AlertsGetResponse:
         """GET alerts/ - Gets the API user's list of alerts
 
@@ -477,7 +479,7 @@ class Client:
 
     async def get_attachment_data(
         self, attachment_id: int
-    ) -> AttachmentGetData:
+    ) -> AttachmentGetDataResponse:
         """GET attachments/{id}/data - Gets the data that makes up the specified attachment
 
         Parameters
@@ -492,11 +494,11 @@ class Client:
         """
 
         payload = await self._http.get_attachment_data(attachment_id)
-        return AttachmentGetData.model_validate(payload)
+        return AttachmentGetDataResponse.model_validate(payload)
 
     async def get_attachment_thumbnail(
         self, attachment_id: int
-    ) -> AttachmentGetThumbnail:
+    ) -> AttachmentGetThumbnailResponse:
         """GET attachments/{id}/thumbnail - Gets the URL to the attachment's thumbnail
 
         Parameters
@@ -516,7 +518,7 @@ class Client:
         """
 
         payload = await self._http.get_attachment_thumbnail(attachment_id)
-        return AttachmentGetThumbnail.model_validate(payload)
+        return AttachmentGetThumbnailResponse.model_validate(payload)
 
     # ============================================================================
     # AUTH
@@ -704,7 +706,7 @@ class Client:
     # ============================================================================
 
     async def get_conversations(
-        self, params: Optional[ConversationsGetParams] = None
+        self, params: ConversationsGetParams | None = None
     ) -> ConversationsGetResponse:
         """GET conversations/ - Gets the API user's list of conversations.
 
@@ -766,7 +768,7 @@ class Client:
     async def get_conversation(
         self,
         conversation_id: int,
-        params: Optional[ConversationGetParams] = None,
+        params: ConversationGetParams | None = None,
     ) -> ConversationGetResponse:
         """GET conversations/{id}/ - Gets information about the specified conversation.
 
@@ -821,7 +823,7 @@ class Client:
     async def delete_conversation(
         self,
         conversation_id: int,
-        params: Optional[ConversationDeleteParams] = None,
+        params: ConversationDeleteParams | None = None,
     ) -> ConversationDeleteResponse:
         """DELETE conversations/{id}/ - Deletes the specified conversation from the API user's list
 
@@ -868,7 +870,7 @@ class Client:
     async def mark_conversation_read(
         self,
         conversation_id: int,
-        params: Optional[ConversationMarkReadParams] = None,
+        params: ConversationMarkReadParams | None = None,
     ) -> ConversationMarkReadResponse:
         """POST conversations/{id}/mark-read - Marks the conversation as read up until the specified time
 
@@ -912,7 +914,7 @@ class Client:
     async def get_conversation_messages(
         self,
         conversation_id: int,
-        params: Optional[ConversationGetMessagesParams] = None,
+        params: ConversationGetMessagesParams | None = None,
     ) -> ConversationMessagesGetResponse:
         """GET conversations/{id}/messages - Gets a page of messages in the specified conversation
 
@@ -962,7 +964,7 @@ class Client:
     # ============================================================================
 
     async def get_forum(
-        self, forum_id: int, params: Optional[ForumGetParams] = None
+        self, forum_id: int, params: ForumGetParams | None = None
     ) -> ForumGetResponse:
         """GET forums/{id}/ - Gets information about the specified forum
 
@@ -1005,7 +1007,7 @@ class Client:
         return ForumGetResponse.model_validate(payload)
 
     async def mark_forum_read(
-        self, forum_id: int, params: Optional[ForumMarkReadParams] = None
+        self, forum_id: int, params: ForumMarkReadParams | None = None
     ) -> ForumMarkReadResponse:
         """POST forums/{id}/mark-read - Marks the forum as read up until the specified time
 
@@ -1026,7 +1028,7 @@ class Client:
         return ForumMarkReadResponse.model_validate(payload)
 
     async def get_forum_threads(
-        self, forum_id: int, params: Optional[ForumThreadsGetParams] = None
+        self, forum_id: int, params: ForumThreadsGetParams | None = None
     ) -> ForumThreadsGetResponse:
         """GET forums/{id}/threads - Gets a page of threads from the specified forum
 
@@ -1292,7 +1294,7 @@ class Client:
         return NodeUpdateResponse.model_validate(payload)
 
     async def delete_node(
-        self, node_id: int, params: Optional[NodeDeleteParams] = None
+        self, node_id: int, params: NodeDeleteParams | None = None
     ) -> NodeDeleteResponse:
         """DELETE nodes/{id}/ - Deletes the specified node
 
@@ -1390,7 +1392,7 @@ class Client:
         return PostUpdateResponse.model_validate(payload)
 
     async def delete_post(
-        self, post_id: int, params: Optional[PostDeleteParams] = None
+        self, post_id: int, params: PostDeleteParams | None = None
     ) -> PostDeleteResponse:
         """DELETE posts/{id}/ - Deletes the specified post
 
@@ -1562,7 +1564,7 @@ class Client:
     async def delete_profile_post_comment(
         self,
         comment_id: int,
-        params: Optional[ProfilePostCommentDeleteParams] = None,
+        params: ProfilePostCommentDeleteParams | None = None,
     ) -> ProfilePostCommentDeleteResponse:
         """DELETE profile-post-comments/{id}/ - Deletes the specified profile post comment
 
@@ -1644,7 +1646,7 @@ class Client:
     async def get_profile_post(
         self,
         profile_post_id: int,
-        params: Optional[ProfilePostGetParams] = None,
+        params: ProfilePostGetParams | None = None,
     ) -> ProfilePostGetResponse:
         """GET profile-posts/{id}/ - Gets information about the specified profile post
 
@@ -1702,7 +1704,7 @@ class Client:
     async def delete_profile_post(
         self,
         profile_post_id: int,
-        params: Optional[ProfilePostDeleteParams] = None,
+        params: ProfilePostDeleteParams | None = None,
     ) -> ProfilePostDeleteResponse:
         """DELETE profile-posts/{id}/ - Deletes the specified profile post
 
@@ -1730,7 +1732,7 @@ class Client:
     async def get_profile_post_comments(
         self,
         profile_post_id: int,
-        params: Optional[ProfilePostCommentsGetParams] = None,
+        params: ProfilePostCommentsGetParams | None = None,
     ) -> ProfilePostCommentsGetResponse:
         """GET profile-posts/{id}/comments - Gets a page of comments on the specified profile post
 
@@ -1801,7 +1803,7 @@ class Client:
     # ============================================================================
 
     async def get_threads(
-        self, params: Optional[ThreadsGetParams] = None
+        self, params: ThreadsGetParams | None = None
     ) -> ThreadsGetResponse:
         """GET threads/ - Gets a list of threads
 
@@ -1878,7 +1880,7 @@ class Client:
         return ThreadCreateResponse.model_validate(payload)
 
     async def get_thread(
-        self, thread_id: int, params: Optional[ThreadGetParams] = None
+        self, thread_id: int, params: ThreadGetParams | None = None
     ) -> ThreadGetResponse:
         """GET threads/{id}/ - Gets information about the specified thread
 
@@ -1939,7 +1941,7 @@ class Client:
         return ThreadUpdateResponse.model_validate(payload)
 
     async def delete_thread(
-        self, thread_id: int, params: Optional[ThreadDeleteParams] = None
+        self, thread_id: int, params: ThreadDeleteParams | None = None
     ) -> ThreadDeleteResponse:
         """DELETE threads/{id}/ - Deletes the specified thread
 
@@ -2041,7 +2043,7 @@ class Client:
         return ThreadMoveResponse.model_validate(payload)
 
     async def get_thread_posts(
-        self, thread_id: int, params: Optional[ThreadPostsGetParams] = None
+        self, thread_id: int, params: ThreadPostsGetParams | None = None
     ) -> ThreadPostsGetResponse:
         """GET threads/{id}/posts - Gets a page of posts from the specified thread
 
@@ -2089,7 +2091,7 @@ class Client:
     # ============================================================================
 
     async def get_users(
-        self, params: Optional[UsersGetParams] = None
+        self, params: UsersGetParams | None = None
     ) -> UsersGetResponse:
         """GET users/ - Gets a list of users
 
@@ -2170,7 +2172,7 @@ class Client:
         return UserFindNameResponse.model_validate(payload)
 
     async def get_user(
-        self, user_id: int, params: Optional[UserGetParams] = None
+        self, user_id: int, params: UserGetParams | None = None
     ) -> UserGetResponse:
         """GET users/{id}/ - Gets information about the specified user
 
@@ -2226,7 +2228,7 @@ class Client:
         return UserUpdateResponse.model_validate(payload)
 
     async def delete_user(
-        self, user_id: int, params: Optional[UserRenameParams] = None
+        self, user_id: int, params: UserRenameParams | None = None
     ) -> UserDeleteResponse:
         """DELETE users/{id}/ - Deletes the specified user
 
@@ -2285,7 +2287,7 @@ class Client:
         return UserAvatarDeleteResponse.model_validate(payload)
 
     async def get_user_profile_posts(
-        self, user_id: int, page: Optional[int]
+        self, user_id: int, page: int | None
     ) -> UserProfilePostsGetResponse:
         """GET users/{id}/profile-posts - Gets a page of profile posts from the specified user's profile
 

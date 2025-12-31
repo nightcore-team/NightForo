@@ -1,6 +1,2 @@
-from pydantic import BaseModel
-
-
-class Page(BaseModel):
-    publish_date: int
-    view_count: int
+from .page import *  # noqa: F403
+from .response import *  # noqa: F403

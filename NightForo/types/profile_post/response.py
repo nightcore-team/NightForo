@@ -4,7 +4,16 @@ from pydantic import BaseModel
 
 from ..pagination import Pagination
 from ..profile_post_comment import ProfilePostComment
-from . import ProfilePost
+from .profile_post import ProfilePost
+
+__all__ = (
+    "ProfilePostCommentsGetResponse",
+    "ProfilePostCreateResponse",
+    "ProfilePostDeleteResponse",
+    "ProfilePostGetResponse",
+    "ProfilePostReactResponse",
+    "ProfilePostUpdateResponse",
+)
 
 
 class ProfilePostCreateResponse(BaseModel):

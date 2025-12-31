@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 
+__all__ = ("Pagination",)
+
 
 class Pagination(BaseModel):
     current_page: int

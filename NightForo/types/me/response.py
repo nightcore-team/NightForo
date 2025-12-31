@@ -2,6 +2,15 @@ from pydantic import BaseModel
 
 from ..user import User
 
+__all__ = (
+    "MeAvatarDeleteResponse",
+    "MeAvatarUpdateResponse",
+    "MeEmailUpdateResponse",
+    "MeGetResponse",
+    "MePasswordUpdateResponse",
+    "MeUpdateResponse",
+)
+
 
 class MeGetResponse(BaseModel):
     me: User

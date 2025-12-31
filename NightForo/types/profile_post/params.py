@@ -2,6 +2,14 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+__all__ = (
+    "ProfilePostCreateParams",
+    "ProfilePostDeleteParams",
+    "ProfilePostGetParams",
+    "ProfilePostReactParams",
+    "ProfilePostUpdateParams",
+)
+
 
 class ProfilePostCreateParams(BaseModel):
     user_id: int

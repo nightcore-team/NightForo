@@ -1,11 +1,12 @@
 """HTTP client for XenForo API."""
 
-from typing import Any, Optional
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 import aiohttp
-from pydantic import BaseModel
 
-from .endpoint import Endpoint, HTTPMethod
+from .endpoint import HTTPMethod
 from .endpoints import (
     endpoint_alert,
     endpoint_alert_mark,
@@ -72,100 +73,107 @@ from .endpoints import (
     endpoint_users_find_name,
 )
 from .errors import UnsupportedEndpointMethodError, XenForoError
-from .types.alert.params import (
-    AlertMarkParams,
-    AlertSendParams,
-    AlertsGetParams,
-    AlertsMarkAllParams,
-)
-from .types.attachment.params import (
-    AttachmentsCreateNewKeyParams,
-    AttachmentsGetParams,
-    AttachmentUploadParams,
-)
-from .types.auth.params import (
-    AuthFromSessionParams,
-    AuthLoginTokenParams,
-    AuthTestParams,
-)
-from .types.conversation.params import (
-    ConversationCreateParams,
-    ConversationDeleteParams,
-    ConversationGetMessagesParams,
-    ConversationGetParams,
-    ConversationInviteParams,
-    ConversationMarkReadParams,
-    ConversationsGetParams,
-    ConversationStarParams,
-    ConversationUpdateParams,
-)
-from .types.conversation_message.params import (
-    ConversationMessageReactParams,
-    ConversationMessageReplyParams,
-    ConversationMessageUpdateParams,
-)
-from .types.forum.params import (
-    ForumGetParams,
-    ForumMarkReadParams,
-    ForumThreadsGetParams,
-)
-from .types.me.params import (
-    MeAvatarUpdateParams,
-    MeEmailUpdateParams,
-    MePasswordUpdateParams,
-    MeUpdateParams,
-)
-from .types.node.params import (
-    NodeCreateParams,
-    NodeDeleteParams,
-    NodeUpdateParams,
-)
-from .types.post.params import (
-    PostCreateParams,
-    PostDeleteParams,
-    PostReactParams,
-    PostUpdateParams,
-    PostVoteParams,
-)
-from .types.profile_post.params import (
-    ProfilePostCreateParams,
-    ProfilePostDeleteParams,
-    ProfilePostGetParams,
-    ProfilePostReactParams,
-    ProfilePostUpdateParams,
-)
-from .types.profile_post_comment.params import (
-    ProfilePostCommentCreateParams,
-    ProfilePostCommentDeleteParams,
-    ProfilePostCommentReactParams,
-    ProfilePostCommentsGetParams,
-    ProfilePostCommentUpdateParams,
-)
-from .types.thread.params import (
-    ThreadChangeTypeParams,
-    ThreadCreateParams,
-    ThreadDeleteParams,
-    ThreadGetParams,
-    ThreadMarkReadParams,
-    ThreadMoveParams,
-    ThreadPostsGetParams,
-    ThreadsGetParams,
-    ThreadUpdateParams,
-    ThreadVoteParams,
-)
-from .types.user.params import (
-    UserAvatarChangeParams,
-    UserCreateParams,
-    UserDemoteParams,
-    UserGetParams,
-    UserProfilePostsGetParams,
-    UserPromoteParams,
-    UserRenameParams,
-    UsersFindEmailParams,
-    UsersFindNameParams,
-    UsersGetParams,
-    UserUpdateParams,
-)
+
+if TYPE_CHECKING:
+    from typing import Any
+
+    from pydantic import BaseModel
+
+    from .endpoint import Endpoint
+    from .types.alert.params import (
+        AlertMarkParams,
+        AlertSendParams,
+        AlertsGetParams,
+        AlertsMarkAllParams,
+    )
+    from .types.attachment.params import (
+        AttachmentsCreateNewKeyParams,
+        AttachmentsGetParams,
+        AttachmentUploadParams,
+    )
+    from .types.auth.params import (
+        AuthFromSessionParams,
+        AuthLoginTokenParams,
+        AuthTestParams,
+    )
+    from .types.conversation.params import (
+        ConversationCreateParams,
+        ConversationDeleteParams,
+        ConversationGetMessagesParams,
+        ConversationGetParams,
+        ConversationInviteParams,
+        ConversationMarkReadParams,
+        ConversationsGetParams,
+        ConversationStarParams,
+        ConversationUpdateParams,
+    )
+    from .types.conversation_message.params import (
+        ConversationMessageReactParams,
+        ConversationMessageReplyParams,
+        ConversationMessageUpdateParams,
+    )
+    from .types.forum.params import (
+        ForumGetParams,
+        ForumMarkReadParams,
+        ForumThreadsGetParams,
+    )
+    from .types.me.params import (
+        MeAvatarUpdateParams,
+        MeEmailUpdateParams,
+        MePasswordUpdateParams,
+        MeUpdateParams,
+    )
+    from .types.node.params import (
+        NodeCreateParams,
+        NodeDeleteParams,
+        NodeUpdateParams,
+    )
+    from .types.post.params import (
+        PostCreateParams,
+        PostDeleteParams,
+        PostReactParams,
+        PostUpdateParams,
+        PostVoteParams,
+    )
+    from .types.profile_post.params import (
+        ProfilePostCreateParams,
+        ProfilePostDeleteParams,
+        ProfilePostGetParams,
+        ProfilePostReactParams,
+        ProfilePostUpdateParams,
+    )
+    from .types.profile_post_comment.params import (
+        ProfilePostCommentCreateParams,
+        ProfilePostCommentDeleteParams,
+        ProfilePostCommentReactParams,
+        ProfilePostCommentsGetParams,
+        ProfilePostCommentUpdateParams,
+    )
+    from .types.thread.params import (
+        ThreadChangeTypeParams,
+        ThreadCreateParams,
+        ThreadDeleteParams,
+        ThreadGetParams,
+        ThreadMarkReadParams,
+        ThreadMoveParams,
+        ThreadPostsGetParams,
+        ThreadsGetParams,
+        ThreadUpdateParams,
+        ThreadVoteParams,
+    )
+    from .types.user.params import (
+        UserAvatarChangeParams,
+        UserCreateParams,
+        UserDemoteParams,
+        UserGetParams,
+        UserProfilePostsGetParams,
+        UserPromoteParams,
+        UserRenameParams,
+        UsersFindEmailParams,
+        UsersFindNameParams,
+        UsersGetParams,
+        UserUpdateParams,
+    )
 
 
 class HTTPClient:
@@ -176,7 +184,7 @@ class HTTPClient:
         self,
         endpoint: Endpoint,
         method: HTTPMethod,
-        params: Optional[BaseModel] = None,
+        params: BaseModel | None = None,
     ) -> Any:
         headers = {}
         req = {}
@@ -217,9 +225,7 @@ class HTTPClient:
     # ALERTS
     # ============================================================================
 
-    async def get_alerts(
-        self, params: Optional[AlertsGetParams] = None
-    ) -> Any:
+    async def get_alerts(self, params: AlertsGetParams | None = None) -> Any:
         return await self._request(
             endpoint=endpoint_alerts, method=HTTPMethod.GET, params=params
         )
@@ -361,7 +367,7 @@ class HTTPClient:
     # ============================================================================
 
     async def get_conversations(
-        self, params: Optional[ConversationsGetParams] = None
+        self, params: ConversationsGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_conversations,
@@ -381,7 +387,7 @@ class HTTPClient:
     async def get_conversation(
         self,
         conversation_id: int,
-        params: Optional[ConversationGetParams] = None,
+        params: ConversationGetParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_conversation(conversation_id),
@@ -401,7 +407,7 @@ class HTTPClient:
     async def delete_conversation(
         self,
         conversation_id: int,
-        params: Optional[ConversationDeleteParams] = None,
+        params: ConversationDeleteParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_conversation(conversation_id),
@@ -421,7 +427,7 @@ class HTTPClient:
     async def mark_conversation_read(
         self,
         conversation_id: int,
-        params: Optional[ConversationMarkReadParams] = None,
+        params: ConversationMarkReadParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_conversation_mark_read(conversation_id),
@@ -438,7 +444,7 @@ class HTTPClient:
     async def get_conversation_messages(
         self,
         conversation_id: int,
-        params: Optional[ConversationGetMessagesParams] = None,
+        params: ConversationGetMessagesParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_conversation_messages_list(conversation_id),
@@ -460,7 +466,7 @@ class HTTPClient:
     # ============================================================================
 
     async def get_forum(
-        self, forum_id: int, params: Optional[ForumGetParams] = None
+        self, forum_id: int, params: ForumGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_forum(forum_id),
@@ -469,7 +475,7 @@ class HTTPClient:
         )
 
     async def mark_forum_read(
-        self, forum_id: int, params: Optional[ForumMarkReadParams] = None
+        self, forum_id: int, params: ForumMarkReadParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_forum_mark_read(forum_id),
@@ -478,7 +484,7 @@ class HTTPClient:
         )
 
     async def get_forum_threads(
-        self, forum_id: int, params: Optional[ForumThreadsGetParams] = None
+        self, forum_id: int, params: ForumThreadsGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_forum_threads(forum_id),
@@ -561,7 +567,7 @@ class HTTPClient:
         )
 
     async def delete_node(
-        self, node_id: int, params: Optional[NodeDeleteParams] = None
+        self, node_id: int, params: NodeDeleteParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_node(node_id),
@@ -591,7 +597,7 @@ class HTTPClient:
         )
 
     async def delete_post(
-        self, post_id: int, params: Optional[PostDeleteParams] = None
+        self, post_id: int, params: PostDeleteParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_post(post_id),
@@ -650,7 +656,7 @@ class HTTPClient:
     async def delete_profile_post_comment(
         self,
         comment_id: int,
-        params: Optional[ProfilePostCommentDeleteParams] = None,
+        params: ProfilePostCommentDeleteParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_profile_post_comment(comment_id),
@@ -683,7 +689,7 @@ class HTTPClient:
     async def get_profile_post(
         self,
         profile_post_id: int,
-        params: Optional[ProfilePostGetParams] = None,
+        params: ProfilePostGetParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_profile_post(profile_post_id),
@@ -703,7 +709,7 @@ class HTTPClient:
     async def delete_profile_post(
         self,
         profile_post_id: int,
-        params: Optional[ProfilePostDeleteParams] = None,
+        params: ProfilePostDeleteParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_profile_post(profile_post_id),
@@ -714,7 +720,7 @@ class HTTPClient:
     async def get_profile_post_comments(
         self,
         profile_post_id: int,
-        params: Optional[ProfilePostCommentsGetParams] = None,
+        params: ProfilePostCommentsGetParams | None = None,
     ) -> Any:
         return await self._request(
             endpoint=endpoint_profile_post_comments_list(profile_post_id),
@@ -744,9 +750,7 @@ class HTTPClient:
     # THREADS
     # ============================================================================
 
-    async def get_threads(
-        self, params: Optional[ThreadsGetParams] = None
-    ) -> Any:
+    async def get_threads(self, params: ThreadsGetParams | None = None) -> Any:
         return await self._request(
             endpoint=endpoint_threads, method=HTTPMethod.GET, params=params
         )
@@ -757,7 +761,7 @@ class HTTPClient:
         )
 
     async def get_thread(
-        self, thread_id: int, params: Optional[ThreadGetParams] = None
+        self, thread_id: int, params: ThreadGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_thread(thread_id),
@@ -775,7 +779,7 @@ class HTTPClient:
         )
 
     async def delete_thread(
-        self, thread_id: int, params: Optional[ThreadDeleteParams] = None
+        self, thread_id: int, params: ThreadDeleteParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_thread(thread_id),
@@ -811,7 +815,7 @@ class HTTPClient:
         )
 
     async def get_thread_posts(
-        self, thread_id: int, params: Optional[ThreadPostsGetParams] = None
+        self, thread_id: int, params: ThreadPostsGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_thread_posts(thread_id),
@@ -832,7 +836,7 @@ class HTTPClient:
     # USERS
     # ============================================================================
 
-    async def get_users(self, params: Optional[UsersGetParams] = None) -> Any:
+    async def get_users(self, params: UsersGetParams | None = None) -> Any:
         return await self._request(
             endpoint=endpoint_users, method=HTTPMethod.GET, params=params
         )
@@ -857,7 +861,7 @@ class HTTPClient:
         )
 
     async def get_user(
-        self, user_id: int, params: Optional[UserGetParams] = None
+        self, user_id: int, params: UserGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_user(user_id),
@@ -873,7 +877,7 @@ class HTTPClient:
         )
 
     async def delete_user(
-        self, user_id: int, params: Optional[UserRenameParams] = None
+        self, user_id: int, params: UserRenameParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_user(user_id),
@@ -896,7 +900,7 @@ class HTTPClient:
         )
 
     async def get_user_profile_posts(
-        self, user_id: int, params: Optional[UserProfilePostsGetParams] = None
+        self, user_id: int, params: UserProfilePostsGetParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_user_profile_posts(user_id),

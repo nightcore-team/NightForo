@@ -3,7 +3,21 @@ from typing import BinaryIO, Dict, List, Optional
 from pydantic import BaseModel
 
 from ...groups import ArzGuardGroupsIdsEnum
-from . import DateOfBirth, Option, Privacy, Profile
+from .user import DateOfBirth, Option, Privacy, Profile
+
+__all__ = (
+    "UserAvatarChangeParams",
+    "UserCreateParams",
+    "UserDemoteParams",
+    "UserGetParams",
+    "UserProfilePostsGetParams",
+    "UserPromoteParams",
+    "UserRenameParams",
+    "UserUpdateParams",
+    "UsersFindEmailParams",
+    "UsersFindNameParams",
+    "UsersGetParams",
+)
 
 
 class UsersGetParams(BaseModel):

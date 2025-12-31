@@ -4,6 +4,13 @@ from pydantic import BaseModel
 
 from ..user import Option, Privacy, Profile
 
+__all__ = (
+    "MeAvatarUpdateParams",
+    "MeEmailUpdateParams",
+    "MePasswordUpdateParams",
+    "MeUpdateParams",
+)
+
 
 class MeUpdateParams(BaseModel):
     option: Optional[Option] = None
