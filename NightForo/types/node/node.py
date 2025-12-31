@@ -1,4 +1,4 @@
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
@@ -6,27 +6,24 @@ __all__ = ("Breadcrumb", "Node", "NodeCreateOrUpdate")
 
 
 class Breadcrumb(BaseModel):
-    node_id: int
-    title: str
-    node_type_id: str
+    node_id: Optional[int] = None
+    title: Optional[str] = None
+    node_type_id: Optional[str] = None
 
 
 class Node(BaseModel):
-    breadcrumbs: List[
-        Breadcrumb
-    ]  # A list of breadcrumbs for this node, including the node_id, title, and node_type_id
-    type_data: Dict[
-        str, Any
-    ]  # Data related to the specific node type this represents. Contents will vary significantly.
-    view_url: str
     node_id: int
-    title: str
-    node_name: str
-    description: str
-    node_type_id: str
-    parent_node_id: int
-    display_order: int
-    display_in_list: bool
+
+    title: Optional[str] = None
+    node_name: Optional[str] = None
+    node_type_id: Optional[str] = None
+    breadcrumbs: Optional[List[Breadcrumb]] = None
+    type_data: Optional[Dict[str, Any]] = None
+    view_url: Optional[str] = None
+    description: Optional[str] = None
+    parent_node_id: Optional[int] = None
+    display_order: Optional[int] = None
+    display_in_list: Optional[bool] = None
 
 
 class NodeCreateOrUpdate(BaseModel):

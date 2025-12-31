@@ -1,10 +1,12 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import BaseModel
 
 from ..attachment import Attachment
-from ..profile_post_comment import ProfilePostComment
-from ..user import User
+
+if TYPE_CHECKING:
+    from ..profile_post_comment import ProfilePostComment
+    from ..user import User
 
 __all__ = ("ProfilePost",)
 
@@ -20,14 +22,14 @@ class ProfilePost(BaseModel):
     view_url: str
     ProfileUser: (
         Optional[
-            User
+            "User"
         ]  # If requested by context, the user this profile post was left for.
     )
     Attachments: List[
         Attachment
     ]  # Attachments to this profile post, if it has any.
     LatestComments: List[
-        ProfilePostComment
+        "ProfilePostComment"
     ]  # If requested, the most recent comments on this profile post.
     is_reacted_to: bool  # True if the viewing user has reacted to this content
     visitor_reaction_id: Optional[
@@ -44,4 +46,4 @@ class ProfilePost(BaseModel):
     first_comment_date: int
     last_comment_date: int
     reaction_score: int
-    User: User
+    User: "User"

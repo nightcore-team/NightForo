@@ -6,7 +6,6 @@ from ..pagination import Pagination
 from ..post import Post
 from .thread import Thread
 
-
 __all__ = (
     "ThreadChangeTypeResponse",
     "ThreadCreateResponse",

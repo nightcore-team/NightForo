@@ -1,6 +1,6 @@
 from typing import BinaryIO, Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from ...groups import ArzGuardGroupsIdsEnum
 from .user import DateOfBirth, Option, Privacy, Profile
@@ -89,6 +89,8 @@ class UserRenameParams(BaseModel):
 
 class UserAvatarChangeParams(BaseModel):
     avatar: BinaryIO
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class UserProfilePostsGetParams(BaseModel):

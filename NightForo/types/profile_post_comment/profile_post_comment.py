@@ -1,10 +1,13 @@
-from typing import List, Optional
+from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import BaseModel
 
 from ..attachment import Attachment
-from ..profile_post import ProfilePost
-from ..user import User
+
+if TYPE_CHECKING:
+    from ..profile_post import ProfilePost
+    from ..user import User
+
 
 __all__ = ("ProfilePostComment",)
 
@@ -21,7 +24,7 @@ class ProfilePostComment(BaseModel):
         Attachment
     ]  # 	 Attachments to this profile post, if it has any.
     ProfilePost: Optional[
-        ProfilePost
+        "ProfilePost"
     ]  #  If requested by context, the profile post this comment relates to.
     is_reacted_to: bool  # True if the viewing user has reacted to this content
     visitor_reaction_id: Optional[
@@ -35,4 +38,4 @@ class ProfilePostComment(BaseModel):
     message_state: str
     warning_message: str
     reaction_score: int
-    User: User
+    User: "User"

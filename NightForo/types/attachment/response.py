@@ -1,6 +1,6 @@
 from typing import BinaryIO, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from .attachment import Attachment
 
@@ -38,6 +38,8 @@ class AttachmentDeleteResponse(BaseModel):
 
 class AttachmentGetDataResponse(BaseModel):
     data: BinaryIO
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class AttachmentGetThumbnailResponse(BaseModel):

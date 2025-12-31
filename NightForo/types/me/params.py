@@ -1,6 +1,6 @@
 from typing import BinaryIO, Dict, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 from ..user import Option, Privacy, Profile
 
@@ -25,6 +25,8 @@ class MeUpdateParams(BaseModel):
 
 class MeAvatarUpdateParams(BaseModel):
     avatar: BinaryIO
+
+    model_config = ConfigDict(arbitrary_types_allowed=True)
 
 
 class MeEmailUpdateParams(BaseModel):

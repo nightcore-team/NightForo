@@ -18,3 +18,6 @@ from .types.stats import *  # noqa: F403
 from .types.thread import *  # noqa: F403
 from .types.user import *  # noqa: F403
 from .types.vote_type import *  # noqa: F403
+
+Post.model_rebuild()  # noqa: F405
+Thread.model_rebuild()  # noqa: F405

@@ -1,75 +1,59 @@
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 from pydantic import BaseModel
 
-from ..node import Node
 from ..user import User
 from ..vote_type import VoteTypeEnum
+
+if TYPE_CHECKING:
+    from ..node import Node
 
 __all__ = ("Thread",)
 
 
 class Thread(BaseModel):
-    username: str
-    is_watching: Optional[
-        bool
-    ]  # If accessing as a user, true if they are watching this thread
-    visitor_post_count: (
-        Optional[
-            int
-        ]  # If accessing as a user, the number of posts they have made in this thread
-    )
-    is_unread: Optional[
-        bool
-    ]  # If accessing as a user, true if this thread is unread
-    custom_fields: Dict[
-        str, Any
-    ]  # Key-value pairs of custom field values for this thread
-    tags: List[str]
-    prefix: Optional[
-        str
-    ]  # Present if this thread has a prefix. Printable name of the prefix.
-    can_edit: bool
-    can_edit_tags: bool
-    can_reply: bool
-    can_soft_delete: bool
-    can_hard_delete: bool
-    can_view_attachments: bool
-    view_url: str
-    is_first_post_pinned: bool
-    highlighted_post_ids: List[int]
-    is_search_engine_indexable: bool
-    index_state: str  # Present for members with permission to change the search index state of this thread.
-    Forum: Optional[
-        Node
-    ]  # If requested by context, the forum this thread was posted in.
-    vote_score: int  # The content's vote score (if supported)
-    can_content_vote: bool  # True if the viewing user can vote on this content
-    allowed_content_vote_types: List[
-        str
-    ]  # List of content vote types allowed on this content
-    is_content_voted: (
-        bool  # True if the viewing user has voted on this content
-    )
-    visitor_content_vote: Optional[
-        VoteTypeEnum
-    ]  # If the viewer reacted, the vote they case (up/down)
+    # Обов'язкові поля - завжди присутні в API
     thread_id: int
     node_id: int
     title: str
-    reply_count: int
-    view_count: int
+    username: str
     user_id: int
-    post_date: int
-    sticky: bool
-    discussion_state: str
-    discussion_open: bool
-    discussion_type: str
-    first_post_id: int
-    last_post_date: int
-    last_post_id: int
-    last_post_user_id: int
-    last_post_username: str
-    first_post_reaction_score: int
-    prefix_id: int
     User: User
+
+    is_watching: Optional[bool] = None
+    visitor_post_count: Optional[int] = None
+    is_unread: Optional[bool] = None
+    custom_fields: Optional[Dict[str, Any]] = None
+    tags: Optional[List[str]] = None
+    prefix: Optional[str] = None
+    can_edit: Optional[bool] = None
+    can_edit_tags: Optional[bool] = None
+    can_reply: Optional[bool] = None
+    can_soft_delete: Optional[bool] = None
+    can_hard_delete: Optional[bool] = None
+    can_view_attachments: Optional[bool] = None
+    view_url: Optional[str] = None
+    is_first_post_pinned: Optional[bool] = None
+    highlighted_post_ids: Optional[List[int]] = None
+    is_search_engine_indexable: Optional[bool] = None
+    index_state: Optional[str] = None
+    Forum: Optional["Node"] = None
+    vote_score: Optional[int] = None
+    can_content_vote: Optional[bool] = None
+    allowed_content_vote_types: Optional[List[str]] = None
+    is_content_voted: Optional[bool] = None
+    visitor_content_vote: Optional[VoteTypeEnum] = None
+    reply_count: Optional[int] = None
+    view_count: Optional[int] = None
+    post_date: Optional[int] = None
+    sticky: Optional[bool] = None
+    discussion_state: Optional[str] = None
+    discussion_open: Optional[bool] = None
+    discussion_type: Optional[str] = None
+    first_post_id: Optional[int] = None
+    last_post_date: Optional[int] = None
+    last_post_id: Optional[int] = None
+    last_post_user_id: Optional[int] = None
+    last_post_username: Optional[str] = None
+    first_post_reaction_score: Optional[int] = None
+    prefix_id: Optional[int] = None
