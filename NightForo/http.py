@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict
 
 import aiohttp
 
@@ -186,8 +186,8 @@ class HTTPClient:
         method: HTTPMethod,
         params: BaseModel | None = None,
     ) -> Any:
-        headers = {}
-        req = {}
+        headers: Dict[str, str]  = {}
+        req: Dict[str, Any]  = {}
 
         headers["XF-Api-Key"] = self.api_key
         headers["Content-Type"] = "application/json"
