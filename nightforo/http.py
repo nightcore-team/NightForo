@@ -203,23 +203,20 @@ class HTTPClient:
         async with aiohttp.ClientSession() as session, session.request(
             method.value, endpoint.url, **req
         ) as response:
-            if response.ok:
-                try:
-                    payload = await response.json()
-                except aiohttp.ContentTypeError:
-                    raise XenForoError(  # noqa: B904
-                        f"Response is not JSON. Status: {response.status}"
-                    )
+            try:
+                payload = await response.json()
+            except aiohttp.ContentTypeError:
+                raise XenForoError(  # noqa: B904
+                    f"Response is not JSON. Status: {response.status}"
+                )
 
-                if (errors := payload.get("errors", None)) is not None:
-                    raise XenForoError(errors)
+            if (errors := payload.get("errors", None)) is not None:
+                raise XenForoError(errors)
 
-                if (errors := payload.get("error", None)) is not None:
-                    raise XenForoError(errors)
+            if (errors := payload.get("error", None)) is not None:
+                raise XenForoError(errors)
 
-                return payload
-            else:
-                raise XenForoError("")
+            return payload
 
     # ============================================================================
     # ALERTS
