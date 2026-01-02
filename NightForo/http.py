@@ -186,8 +186,8 @@ class HTTPClient:
         method: HTTPMethod,
         params: BaseModel | None = None,
     ) -> Any:
-        headers: Dict[str, str]  = {}
-        req: Dict[str, Any]  = {}
+        headers: Dict[str, str] = {}
+        req: Dict[str, Any] = {}
 
         headers["XF-Api-Key"] = self.api_key
         headers["Content-Type"] = "application/json"
@@ -195,7 +195,7 @@ class HTTPClient:
         req["headers"] = headers
 
         if params is not None:
-            req["json"] = params.model_dump()
+            req["json"] = params.model_dump(by_alias=True)
 
         if method not in endpoint.supported_methods:
             raise UnsupportedEndpointMethodError(method)

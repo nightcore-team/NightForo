@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..user import User
 from ..vote_type import VoteTypeEnum
@@ -12,14 +12,12 @@ __all__ = ("Thread",)
 
 
 class Thread(BaseModel):
-    # Обов'язкові поля - завжди присутні в API
     thread_id: int
     node_id: int
     title: str
     username: str
     user_id: int
-    User: User
-
+    user: Optional[User] = Field(alias="User", default=None)
     is_watching: Optional[bool] = None
     visitor_post_count: Optional[int] = None
     is_unread: Optional[bool] = None
@@ -37,7 +35,7 @@ class Thread(BaseModel):
     highlighted_post_ids: Optional[List[int]] = None
     is_search_engine_indexable: Optional[bool] = None
     index_state: Optional[str] = None
-    Forum: Optional["Node"] = None
+    Forum: Optional[Node] = None
     vote_score: Optional[int] = None
     can_content_vote: Optional[bool] = None
     allowed_content_vote_types: Optional[List[str]] = None

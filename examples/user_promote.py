@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from nightforo import ArzGuardGroupsIdsEnum, Client
+from NightForo import ArzGuardGroupsIdsEnum, Client
 
 
 async def main():
@@ -11,7 +11,7 @@ async def main():
 
     client = Client(token)
 
-    user_id = 123
+    user_id = -1
 
     response = await client.promote_user(
         user_id, ArzGuardGroupsIdsEnum.MODERATORS

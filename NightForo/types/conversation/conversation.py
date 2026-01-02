@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..user import User
 
@@ -13,9 +13,7 @@ class Conversation(BaseModel):
         str, str
     ]  # Key-value pair of recipient user IDs and names
     is_starred: bool  # True if the viewing user starred the conversation
-    is_unread: Optional[
-        bool
-    ]  # If accessing as a user, true if this conversation is unread
+    is_unread: Optional[bool] = Field(default=None)
     can_edit: bool
     can_reply: bool
     can_invite: bool
@@ -33,4 +31,4 @@ class Conversation(BaseModel):
     last_message_date: int
     last_message_id: int
     last_message_user_id: int
-    Starter: User
+    starter: Optional[User] = Field(alias="Starter", default=None)

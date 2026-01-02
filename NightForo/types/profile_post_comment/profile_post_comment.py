@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..attachment import Attachment
 
@@ -20,9 +20,9 @@ class ProfilePostComment(BaseModel):
     can_hard_delete: bool
     can_react: bool
     can_view_attachments: bool
-    Attachments: List[
-        Attachment
-    ]  # 	 Attachments to this profile post, if it has any.
+    Attachments: Optional[List[Attachment]] = Field(
+        alias="Attachments", default=None
+    )  # 	 Attachments to this profile post, if it has any.
     ProfilePost: Optional[
         "ProfilePost"
     ]  #  If requested by context, the profile post this comment relates to.

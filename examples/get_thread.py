@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from nightforo import Client, ThreadGetParams
+from NightForo import Client, ThreadGetParams
 
 
 async def main():
@@ -11,7 +11,7 @@ async def main():
 
     client = Client(token)
 
-    example_thread_id = 123
+    example_thread_id = -1
 
     params = ThreadGetParams(with_posts=True)
     await client.get_thread(example_thread_id, params)

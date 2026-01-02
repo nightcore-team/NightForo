@@ -1,7 +1,7 @@
 from enum import Enum
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..attachment import Attachment
 from ..conversation import Conversation
@@ -26,10 +26,12 @@ class ConversationMessage(BaseModel):
     can_edit: bool
     can_react: bool
     view_url: str
-    Conversation: Conversation  # If requested by context, the conversation this message is part of.
-    Attachments: Optional[
-        List[Attachment]
-    ]  # If there are attachments to this message, a list of attachments.
+    conversation: Optional[Conversation] = Field(
+        default=None, alias="Conversation"
+    )  # If requested by context, the conversation this message is part of.
+    attachments: Optional[List[Attachment]] = Field(
+        default=None, alias="Attachments"
+    )
     is_reacted_to: bool  # True if the viewing user has reacted to this content
     visitor_reaction_id: Optional[
         int
@@ -41,4 +43,4 @@ class ConversationMessage(BaseModel):
     message: str
     attach_count: int
     reaction_score: int
-    User: User
+    user: Optional[User] = Field(default=None, alias="User")

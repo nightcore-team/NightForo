@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..attachment import Attachment
 from ..user import User
@@ -14,15 +14,13 @@ __all__ = ("Post",)
 
 
 class Post(BaseModel):
-    # Обов'язкові поля - завжди присутні
     post_id: int
     thread_id: int
     user_id: int
     username: str
     message: str
-    User: User  # ЦЕ ПОЛЕ ЗАВЖДИ Є! НЕ Optional!
+    user: User | None = Field(alias="User", default=None)
 
-    # Всі інші Optional
     is_first_post: Optional[bool] = None
     is_last_post: Optional[bool] = None
     is_unread: Optional[bool] = None
@@ -33,7 +31,7 @@ class Post(BaseModel):
     can_react: Optional[bool] = None
     can_view_attachments: Optional[bool] = None
     view_url: Optional[str] = None
-    Thread: Optional["Thread"] = None
+    Thread: Optional[Thread] = None
     Attachments: Optional[List[Attachment]] = None
     is_reacted_to: Optional[bool] = None
     visitor_reaction_id: Optional[int] = None

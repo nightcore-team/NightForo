@@ -59,7 +59,6 @@ class Privacy(BaseModel):
 
 
 class User(BaseModel):
-    # Обов'язкові поля (завжди присутні в API)
     user_id: int
     username: str
 

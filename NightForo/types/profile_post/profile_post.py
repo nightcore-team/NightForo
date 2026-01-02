@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 from ..attachment import Attachment
 
@@ -20,17 +20,17 @@ class ProfilePost(BaseModel):
     can_react: bool
     can_view_attachments: bool
     view_url: str
-    ProfileUser: (
+    profile_user: (
         Optional[
             "User"
         ]  # If requested by context, the user this profile post was left for.
-    )
-    Attachments: List[
-        Attachment
-    ]  # Attachments to this profile post, if it has any.
-    LatestComments: List[
-        "ProfilePostComment"
-    ]  # If requested, the most recent comments on this profile post.
+    ) = Field(alias="ProfileUser", default=None)
+    Attachments: Optional[List[Attachment]] = Field(
+        alias="Attachments", default=None
+    )  # 	 Attachments to this profile post, if it has any.
+    latest_comments: Optional[List["ProfilePostComment"]] = Field(
+        alias="LatestComments", default=None
+    )  # If requested, the most recent comments on this profile post.
     is_reacted_to: bool  # True if the viewing user has reacted to this content
     visitor_reaction_id: Optional[
         int
@@ -46,4 +46,4 @@ class ProfilePost(BaseModel):
     first_comment_date: int
     last_comment_date: int
     reaction_score: int
-    User: "User"
+    user: Optional["User"] = Field(alias="User", default=None)

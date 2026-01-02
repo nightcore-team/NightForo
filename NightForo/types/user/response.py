@@ -85,10 +85,10 @@ class GetPromoteGroupsResponse(BaseModel):
 class PromoteUserResponse(BaseModel):
     success: bool
     groups: List[ArzGuardGroupsNamesEnum]
-    user: Optional[User]
+    user: Optional[User] = None
 
 
 class DemoteUserResponse(BaseModel):
     success: bool
     groups: List[ArzGuardGroupsNamesEnum]
-    user: Optional[User]
+    user: Optional[User] = None
