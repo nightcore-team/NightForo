@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from NightForo import Client, ThreadGetParams
+from nightforo import Client, ThreadGetParams
 
 
 async def main():

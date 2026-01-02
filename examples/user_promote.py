@@ -1,7 +1,7 @@
 import asyncio
 import os
 
-from NightForo import ArzGuardGroupsIdsEnum, Client
+from nightforo import ArzGuardGroupsIdsEnum, Client
 
 
 async def main():
