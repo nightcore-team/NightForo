@@ -1,0 +1,15 @@
+name: Test Release Events
+
+on:
+  release:
+    types: [published, created, edited, deleted, prereleased, unpublished, released]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: |
+          echo "$GITHUB_CONTEXT"
