@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Dict
+from typing import TYPE_CHECKING
 
 import aiohttp
 
@@ -185,23 +185,32 @@ class HTTPClient:
         endpoint: Endpoint,
         method: HTTPMethod,
         params: BaseModel | None = None,
+        content_type: str = "application/json",
     ) -> Any:
-        headers: Dict[str, str] = {}
-        req: Dict[str, Any] = {}
+        headers: dict[str, str] = {}
+        req: dict[str, Any] = {}
 
         headers["XF-Api-Key"] = self.api_key
-        headers["Content-Type"] = "application/json"
 
         req["headers"] = headers
 
+        data = None
+
         if params is not None:
-            req["json"] = params.model_dump(by_alias=True)
+            dump = params.model_dump(by_alias=True)
+
+            if content_type == "application/json":
+                headers["Content-Type"] = content_type
+                req["json"] = dump
+
+            elif content_type == "multipart/form-data":
+                data = aiohttp.FormData(dump, default_to_multipart=True)
 
         if method not in endpoint.supported_methods:
             raise UnsupportedEndpointMethodError(method)
 
         async with aiohttp.ClientSession() as session, session.request(
-            method.value, endpoint.url, **req
+            method.value, endpoint.url, data=data, **req
         ) as response:
             try:
                 payload = await response.json()
@@ -915,10 +924,13 @@ class HTTPClient:
         )
 
     async def demote_user(self, user_id: int, params: UserDemoteParams) -> Any:
+        content_type = "multipart/form-data"
+
         return await self._request(
             endpoint=endpoint_demote_user(user_id),
             method=HTTPMethod.POST,
             params=params,
+            content_type=content_type,
         )
 
     async def get_promote_groups(self) -> Any:
@@ -929,8 +941,11 @@ class HTTPClient:
     async def promote_user(
         self, user_id: int, params: UserPromoteParams
     ) -> Any:
+        content_type = "multipart/form-data"
+
         return await self._request(
             endpoint=endpoint_promote_user(user_id),
             method=HTTPMethod.POST,
             params=params,
+            content_type=content_type,
         )
