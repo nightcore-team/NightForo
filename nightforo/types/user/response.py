@@ -1,4 +1,4 @@
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Union
 
 from pydantic import BaseModel
 
@@ -73,22 +73,28 @@ class UserProfilePostsGetResponse(BaseModel):
 
 
 class GetDemoteGroupsResponse(BaseModel):
-    success: bool
+    success: Optional[bool] = None
     groups: Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]
 
 
 class GetPromoteGroupsResponse(BaseModel):
-    success: bool
+    success: Optional[bool] = None
     groups: Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]
 
 
 class PromoteUserResponse(BaseModel):
     success: bool
-    groups: List[ArzGuardGroupsNamesEnum]
+    groups: Union[
+        Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum],
+        List[ArzGuardGroupsNamesEnum],
+    ]  # Если нет групп - пустой список, иначе dict
     user: Optional[User] = None
 
 
 class DemoteUserResponse(BaseModel):
     success: bool
-    groups: List[ArzGuardGroupsNamesEnum]
+    groups: Union[
+        Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum],
+        List[ArzGuardGroupsNamesEnum],
+    ]  # Если нет групп - пустой список, иначе dict
     user: Optional[User] = None
