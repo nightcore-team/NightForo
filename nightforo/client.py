@@ -104,6 +104,7 @@ from .types.thread.response import (
     ThreadUpdateResponse,
     ThreadVoteResponse,
 )
+from .types.user.params import UserDemoteParams, UserPromoteParams
 from .types.user.response import (
     DemoteUserResponse,
     GetDemoteGroupsResponse,
@@ -207,10 +208,8 @@ if TYPE_CHECKING:
     from .types.user.params import (
         UserAvatarChangeParams,
         UserCreateParams,
-        UserDemoteParams,
         UserGetParams,
         UserProfilePostsGetParams,
-        UserPromoteParams,
         UserRenameParams,
         UsersFindEmailParams,
         UsersFindNameParams,
