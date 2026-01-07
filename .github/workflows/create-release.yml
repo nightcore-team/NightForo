@@ -84,8 +84,9 @@ jobs:
         tag_name: ${{ steps.extract_version.outputs.tag }}
         name: Release ${{ steps.extract_version.outputs.version }}
         generate_release_notes: true
-        draft: true  # Создаем как черновик, чтобы можно было проверить
+        draft: false
         prerelease: false
         files: |
           dist/*.whl
           dist/*.tar.gz
+
