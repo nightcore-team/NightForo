@@ -21,3 +21,4 @@ from .types.vote_type import *  # noqa: F403
 
 Post.model_rebuild()  # noqa: F405
 Thread.model_rebuild()  # noqa: F405
+UserGetResponse.model_rebuild()  # noqa: F405
