@@ -98,22 +98,6 @@ jobs:
       run: |
         uv build
 
-    - name: Create and push Git tag
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        
-        TAG_NAME="${{ steps.extract_version.outputs.tag }}"
-        
-        # Проверяем, существует ли тег
-        if git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
-          echo "Tag $TAG_NAME already exists"
-        else
-          # Создаем тег и пушим его
-          git tag "$TAG_NAME"
-          git push origin "$TAG_NAME"
-        fi
-
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
