@@ -1,11 +1,10 @@
-from typing import BinaryIO, Dict, Optional
+from typing import Dict, Optional
 
 from pydantic import BaseModel, ConfigDict
 
 from ..user import Option, Privacy, Profile
 
 __all__ = (
-    "MeAvatarUpdateParams",
     "MeEmailUpdateParams",
     "MePasswordUpdateParams",
     "MeUpdateParams",
@@ -21,10 +20,6 @@ class MeUpdateParams(BaseModel):
     timezone: Optional[str] = None
     custom_title: Optional[str] = None
     custom_fields: Optional[Dict[str, str]] = None
-
-
-class MeAvatarUpdateParams(BaseModel):
-    avatar: BinaryIO
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 

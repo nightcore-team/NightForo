@@ -1,4 +1,4 @@
-from typing import BinaryIO, List, Optional
+from typing import List, Optional
 
 from pydantic import BaseModel, ConfigDict
 
@@ -15,7 +15,6 @@ class AttachmentsGetParams(BaseModel):
 
 class AttachmentUploadParams(BaseModel):
     key: str
-    attachment: BinaryIO
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
 
@@ -23,6 +22,5 @@ class AttachmentUploadParams(BaseModel):
 class AttachmentsCreateNewKeyParams(BaseModel):
     type: str
     context: Optional[List[str]] = None
-    attachment: Optional[BinaryIO] = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True)

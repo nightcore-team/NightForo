@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, BinaryIO
 
 from .errors import NoApiKeyProvidedError
 from .http import HTTPClient
@@ -162,7 +162,6 @@ if TYPE_CHECKING:
         ForumThreadsGetParams,
     )
     from .types.me.params import (
-        MeAvatarUpdateParams,
         MeEmailUpdateParams,
         MePasswordUpdateParams,
         MeUpdateParams,
@@ -206,7 +205,6 @@ if TYPE_CHECKING:
         ThreadVoteParams,
     )
     from .types.user.params import (
-        UserAvatarChangeParams,
         UserCreateParams,
         UserGetParams,
         UserProfilePostsGetParams,
@@ -387,7 +385,7 @@ class Client:
         return AttachmentsGetResponse.model_validate(payload)
 
     async def upload_attachment(
-        self, params: AttachmentUploadParams
+        self, params: AttachmentUploadParams, attachment: BinaryIO
     ) -> AttachmentUploadResponse:
         """POST attachments/ - Uploads an attachment
 
@@ -411,11 +409,13 @@ class Client:
                 Triggered if the user making the request does not match the user that created the attachment key.
         """
 
-        payload = await self._http.upload_attachment(params)
+        payload = await self._http.upload_attachment(params, attachment)
         return AttachmentUploadResponse.model_validate(payload)
 
     async def create_attachment_key(
-        self, params: AttachmentsCreateNewKeyParams
+        self,
+        params: AttachmentsCreateNewKeyParams,
+        attachment: BinaryIO | None = None,
     ) -> AttachmentsCreateNewKeyResponse:
         """POST attachments/new-key - Creates a new attachment key
 
@@ -436,7 +436,7 @@ class Client:
             Attachment information if provided
         """
 
-        payload = await self._http.create_attachment_key(params)
+        payload = await self._http.create_attachment_key(params, attachment)
         return AttachmentsCreateNewKeyResponse.model_validate(payload)
 
     async def get_attachment(
@@ -1129,7 +1129,7 @@ class Client:
         return MeUpdateResponse.model_validate(payload)
 
     async def update_my_avatar(
-        self, params: MeAvatarUpdateParams
+        self, avatar: BinaryIO
     ) -> MeAvatarUpdateResponse:
         """POST me/avatar - Updates the current user's avatar
 
@@ -1144,7 +1144,7 @@ class Client:
             True if update was successful
         """
 
-        payload = await self._http.update_my_avatar(params)
+        payload = await self._http.update_my_avatar(avatar)
         return MeAvatarUpdateResponse.model_validate(payload)
 
     async def delete_my_avatar(self) -> MeAvatarDeleteResponse:
@@ -2247,7 +2247,7 @@ class Client:
         return UserDeleteResponse.model_validate(payload)
 
     async def update_user_avatar(
-        self, user_id: int, params: UserAvatarChangeParams
+        self, user_id: int, avatar: BinaryIO
     ) -> UserAvatarUpdateResponse:
         """POST users/{id}/avatar - Updates the specified user's avatar
 
@@ -2263,7 +2263,7 @@ class Client:
         success : bool
             True if update was successful
         """
-        payload = await self._http.update_user_avatar(user_id, params)
+        payload = await self._http.update_user_avatar(user_id, avatar)
         return UserAvatarUpdateResponse.model_validate(payload)
 
     async def delete_user_avatar(

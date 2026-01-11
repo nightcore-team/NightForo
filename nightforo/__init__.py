@@ -6,6 +6,7 @@ from .types.attachment import *  # noqa: F403
 from .types.auth import *  # noqa: F403
 from .types.conversation import *  # noqa: F403
 from .types.conversation_message import *  # noqa: F403
+from .types.file import *  # noqa: F403
 from .types.forum import *  # noqa: F403
 from .types.me import *  # noqa: F403
 from .types.node import *  # noqa: F403

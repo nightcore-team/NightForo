@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, BinaryIO
 
 import aiohttp
 
@@ -73,6 +73,7 @@ from .endpoints import (
     endpoint_users_find_name,
 )
 from .errors import UnsupportedEndpointMethodError, XenForoError
+from .types.file import XenforoFile
 
 if TYPE_CHECKING:
     from typing import Any
@@ -118,7 +119,6 @@ if TYPE_CHECKING:
         ForumThreadsGetParams,
     )
     from .types.me.params import (
-        MeAvatarUpdateParams,
         MeEmailUpdateParams,
         MePasswordUpdateParams,
         MeUpdateParams,
@@ -162,7 +162,6 @@ if TYPE_CHECKING:
         ThreadVoteParams,
     )
     from .types.user.params import (
-        UserAvatarChangeParams,
         UserCreateParams,
         UserDemoteParams,
         UserGetParams,
@@ -186,6 +185,7 @@ class HTTPClient:
         method: HTTPMethod,
         params: BaseModel | None = None,
         content_type: str = "application/json",
+        file: XenforoFile | None = None,
     ) -> Any:
         headers: dict[str, str] = {}
         req: dict[str, Any] = {}
@@ -205,6 +205,12 @@ class HTTPClient:
 
             elif content_type == "multipart/form-data":
                 data = aiohttp.FormData(dump, default_to_multipart=True)
+
+        if file is not None:
+            if data is None:
+                data = aiohttp.FormData()
+
+            data.add_field(file.name, file.stream)
 
         if method not in endpoint.supported_methods:
             raise UnsupportedEndpointMethodError(method)
@@ -269,20 +275,28 @@ class HTTPClient:
             endpoint=endpoint_attachments, method=HTTPMethod.GET, params=params
         )
 
-    async def upload_attachment(self, params: AttachmentUploadParams) -> Any:
+    async def upload_attachment(
+        self, params: AttachmentUploadParams, attachment: BinaryIO
+    ) -> Any:
+        file = XenforoFile(attachment, "attachment")
         return await self._request(
             endpoint=endpoint_attachments,
             method=HTTPMethod.POST,
             params=params,
+            file=file,
         )
 
     async def create_attachment_key(
-        self, params: AttachmentsCreateNewKeyParams
+        self,
+        params: AttachmentsCreateNewKeyParams,
+        attachment: BinaryIO | None,
     ) -> Any:
+        file = XenforoFile(attachment, "attachment") if attachment else None
         return await self._request(
             endpoint=endpoint_attachments_new_key,
             method=HTTPMethod.POST,
             params=params,
+            file=file,
         )
 
     async def get_attachment(self, attachment_id: int) -> Any:
@@ -519,9 +533,12 @@ class HTTPClient:
             endpoint=endpoint_me, method=HTTPMethod.POST, params=params
         )
 
-    async def update_my_avatar(self, params: MeAvatarUpdateParams) -> Any:
+    async def update_my_avatar(self, avatar: BinaryIO) -> Any:
+        file = XenforoFile(avatar, "avatar")
         return await self._request(
-            endpoint=endpoint_me_avatar, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_me_avatar,
+            method=HTTPMethod.POST,
+            file=file,
         )
 
     async def delete_my_avatar(self) -> Any:
@@ -891,13 +908,12 @@ class HTTPClient:
             params=params,
         )
 
-    async def update_user_avatar(
-        self, user_id: int, params: UserAvatarChangeParams
-    ) -> Any:
+    async def update_user_avatar(self, user_id: int, avatar: BinaryIO) -> Any:
+        file = XenforoFile(avatar, "avatar")
         return await self._request(
             endpoint=endpoint_user_avatar(user_id),
             method=HTTPMethod.POST,
-            params=params,
+            file=file,
         )
 
     async def delete_user_avatar(self, user_id: int) -> Any:
