@@ -1,71 +1,78 @@
-name: Upload Python Package
+name: Create Release
 
 on:
-  release:
-    types: [published, created, edited]
-
-permissions:
-  contents: read
+  push:
+    branches:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - '[0-9]+.[0-9]+.[0-9]+'
+      - 'release/*'
 
 jobs:
-  release-build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.release.tag_name }}
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.x"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v3
-
-      - name: Build release distributions with uv
-        run: |
-          uv build
-
-      - name: Verify version matches release
-        run: |
-          # Проверяем, что версия в pyproject.toml совпадает с тегом релиза
-          RELEASE_VERSION="${GITHUB_REF#refs/tags/v}"
-          PROJECT_VERSION=$(uv run python -c "import tomllib; data = tomllib.load(open('pyproject.toml', 'rb')); print(data['project']['version'])")
-          
-          echo "Release version: $RELEASE_VERSION"
-          echo "Project version: $PROJECT_VERSION"
-          
-          if [ "$RELEASE_VERSION" != "$PROJECT_VERSION" ]; then
-            echo "ERROR: Version mismatch!"
-            exit 1
-          fi
-
-      - name: Upload distributions
-        uses: actions/upload-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
-  pypi-publish:
-    runs-on: ubuntu-latest
-    needs:
-      - release-build
-    permissions:
-      id-token: write
+  create-release:
     
-    environment:
-      name: pypi
-      url: https://pypi.org/p/nightforo
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
 
     steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      - name: Publish release distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          packages-dir: dist/
+    - name: Extract version from branch name
+      id: extract_version
+      run: |
+        BRANCH_NAME=${GITHUB_REF#refs/heads/}
+        
+        if [[ "$BRANCH_NAME" =~ ^v([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+          VERSION="${BASH_REMATCH[1]}"
+          echo "Detected version from v-prefixed branch: $VERSION"
+        elif [[ "$BRANCH_NAME" =~ ^release/(v)?([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+          VERSION="${BASH_REMATCH[2]}"
+          echo "Detected version from release branch: $VERSION"
+        elif [[ "$BRANCH_NAME" =~ ^([0-9]+\.[0-9]+\.[0-9]+)$ ]]; then
+          VERSION="$BRANCH_NAME"
+          echo "Detected version from plain version branch: $VERSION"
+        else
+          echo "Branch name does not match version pattern: $BRANCH_NAME"
+          exit 1
+        fi
+        
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "tag=v$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.x'
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        enable-cache: true
+        cache-dependency-glob: 'uv.lock'
+
+    - name: Install dependencies
+      run: |
+        uv sync --all-extras --dev
+
+    - name: Build package
+      run: |
+        uv build
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: ${{ steps.extract_version.outputs.tag }}
+        name: Release ${{ steps.extract_version.outputs.version }}
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+        files: |
+          dist/*.whl
+          dist/*.tar.gz
+
+    - name: Publish to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
