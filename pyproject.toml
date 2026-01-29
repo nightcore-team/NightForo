@@ -1,28 +1,19 @@
 [project]
 name = "nightforo"
-version = "1.1.0"
-authors = [
-  { name = "nightcore-team" }
-]
+version = "1.1.2"
+authors = [{ name = "nightcore-team" }]
 description = "API wrapper for Arizona Guard written in Python"
 readme = "README.md"
 license = "MIT"
 license-files = ["LICENSE"]
 requires-python = ">=3.8"
-dependencies = [
-    "aiohttp>=3.10.11",
-    "pydantic>=2.10.6",
-]
+dependencies = ["aiohttp>=3.10.11", "pydantic>=2.10.6"]
 
 [project.urls]
 Repository = "https://github.com/nightcore-team/NightForo"
 
 [dependency-groups]
-dev = [
-    "build>=1.2.2.post1",
-    "ruff>=0.14.10",
-    "twine>=6.1.0",
-]
+dev = ["build>=1.2.2.post1", "ruff>=0.14.10", "twine>=6.1.0"]
 
 [tool.ruff]
 # Line length according to PEP 8 - 79 characters
