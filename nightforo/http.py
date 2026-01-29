@@ -204,7 +204,9 @@ class HTTPClient:
                 req["json"] = dump
 
             elif content_type == "multipart/form-data":
-                data = aiohttp.FormData(dump, default_to_multipart=True)
+                data = aiohttp.FormData()
+                for k, v in dump.items():
+                    data.add_field(name=k, value=str(v))
 
         if file is not None:
             if data is None:
