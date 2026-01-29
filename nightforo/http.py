@@ -798,10 +798,13 @@ class HTTPClient:
     async def update_thread(
         self, thread_id: int, params: ThreadUpdateParams
     ) -> Any:
+        content_type = "multipart/form-data"
+
         return await self._request(
             endpoint=endpoint_thread(thread_id),
             method=HTTPMethod.POST,
             params=params,
+            content_type=content_type
         )
 
     async def delete_thread(
