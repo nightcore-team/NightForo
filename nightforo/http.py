@@ -197,7 +197,7 @@ class HTTPClient:
         data = None
 
         if params is not None:
-            dump = params.model_dump(by_alias=True)
+            dump = params.model_dump(by_alias=True, exclude_none=True)
 
             if content_type == "application/json":
                 headers["Content-Type"] = content_type
