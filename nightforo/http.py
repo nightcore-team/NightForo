@@ -604,7 +604,10 @@ class HTTPClient:
 
     async def create_post(self, params: PostCreateParams) -> Any:
         return await self._request(
-            endpoint=endpoint_posts, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_posts,
+            method=HTTPMethod.POST,
+            params=params,
+            content_type="multipart/form-data",
         )
 
     async def get_post(self, post_id: int) -> Any:
