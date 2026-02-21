@@ -212,7 +212,6 @@ class HTTPClient:
 
         if body_params is not None:
             dump = body_params.model_dump(by_alias=True, exclude_none=True)
-            print(dump)
             data = aiohttp.FormData(dump)
 
         if file is not None:
@@ -231,7 +230,6 @@ class HTTPClient:
             headers=headers,
             params=query,
         ) as response:
-            print(response.request_info)
             try:
                 payload = await response.json()
             except aiohttp.ContentTypeError:
