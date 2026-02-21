@@ -1,6 +1,6 @@
 from typing import Dict, Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, field_serializer
 
 from ..user import Option, Privacy, Profile
 
@@ -22,6 +22,10 @@ class MeUpdateParams(BaseModel):
     custom_fields: Optional[Dict[str, str]] = None
 
     model_config = ConfigDict(arbitrary_types_allowed=True)
+
+    @field_serializer("visible", "activity_visible")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
 
 
 class MeEmailUpdateParams(BaseModel):

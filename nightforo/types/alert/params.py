@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 __all__ = (
     "AlertMarkParams",
@@ -16,6 +16,10 @@ class AlertsGetParams(BaseModel):
     unviewed: Optional[bool] = None
     unread: Optional[bool] = None
 
+    @field_serializer("unviewed", "unread")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
+
 
 class AlertSendParams(BaseModel):
     to_user_id: int
@@ -29,8 +33,16 @@ class AlertsMarkAllParams(BaseModel):
     read: Optional[bool] = None
     viewed: Optional[bool] = None
 
+    @field_serializer("read", "viewed")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
+
 
 class AlertMarkParams(BaseModel):
     read: Optional[bool] = None
     unread: Optional[bool] = None
     viewed: Optional[bool] = None
+
+    @field_serializer("read", "unread", "viewed")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0

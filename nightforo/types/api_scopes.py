@@ -1,5 +1,7 @@
 from enum import Enum
 
+__all__ = ("APIScopeIdsEnum",)
+
 
 class APIScopeIdsEnum(Enum):
     ALERT_READ = "alert:read"

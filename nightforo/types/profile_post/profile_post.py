@@ -32,9 +32,7 @@ class ProfilePost(BaseModel):
         alias="LatestComments", default=None
     )  # If requested, the most recent comments on this profile post.
     is_reacted_to: bool  # True if the viewing user has reacted to this content
-    visitor_reaction_id: Optional[
-        int
-    ]  # If the viewer reacted, the ID of the reaction they used
+    visitor_reaction_id: Optional[int] = None
     profile_post_id: int
     profile_user_id: int
     user_id: int

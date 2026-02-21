@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+from ...types.post_react_state import PostReactStateEnum
 from . import ProfilePostComment
 
 __all__ = (
@@ -31,4 +32,4 @@ class ProfilePostCommentDeleteResponse(BaseModel):
 
 class ProfilePostCommentReactResponse(BaseModel):
     success: bool
-    action: str
+    action: PostReactStateEnum

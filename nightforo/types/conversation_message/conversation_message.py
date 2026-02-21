@@ -33,9 +33,7 @@ class ConversationMessage(BaseModel):
         default=None, alias="Attachments"
     )
     is_reacted_to: bool  # True if the viewing user has reacted to this content
-    visitor_reaction_id: Optional[
-        int
-    ]  # If the viewer reacted, the ID of the reaction they used
+    visitor_reaction_id: Optional[int] = None
     message_id: int
     conversation_id: int
     message_date: int

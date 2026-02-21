@@ -1,34 +1,45 @@
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Union
 
 from pydantic import BaseModel
 
-__all__ = ("Breadcrumb", "Node", "NodeCreateOrUpdate")
+from nightforo.types.forum.forum import LinkForumTypeData
+
+from ...types.forum import (
+    ForumTypeData,
+    SearchForumTypeData,
+)
+from ...types.node_type import NodeTypeEnum
+from ...types.page import PageTypeData
+
+AnyNodeTypeData = Union[
+    ForumTypeData,
+    SearchForumTypeData,
+    PageTypeData,
+    LinkForumTypeData,
+    Dict[str, Any],
+]
+
+__all__ = ("Breadcrumb", "Node")
 
 
 class Breadcrumb(BaseModel):
     node_id: Optional[int] = None
     title: Optional[str] = None
-    node_type_id: Optional[str] = None
+    node_type_id: Optional[NodeTypeEnum] = None
 
 
 class Node(BaseModel):
     node_id: int
 
-    title: Optional[str] = None
-    node_name: Optional[str] = None
-    node_type_id: Optional[str] = None
-    breadcrumbs: Optional[List[Breadcrumb]] = None
-    type_data: Optional[Dict[str, Any]] = None
-    view_url: Optional[str] = None
-    description: Optional[str] = None
-    parent_node_id: Optional[int] = None
-    display_order: Optional[int] = None
-    display_in_list: Optional[bool] = None
-
-
-class NodeCreateOrUpdate(BaseModel):
     title: str
-    node_name: str
+    node_name: Optional[str] = None
+    node_type_id: NodeTypeEnum
+    breadcrumbs: List[Breadcrumb]
+    type_data: Union[
+        AnyNodeTypeData,
+        Dict[str, Any],
+    ]
+    view_url: str
     description: str
     parent_node_id: int
     display_order: int

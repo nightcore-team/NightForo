@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
+from ...types.post_react_state import PostReactStateEnum
 from ..pagination import Pagination
 from ..post import Post
 from .thread import Thread
@@ -73,4 +74,4 @@ class ThreadPostsGetResponse(BaseModel):
 
 class ThreadVoteResponse(BaseModel):
     success: bool
-    action: str
+    action: PostReactStateEnum

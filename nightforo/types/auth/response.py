@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 from ..user import User
@@ -15,7 +17,7 @@ class AuthTestResponse(BaseModel):
 
 class AuthFromSessionResponse(BaseModel):
     success: bool
-    user: User
+    user: Optional[User] = None
 
 
 class AuthLoginTokenResponse(BaseModel):

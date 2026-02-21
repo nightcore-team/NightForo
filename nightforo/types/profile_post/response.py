@@ -2,6 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel
 
+from ...types.post_react_state import PostReactStateEnum
 from ..pagination import Pagination
 from ..profile_post_comment import ProfilePostComment
 from .profile_post import ProfilePost
@@ -43,4 +44,4 @@ class ProfilePostCommentsGetResponse(BaseModel):
 
 class ProfilePostReactResponse(BaseModel):
     success: bool
-    action: str
+    action: PostReactStateEnum

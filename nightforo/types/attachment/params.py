@@ -1,6 +1,8 @@
-from typing import List, Optional
+from typing import Any, Dict, Optional
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, field_serializer
+
+from nightforo.types.content_type import ContentTypeEnum
 
 __all__ = (
     "AttachmentUploadParams",
@@ -16,11 +18,11 @@ class AttachmentsGetParams(BaseModel):
 class AttachmentUploadParams(BaseModel):
     key: str
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
 
 class AttachmentsCreateNewKeyParams(BaseModel):
-    type: str
-    context: Optional[List[str]] = None
+    type: ContentTypeEnum
+    context: Optional[Dict[str, Any]] = None
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
+    @field_serializer("type")
+    def serialize_type(self, v: ContentTypeEnum):
+        return v.value

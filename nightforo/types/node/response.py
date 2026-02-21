@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Dict, List
 
 from pydantic import BaseModel
 
@@ -15,7 +15,7 @@ __all__ = (
 
 
 class NodesGetResponse(BaseModel):
-    tree_map: List[Any]
+    tree_map: Dict[int, List[int]]
     nodes: List[Node]
 
 
@@ -23,8 +23,13 @@ class NodeCreateResponse(BaseModel):
     node: Node
 
 
+class NodesFlat(BaseModel):
+    node: Node
+    depth: int
+
+
 class NodesFlattenedGetResponse(BaseModel):
-    nodes_flat: List[Any]
+    nodes_flat: List[NodesFlat]
 
 
 class NodeGetResponse(BaseModel):

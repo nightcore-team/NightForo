@@ -1,8 +1,8 @@
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
-from ...groups import ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum
+from ..groups import ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum
 from ..pagination import Pagination
 from ..profile_post import ProfilePost
 from .user import User
@@ -84,17 +84,39 @@ class GetPromoteGroupsResponse(BaseModel):
 
 class PromoteUserResponse(BaseModel):
     success: bool
-    groups: Union[
-        Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum],
-        List[ArzGuardGroupsNamesEnum],
-    ]  # Если нет групп - пустой список, иначе dict
+    groups: Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]
     user: Optional[User] = None
+
+    @field_validator("groups", mode="before")
+    @classmethod
+    def validate_groups(
+        cls,
+        v: Union[
+            Dict[str, ArzGuardGroupsNamesEnum],
+            List[ArzGuardGroupsNamesEnum],
+        ],
+    ) -> Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]:
+        if isinstance(v, list):
+            v = {}
+
+        return {ArzGuardGroupsIdsEnum(int(k)): v for k, v in v.items()}
 
 
 class DemoteUserResponse(BaseModel):
     success: bool
-    groups: Union[
-        Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum],
-        List[ArzGuardGroupsNamesEnum],
-    ]  # Если нет групп - пустой список, иначе dict
+    groups: Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]
     user: Optional[User] = None
+
+    @field_validator("groups", mode="before")
+    @classmethod
+    def validate_groups(
+        cls,
+        v: Union[
+            Dict[str, ArzGuardGroupsNamesEnum],
+            List[ArzGuardGroupsNamesEnum],
+        ],
+    ) -> Dict[ArzGuardGroupsIdsEnum, ArzGuardGroupsNamesEnum]:
+        if isinstance(v, list):
+            v = {}
+
+        return {ArzGuardGroupsIdsEnum(int(k)): v for k, v in v.items()}

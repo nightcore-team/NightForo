@@ -2,6 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel
 
+from ...types.post_react_state import PostReactStateEnum
 from .post import Post
 
 __all__ = (
@@ -41,9 +42,9 @@ class PostMarkSolutionResponse(BaseModel):
 
 class PostReactResponse(BaseModel):
     success: bool
-    action: str
+    action: PostReactStateEnum
 
 
 class PostVoteResponse(BaseModel):
     success: bool
-    action: str
+    action: PostReactStateEnum

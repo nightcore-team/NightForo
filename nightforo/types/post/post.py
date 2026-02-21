@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, Field
 
+from ...types.discussion_state import DiscussionStateEnum
 from ..attachment import Attachment
 from ..user import User
 
@@ -21,29 +22,31 @@ class Post(BaseModel):
     message: str
     user: User | None = Field(alias="User", default=None)
 
-    is_first_post: Optional[bool] = None
-    is_last_post: Optional[bool] = None
-    is_unread: Optional[bool] = None
-    message_parsed: Optional[str] = None
-    can_edit: Optional[bool] = None
-    can_soft_delete: Optional[bool] = None
-    can_hard_delete: Optional[bool] = None
-    can_react: Optional[bool] = None
-    can_view_attachments: Optional[bool] = None
-    view_url: Optional[str] = None
-    Thread: Optional[Thread] = None
-    Attachments: Optional[List[Attachment]] = None
-    is_reacted_to: Optional[bool] = None
-    visitor_reaction_id: Optional[int] = None
-    vote_score: Optional[int] = None
-    can_content_vote: Optional[bool] = None
-    allowed_content_vote_types: Optional[List[str]] = None
-    is_content_voted: Optional[bool] = None
-    visitor_content_vote: Optional[str] = None
-    post_date: Optional[int] = None
-    message_state: Optional[str] = None
-    attach_count: Optional[int] = None
-    warning_message: Optional[str] = None
-    position: Optional[int] = None
-    last_edit_date: Optional[int] = None
-    reaction_score: Optional[int] = None
+    is_first_post: bool
+    is_last_post: bool
+    is_unread: bool
+    message_parsed: str | None = None
+    can_edit: bool
+    can_soft_delete: bool
+    can_hard_delete: bool
+    can_react: bool
+    can_view_attachments: bool | None = None
+    view_url: str
+    thread: Thread | None = Field(alias="Thread", default=None)
+    attachments: list[Attachment] | None = Field(
+        alias="Attachments", default=None
+    )
+    is_reacted_to: bool
+    visitor_reaction_id: int | None = None
+    vote_score: int | None = None
+    can_content_vote: bool | None = None
+    allowed_content_vote_types: list[str] | None = None
+    is_content_voted: bool | None = None
+    visitor_content_vote: str | None = None
+    post_date: int
+    message_state: DiscussionStateEnum
+    attach_count: int
+    warning_message: str
+    position: int
+    last_edit_date: int
+    reaction_score: int

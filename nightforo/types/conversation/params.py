@@ -1,6 +1,6 @@
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 __all__ = (
     "ConversationCreateParams",
@@ -22,6 +22,10 @@ class ConversationsGetParams(BaseModel):
     starred: Optional[bool] = None
     unread: Optional[bool] = None
 
+    @field_serializer("starred", "unread")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
+
 
 class ConversationCreateParams(BaseModel):
     recipient_ids: List[int]
@@ -31,10 +35,18 @@ class ConversationCreateParams(BaseModel):
     conversation_open: Optional[bool] = None
     open_invite: Optional[bool] = None
 
+    @field_serializer("open_invite", "conversation_open")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
+
 
 class ConversationGetParams(BaseModel):
     with_messages: Optional[bool] = None
     page: Optional[int] = None
+
+    @field_serializer("with_messages")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
 
 
 class ConversationUpdateParams(BaseModel):
@@ -42,9 +54,17 @@ class ConversationUpdateParams(BaseModel):
     open_invite: Optional[bool] = None
     conversation_open: Optional[bool] = None
 
+    @field_serializer("open_invite", "conversation_open")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
+
 
 class ConversationDeleteParams(BaseModel):
-    ignore: Optional[bool] = None
+    ignore: bool
+
+    @field_serializer("ignore")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
 
 
 class ConversationInviteParams(BaseModel):
@@ -52,12 +72,16 @@ class ConversationInviteParams(BaseModel):
 
 
 class ConversationMarkReadParams(BaseModel):
-    date: Optional[int] = None
+    date: int
 
 
 class ConversationGetMessagesParams(BaseModel):
-    page: Optional[int] = None
+    page: int
 
 
 class ConversationStarParams(BaseModel):
-    star: Optional[bool] = None
+    star: bool
+
+    @field_serializer("star")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0

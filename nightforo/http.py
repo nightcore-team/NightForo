@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, BinaryIO
 
 import aiohttp
 
+from . import __version__
 from .endpoint import HTTPMethod
 from .endpoints import (
     endpoint_alert,
@@ -124,7 +125,7 @@ if TYPE_CHECKING:
         MeUpdateParams,
     )
     from .types.node.params import (
-        NodeCreateParams,
+        AnyNodeCreateParams,
         NodeDeleteParams,
         NodeUpdateParams,
     )
@@ -163,11 +164,11 @@ if TYPE_CHECKING:
     )
     from .types.user.params import (
         UserCreateParams,
+        UserDeleteParams,
         UserDemoteParams,
         UserGetParams,
         UserProfilePostsGetParams,
         UserPromoteParams,
-        UserRenameParams,
         UsersFindEmailParams,
         UsersFindNameParams,
         UsersGetParams,
@@ -176,37 +177,43 @@ if TYPE_CHECKING:
 
 
 class HTTPClient:
-    def __init__(self, api_key: str) -> None:
+    def __init__(
+        self,
+        api_key: str,
+        is_super_user: bool = False,
+        xf_user_id: int | None = None,
+    ) -> None:
         self.api_key = api_key
+        self.xf_user_id = xf_user_id
+        self.is_super_user = is_super_user
 
     async def _request(
         self,
         endpoint: Endpoint,
         method: HTTPMethod,
-        params: BaseModel | None = None,
-        content_type: str = "application/json",
+        body_params: BaseModel | None = None,
+        query_params: BaseModel | None = None,
         file: XenforoFile | None = None,
     ) -> Any:
+        if method not in endpoint.supported_methods:
+            raise UnsupportedEndpointMethodError(method)
+
         headers: dict[str, str] = {}
-        req: dict[str, Any] = {}
 
         headers["XF-Api-Key"] = self.api_key
 
-        req["headers"] = headers
+        if self.is_super_user:
+            headers["XF-Api-User"] = str(self.xf_user_id)
+
+        headers["User-Agent"] = "Nightforo/" + __version__
 
         data = None
+        query = None
 
-        if params is not None:
-            dump = params.model_dump(by_alias=True, exclude_none=True)
-
-            if content_type == "application/json":
-                headers["Content-Type"] = content_type
-                req["json"] = dump
-
-            elif content_type == "multipart/form-data":
-                data = aiohttp.FormData()
-                for k, v in dump.items():
-                    data.add_field(name=k, value=str(v))
+        if body_params is not None:
+            dump = body_params.model_dump(by_alias=True, exclude_none=True)
+            print(dump)
+            data = aiohttp.FormData(dump)
 
         if file is not None:
             if data is None:
@@ -214,12 +221,17 @@ class HTTPClient:
 
             data.add_field(file.name, file.stream)
 
-        if method not in endpoint.supported_methods:
-            raise UnsupportedEndpointMethodError(method)
+        if query_params:
+            query = query_params.model_dump(by_alias=True, exclude_none=True)
 
         async with aiohttp.ClientSession() as session, session.request(
-            method.value, endpoint.url, data=data, **req
+            method=method.value,
+            url=endpoint.url,
+            data=data,
+            headers=headers,
+            params=query,
         ) as response:
+            print(response.request_info)
             try:
                 payload = await response.json()
             except aiohttp.ContentTypeError:
@@ -241,19 +253,23 @@ class HTTPClient:
 
     async def get_alerts(self, params: AlertsGetParams | None = None) -> Any:
         return await self._request(
-            endpoint=endpoint_alerts, method=HTTPMethod.GET, params=params
+            endpoint=endpoint_alerts,
+            method=HTTPMethod.GET,
+            query_params=params,
         )
 
     async def send_alert(self, params: AlertSendParams) -> Any:
         return await self._request(
-            endpoint=endpoint_alerts, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_alerts,
+            method=HTTPMethod.POST,
+            body_params=params,
         )
 
     async def mark_all_alerts(self, params: AlertsMarkAllParams) -> Any:
         return await self._request(
             endpoint=endpoint_alerts_mark_all,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_alert(self, alert_id: int) -> Any:
@@ -265,7 +281,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_alert_mark(alert_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -274,7 +290,9 @@ class HTTPClient:
 
     async def get_attachments(self, params: AttachmentsGetParams) -> Any:
         return await self._request(
-            endpoint=endpoint_attachments, method=HTTPMethod.GET, params=params
+            endpoint=endpoint_attachments,
+            method=HTTPMethod.GET,
+            query_params=params,
         )
 
     async def upload_attachment(
@@ -284,7 +302,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_attachments,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
             file=file,
         )
 
@@ -297,7 +315,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_attachments_new_key,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
             file=file,
         )
 
@@ -330,21 +348,21 @@ class HTTPClient:
 
     async def test_auth(self, params: AuthTestParams) -> Any:
         return await self._request(
-            endpoint=endpoint_auth, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_auth, method=HTTPMethod.POST, body_params=params
         )
 
     async def auth_from_session(self, params: AuthFromSessionParams) -> Any:
         return await self._request(
             endpoint=endpoint_auth_from_session,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def create_login_token(self, params: AuthLoginTokenParams) -> Any:
         return await self._request(
             endpoint=endpoint_auth_login_token,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -357,7 +375,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_messages,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_conversation_message(self, message_id: int) -> Any:
@@ -372,7 +390,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_message(message_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def react_conversation_message(
@@ -381,7 +399,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_message_react(message_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -394,7 +412,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversations,
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def create_conversation(
@@ -403,7 +421,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversations,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_conversation(
@@ -414,7 +432,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation(conversation_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def update_conversation(
@@ -423,7 +441,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation(conversation_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def delete_conversation(
@@ -434,7 +452,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation(conversation_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     async def invite_conversation(
@@ -443,7 +461,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_invite(conversation_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def mark_conversation_read(
@@ -454,7 +472,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_mark_read(conversation_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def mark_conversation_unread(self, conversation_id: int) -> Any:
@@ -471,7 +489,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_messages_list(conversation_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def star_conversation(
@@ -480,7 +498,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_conversation_star(conversation_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -493,7 +511,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_forum(forum_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def mark_forum_read(
@@ -502,7 +520,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_forum_mark_read(forum_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_forum_threads(
@@ -511,7 +529,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_forum_threads(forum_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     # ============================================================================
@@ -532,7 +550,7 @@ class HTTPClient:
 
     async def update_me(self, params: MeUpdateParams) -> Any:
         return await self._request(
-            endpoint=endpoint_me, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_me, method=HTTPMethod.POST, body_params=params
         )
 
     async def update_my_avatar(self, avatar: BinaryIO) -> Any:
@@ -550,14 +568,16 @@ class HTTPClient:
 
     async def update_my_email(self, params: MeEmailUpdateParams) -> Any:
         return await self._request(
-            endpoint=endpoint_me_email, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_me_email,
+            method=HTTPMethod.POST,
+            body_params=params,
         )
 
     async def update_my_password(self, params: MePasswordUpdateParams) -> Any:
         return await self._request(
             endpoint=endpoint_me_password,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -569,9 +589,11 @@ class HTTPClient:
             endpoint=endpoint_nodes, method=HTTPMethod.GET
         )
 
-    async def create_node(self, params: NodeCreateParams) -> Any:
+    async def create_node(self, params: AnyNodeCreateParams) -> Any:
         return await self._request(
-            endpoint=endpoint_nodes, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_nodes,
+            method=HTTPMethod.POST,
+            body_params=params,
         )
 
     async def get_nodes_flattened(self) -> Any:
@@ -588,7 +610,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_node(node_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def delete_node(
@@ -597,7 +619,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_node(node_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     # ============================================================================
@@ -608,8 +630,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_posts,
             method=HTTPMethod.POST,
-            params=params,
-            content_type="multipart/form-data",
+            body_params=params,
         )
 
     async def get_post(self, post_id: int) -> Any:
@@ -621,7 +642,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_post(post_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def delete_post(
@@ -630,7 +651,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_post(post_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     async def mark_post_solution(self, post_id: int) -> Any:
@@ -643,14 +664,14 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_post_react(post_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def vote_post(self, post_id: int, params: PostVoteParams) -> Any:
         return await self._request(
             endpoint=endpoint_post_vote(post_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -663,7 +684,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post_comments,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_profile_post_comment(self, comment_id: int) -> Any:
@@ -678,7 +699,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post_comment(comment_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def delete_profile_post_comment(
@@ -689,7 +710,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post_comment(comment_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     async def react_profile_post_comment(
@@ -698,7 +719,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post_comment_react(comment_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -711,7 +732,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_posts,
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_profile_post(
@@ -722,7 +743,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post(profile_post_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def update_profile_post(
@@ -731,7 +752,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post(profile_post_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def delete_profile_post(
@@ -742,7 +763,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post(profile_post_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     async def get_profile_post_comments(
@@ -753,7 +774,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post_comments_list(profile_post_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def react_profile_post(
@@ -762,7 +783,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_profile_post_react(profile_post_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -780,12 +801,16 @@ class HTTPClient:
 
     async def get_threads(self, params: ThreadsGetParams | None = None) -> Any:
         return await self._request(
-            endpoint=endpoint_threads, method=HTTPMethod.GET, params=params
+            endpoint=endpoint_threads,
+            method=HTTPMethod.GET,
+            query_params=params,
         )
 
     async def create_thread(self, params: ThreadCreateParams) -> Any:
         return await self._request(
-            endpoint=endpoint_threads, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_threads,
+            method=HTTPMethod.POST,
+            body_params=params,
         )
 
     async def get_thread(
@@ -794,19 +819,16 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread(thread_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def update_thread(
         self, thread_id: int, params: ThreadUpdateParams
     ) -> Any:
-        content_type = "multipart/form-data"
-
         return await self._request(
             endpoint=endpoint_thread(thread_id),
             method=HTTPMethod.POST,
-            params=params,
-            content_type=content_type
+            body_params=params,
         )
 
     async def delete_thread(
@@ -815,7 +837,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread(thread_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     async def change_thread_type(
@@ -824,7 +846,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread_change_type(thread_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def mark_thread_read(
@@ -833,7 +855,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread_mark_read(thread_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def move_thread(
@@ -842,7 +864,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread_move(thread_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def get_thread_posts(
@@ -851,7 +873,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread_posts(thread_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def vote_thread(
@@ -860,7 +882,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_thread_vote(thread_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     # ============================================================================
@@ -869,26 +891,26 @@ class HTTPClient:
 
     async def get_users(self, params: UsersGetParams | None = None) -> Any:
         return await self._request(
-            endpoint=endpoint_users, method=HTTPMethod.GET, params=params
+            endpoint=endpoint_users, method=HTTPMethod.GET, query_params=params
         )
 
     async def create_user(self, params: UserCreateParams) -> Any:
         return await self._request(
-            endpoint=endpoint_users, method=HTTPMethod.POST, params=params
+            endpoint=endpoint_users, method=HTTPMethod.POST, body_params=params
         )
 
     async def find_user_by_email(self, params: UsersFindEmailParams) -> Any:
         return await self._request(
             endpoint=endpoint_users_find_email,
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def find_user_by_name(self, params: UsersFindNameParams) -> Any:
         return await self._request(
             endpoint=endpoint_users_find_name,
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def get_user(
@@ -897,23 +919,23 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_user(user_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     async def update_user(self, user_id: int, params: UserUpdateParams) -> Any:
         return await self._request(
             endpoint=endpoint_user(user_id),
             method=HTTPMethod.POST,
-            params=params,
+            body_params=params,
         )
 
     async def delete_user(
-        self, user_id: int, params: UserRenameParams | None = None
+        self, user_id: int, params: UserDeleteParams | None = None
     ) -> Any:
         return await self._request(
             endpoint=endpoint_user(user_id),
             method=HTTPMethod.DELETE,
-            params=params,
+            query_params=params,
         )
 
     async def update_user_avatar(self, user_id: int, avatar: BinaryIO) -> Any:
@@ -935,7 +957,7 @@ class HTTPClient:
         return await self._request(
             endpoint=endpoint_user_profile_posts(user_id),
             method=HTTPMethod.GET,
-            params=params,
+            query_params=params,
         )
 
     # ============================================================================
@@ -948,13 +970,10 @@ class HTTPClient:
         )
 
     async def demote_user(self, user_id: int, params: UserDemoteParams) -> Any:
-        content_type = "multipart/form-data"
-
         return await self._request(
             endpoint=endpoint_demote_user(user_id),
             method=HTTPMethod.POST,
-            params=params,
-            content_type=content_type,
+            body_params=params,
         )
 
     async def get_promote_groups(self) -> Any:
@@ -965,11 +984,8 @@ class HTTPClient:
     async def promote_user(
         self, user_id: int, params: UserPromoteParams
     ) -> Any:
-        content_type = "multipart/form-data"
-
         return await self._request(
             endpoint=endpoint_promote_user(user_id),
             method=HTTPMethod.POST,
-            params=params,
-            content_type=content_type,
+            body_params=params,
         )

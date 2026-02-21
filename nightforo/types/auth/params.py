@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
 __all__ = ("AuthFromSessionParams", "AuthLoginTokenParams", "AuthTestParams")
 
@@ -16,6 +16,10 @@ class AuthLoginTokenParams(BaseModel):
     return_url: Optional[str] = None
     force: Optional[bool] = None
     remember: Optional[bool] = None
+
+    @field_serializer("force", "remember")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
 
 
 class AuthTestParams(BaseModel):

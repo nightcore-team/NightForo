@@ -1,8 +1,9 @@
 from pydantic import BaseModel
 
-__all__ = ("Page",)
+__all__ = ("PageTypeData",)
 
 
-class Page(BaseModel):
+class PageTypeData(BaseModel):
+    content: str
     publish_date: int
     view_count: int

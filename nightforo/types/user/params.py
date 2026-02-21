@@ -1,17 +1,17 @@
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, field_serializer
 
-from ...groups import ArzGuardGroupsIdsEnum
+from ..groups import ArzGuardGroupsIdsEnum
 from .user import DateOfBirth, Option, Privacy, Profile
 
 __all__ = (
     "UserCreateParams",
+    "UserDeleteParams",
     "UserDemoteParams",
     "UserGetParams",
     "UserProfilePostsGetParams",
     "UserPromoteParams",
-    "UserRenameParams",
     "UserUpdateParams",
     "UsersFindEmailParams",
     "UsersFindNameParams",
@@ -45,6 +45,12 @@ class UserCreateParams(BaseModel):
     dob: Optional[Dict[str, int]] = None
     custom_fields: Optional[str] = None
 
+    @field_serializer(
+        "visible", "activity_visible", "is_staff", "username_change_visible"
+    )
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
+
 
 class UsersFindEmailParams(BaseModel):
     email: str
@@ -57,6 +63,10 @@ class UsersFindNameParams(BaseModel):
 class UserGetParams(BaseModel):
     with_posts: Optional[bool] = None
     page: Optional[int] = None
+
+    @field_serializer("with_posts")
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
 
 
 class UserUpdateParams(BaseModel):
@@ -81,9 +91,15 @@ class UserUpdateParams(BaseModel):
     dob: Optional[DateOfBirth] = None
     custom_fields: Optional[str] = None
 
+    @field_serializer(
+        "visible", "activity_visible", "is_staff", "username_change_visible"
+    )
+    def serialize_bool(self, v: bool):
+        return 1 if v else 0
 
-class UserRenameParams(BaseModel):
-    rename_to: Optional[str] = None
+
+class UserDeleteParams(BaseModel):
+    rename_to: str
 
 
 class UserProfilePostsGetParams(BaseModel):
@@ -93,6 +109,14 @@ class UserProfilePostsGetParams(BaseModel):
 class UserDemoteParams(BaseModel):
     group: ArzGuardGroupsIdsEnum
 
+    @field_serializer("group")
+    def serialize_group(self, v: ArzGuardGroupsIdsEnum):
+        return v.value
+
 
 class UserPromoteParams(BaseModel):
     group: ArzGuardGroupsIdsEnum
+
+    @field_serializer("group")
+    def serialize_group(self, v: ArzGuardGroupsIdsEnum):
+        return v.value
