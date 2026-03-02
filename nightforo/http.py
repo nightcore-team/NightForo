@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING, BinaryIO
 
 import aiohttp
@@ -175,6 +176,8 @@ if TYPE_CHECKING:
         UserUpdateParams,
     )
 
+_log = logging.getLogger(__name__)
+
 
 class HTTPClient:
     def __init__(
@@ -230,6 +233,14 @@ class HTTPClient:
             headers=headers,
             params=query,
         ) as response:
+            _log.debug(
+                "%s %s with query=%s has returned %s",
+                method,
+                endpoint.url,
+                query,
+                response.status,
+            )
+
             try:
                 payload = await response.json()
             except aiohttp.ContentTypeError:

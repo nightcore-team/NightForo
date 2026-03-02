@@ -1,4 +1,4 @@
-__version__ = "1.1.5"
+__version__ = "1.1.6"
 
 from .client import *  # noqa: F403
 from .errors import *  # noqa: F403
@@ -29,6 +29,7 @@ from .types.thread import *  # noqa: F403
 from .types.thread_type import *  # noqa: F403
 from .types.user import *  # noqa: F403
 from .types.vote_type import *  # noqa: F403
+from .utils.logger import *  # noqa: F403
 
 Post.model_rebuild()  # noqa: F405
 Thread.model_rebuild()  # noqa: F405

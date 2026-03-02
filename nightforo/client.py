@@ -191,6 +191,7 @@ from .types.user import (
     UserUpdateResponse,
 )
 from .types.vote_type import VoteTypeEnum
+from .utils.logger import LoggerData, setup_logging
 
 __all__ = ("Client",)
 
@@ -220,6 +221,7 @@ class Client:
         api_key: str,
         is_super_user: bool = False,
         xf_user_id: int | None = None,
+        logger_data: LoggerData | None = None,
     ) -> None:
         if api_key == "":
             raise NoApiKeyProvidedError()
@@ -228,6 +230,8 @@ class Client:
             raise NoApiKeyProvidedError(
                 "Вы должны предоставить параметр xf_user при использовании ключа с правами super user"
             )
+
+        setup_logging(logger_data)
 
         self._is_super_user = is_super_user
         self.xf_user_id = xf_user_id
