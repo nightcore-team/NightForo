@@ -185,10 +185,12 @@ class HTTPClient:
         api_key: str,
         is_super_user: bool = False,
         xf_user_id: int | None = None,
+        connector: aiohttp.BaseConnector | None = None,
     ) -> None:
         self.api_key = api_key
         self.xf_user_id = xf_user_id
         self.is_super_user = is_super_user
+        self._session = aiohttp.ClientSession(connector=connector)
 
     async def _request(
         self,
@@ -226,7 +228,7 @@ class HTTPClient:
         if query_params:
             query = query_params.model_dump(by_alias=True, exclude_none=True)
 
-        async with aiohttp.ClientSession() as session, session.request(
+        async with self._session.request(
             method=method.value,
             url=endpoint.url,
             data=data,
