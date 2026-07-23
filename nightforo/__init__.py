@@ -1,4 +1,4 @@
-__version__ = "1.1.9"
+__version__ = "1.1.10"
 
 from .client import *  # noqa: F403
 from .errors import *  # noqa: F403
