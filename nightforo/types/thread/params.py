@@ -77,7 +77,7 @@ class ThreadGetParams(BaseModel):
 
 
 class ThreadUpdateParams(BaseModel):
-    prefix_id: Optional[int] = None
+    prefix_id: Optional[List[int]] = None
     title: Optional[str] = None
     discussion_open: Optional[bool] = None
     sticky: Optional[bool] = None
